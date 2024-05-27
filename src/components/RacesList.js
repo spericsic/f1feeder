@@ -5,7 +5,7 @@ const RacesList = () => {
 
     return (
       <div>
-  
+        RACES LIST
       </div>
     );
   }

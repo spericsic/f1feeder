@@ -1,0 +1,13 @@
+@import "reset";
+
+.main-screen{
+    display: flex;
+    
+    nav {
+        max-width: 15%;
+        
+        img {
+            width: 100%;
+        }
+    }
+}

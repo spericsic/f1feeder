@@ -5,7 +5,7 @@ const DriversList = () => {
 
     return (
       <div>
-  
+          DRIVERS LIST
       </div>
     );
   }
