@@ -1,11 +1,37 @@
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 const RacesList = () => {
 
+    const [races, setRaces] = useState([]);
 
+    useEffect(() => {
+      getRaces();
+    }, []);
+
+    const getRaces = async () => {
+      const url = 'http://ergast.com/api/f1/2013/results/1.json'
+      
+      const response = await axios.get(url);
+      const data = response.data.MRData.RaceTable.Races;
+      setRaces(data);
+    }
 
     return (
       <div>
-        RACES LIST
+        <h2>Race Calendar</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Race Calendar - 2013</th>
+            </tr>
+          </thead>
+          <tbody>
+            {races.map((race)=>
+              <tr>{race.raceName}</tr>
+            )}
+          </tbody>
+        </table>
       </div>
     );
   }
