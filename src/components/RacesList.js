@@ -28,7 +28,13 @@ const RacesList = () => {
           </thead>
           <tbody>
             {races.map((race)=>
-              <tr>{race.raceName}</tr>
+              <tr key={race.round}>
+                <td>{race.round}</td>
+                <td>{race.Circuit.Location.country} {race.raceName}</td>
+                <td>{race.Circuit.circuitName}</td>
+                <td>{race.date}</td>
+                <td>{race.Results[0].Driver.nationality} {race.Results[0].Driver.driverId}</td>
+              </tr>
             )}
           </tbody>
         </table>
