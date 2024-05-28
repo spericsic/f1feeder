@@ -1,10 +1,13 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 
 const TeamsList = () => {
 
   const [teams, setTeams] = useState([]);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     getTeams();
@@ -17,7 +20,11 @@ const TeamsList = () => {
     setTeams(data);
   };
 
-
+  const handelClickDetails = (id) => {
+    console.log(id);
+    const linkTo = `/races/details/${id}`;
+    navigate(linkTo);
+  };
 
 
   return (
@@ -34,7 +41,8 @@ const TeamsList = () => {
 
         {teams.map((team) => {
           return(
-          <tr key={team.position}>
+          <tr key={team.position}
+            onClick={() => handelClickDetails(team.Constructor.constructorId)}>
             <td>{team.position}</td>
             <td>{team.Constructor.nationality} {team.Constructor.name}</td>
             <td>{team.Constructor.url}</td>

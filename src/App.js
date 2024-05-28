@@ -3,6 +3,9 @@ import { BrowserRouter as Router, Routes, Route, Link, NavLink } from "react-rou
 import DriversList from "./components/DriversList";
 import TeamsList from "./components/TeamsList";
 import RacesList from "./components/RacesList";
+import DriverDetails from "./components/DriverDetails";
+import TeamDetails from "./components/TeamDetails";
+import RacesDetails from "./components/RacesDetails";
 import NavHelmet from "./img/Kaciga.png";
 import NavTeams from "./img/Teams.png";
 import NavRaces from "./img/Races.png";
@@ -28,8 +31,11 @@ const App = () => {
         <Routes>
           <Route path="/" element={<div></div>}/> 
           <Route path="/drivers" element={<DriversList/>}/>
+          <Route path="/drivers/details/:driverId" element={<DriverDetails/>}/>
           <Route path="/teams" element={<TeamsList/>}/>
+          <Route path="/teams/details/:constructorId" element={<TeamDetails/>}/>
           <Route path="/races" element={<RacesList/>}/>
+          <Route path="/races/details/:raceId" element={<RacesDetails/>}/>
         </Routes>
       </Router>
     </div>
