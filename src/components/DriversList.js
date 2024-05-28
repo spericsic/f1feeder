@@ -19,7 +19,6 @@ const [drivers, setDrivers] = useState([]);
   };
 
   const handelClickDetails = (id) => {
-    console.log(id);
     const linkTo = `/drivers/details/${id}`;
     navigate(linkTo);
   };
