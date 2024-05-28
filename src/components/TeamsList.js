@@ -21,8 +21,7 @@ const TeamsList = () => {
   };
 
   const handelClickDetails = (id) => {
-    console.log(id);
-    const linkTo = `/races/details/${id}`;
+    const linkTo = `/teams/details/${id}`;
     navigate(linkTo);
   };
 
