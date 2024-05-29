@@ -5,6 +5,17 @@ import Flag from 'react-flagkit';
 import LinearProgress from '@mui/material/LinearProgress';
 import { getAlphaCode } from '../Utils.js';
 
+import * as React from 'react';
+import { styled } from '@mui/material/styles';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell, { tableCellClasses } from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import { grey } from "@mui/material/colors";
+
 const RacesDetails = (props) => {
 
   const [RacesDetails, setRacesDetails] = useState([]);
@@ -50,16 +61,26 @@ const RacesDetails = (props) => {
 
   }
 
-
-
   if (isLoading) {
     return <LinearProgress />;
-  } 
+  }
+
+  const StyledTableCell = styled(TableCell)(({ theme }) => ({
+    [`&.${tableCellClasses.head}`]: {
+      backgroundColor: grey.A200,
+      color: theme.palette.common.black,
+      fontWeight: 600,
+    },
+    [`&.${tableCellClasses.body}`]: {
+      fontSize: 14,
+    },
+  }));
+
 
   return (
     <div style={{ display: "flex" }}>
       <div>
-        
+
         <p><Flag country={getAlphaCode(props.flags, Card.Circuit.Location.country)} size={150} /></p>
         <p>{Card.raceName}</p>
         <p>Country: {Card.Circuit.Location.country}</p>
@@ -67,62 +88,68 @@ const RacesDetails = (props) => {
         <p>Date: {Card.date}</p>
         <p>Full Report: {Card.url}</p>
       </div>
-      <div>
-        <table>
-          <thead>
-            <tr>
-              <th>Qualifying results</th>
-            </tr>
-            <tr>
-              <th>Pos</th>
-              <th>Driver</th>
-              <th>Team</th>
-              <th>Best Time</th>
-            </tr>
-          </thead>
-          <tbody>
-            {RacesQualifying.map((race) =>
-              <tr key={race.position}>
-                <td>{race.position}</td>
-                <td>
-                  <Flag country={getAlphaCode(props.flags,race.Driver.nationality)} size={20} /> {race.Driver.familyName}
-                </td>
-                <td>{race.Constructor.name}</td>
-                <td>{handelTime(race)}</td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
-      <div>
-        <table>
-          <thead>
-            <tr>
-              <th>Race results</th>
-            </tr>
-            <tr>
-              <th>Pos</th>
-              <th>Driver</th>
-              <th>Team</th>
-              <th>Result</th>
-              <th>Points</th>
-            </tr>
-          </thead>
-          <tbody>
-            {RacesDetails.map((race) =>
-              <tr key={race.position}>
-                <td>{race.position}</td>
-                <td>
-                  <Flag country={getAlphaCode(props.flags,race.Driver.nationality)} size={20} /> {race.Driver.familyName}
-                </td>
-                <td>{race.Constructor.name}</td>
-                <td>{race.Time ? race.Time.time : "0"}</td>
-                <td>{race.points}</td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
+      
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 700 }} aria-label="customized table">
+          <TableHead>
+            <TableRow><StyledTableCell>Qualifying results</StyledTableCell></TableRow>
+            <TableRow>
+              <StyledTableCell>Pos</StyledTableCell>
+              <StyledTableCell >Driver</StyledTableCell>
+              <StyledTableCell >Team</StyledTableCell>
+              <StyledTableCell >Best Time</StyledTableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {RacesQualifying.map((race) => (
+              <TableRow key={race.position}>
+                <StyledTableCell component="th" scope="row" >{race.position}</StyledTableCell>
+                <StyledTableCell>
+                  <div style={{ display: "flex", alignItems: 'center' }}>
+                    <div style={{ margin: "0 10px" }}>
+                      <Flag country={getAlphaCode(props.flags, race.Driver.nationality)} size={20} />
+                    </div> {race.Driver.familyName}
+                  </div>
+                </StyledTableCell>
+                <StyledTableCell>{race.Constructor.name}</StyledTableCell>
+                <StyledTableCell>{handelTime(race)}</StyledTableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 700 }} aria-label="customized table">
+          <TableHead>
+            <TableRow><StyledTableCell>Race results</StyledTableCell></TableRow>
+            <TableRow>
+              <StyledTableCell>Pos</StyledTableCell>
+              <StyledTableCell >Driver</StyledTableCell>
+              <StyledTableCell >Team</StyledTableCell>
+              <StyledTableCell >Result</StyledTableCell>
+              <StyledTableCell >Points</StyledTableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {RacesDetails.map((race) => (
+              <TableRow key={race.position}>
+                <StyledTableCell component="th" scope="row" >{race.position}</StyledTableCell>
+                <StyledTableCell>
+                  <div style={{ display: "flex", alignItems: 'center' }}>
+                    <div style={{ margin: "0 10px" }}>
+                      <Flag country={getAlphaCode(props.flags, race.Driver.nationality)} size={20} />
+                    </div> {race.Driver.familyName}
+                  </div>
+                </StyledTableCell>
+                <StyledTableCell>{race.Constructor.name}</StyledTableCell>
+                <StyledTableCell>{race.Time ? race.Time.time : "0"}</StyledTableCell>
+                <StyledTableCell>{race.points}</StyledTableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
 
     </div>
   );
