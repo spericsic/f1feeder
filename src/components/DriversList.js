@@ -1,8 +1,9 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import Flag from 'react-flagkit';
 
-const DriversList = () => {
+const DriversList = (props) => {
 const [drivers, setDrivers] = useState([]);
 
   const navigate = useNavigate();
@@ -23,6 +24,15 @@ const [drivers, setDrivers] = useState([]);
     navigate(linkTo);
   };
 
+  const getFlag = (filter, size) => {
+    const flagData = props.flags.filter(flag => 
+        flag.en_short_name.toLowerCase() === filter.toLowerCase() 
+      || flag.nationality.toLowerCase() === filter.toLowerCase()
+      );
+    const alpha2Code = flagData.length == 1 ? flagData[0].alpha_2_code : (filter == "UK" ? "GB" : filter);
+    return <Flag country={alpha2Code} size={size} />
+  }
+
   return (
     <div>
         <h2>Drivers Championship</h2>
@@ -37,7 +47,7 @@ const [drivers, setDrivers] = useState([]);
               <tr key={driver.position}
                 onClick={() => handelClickDetails(driver.Driver.driverId)}>
                 <td>{driver.position}</td>
-                <td>{driver.Driver.nationality} {driver.Driver.givenName} {driver.Driver.familyName}</td>
+                <td>{getFlag(driver.Driver.nationality, 20)} {driver.Driver.givenName} {driver.Driver.familyName}</td>
                 <td>{driver.Constructors[0].name}</td>
                 <td>{driver.points}</td>
               </tr>
