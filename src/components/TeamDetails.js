@@ -54,7 +54,7 @@ const TeamDetails = (props) => {
       <div>
 
         <div>
-          <p><img src={TeamsLogo} alt="Teams" style={{ maxWidth: '150px' }} /></p>
+          <p><img src={`${process.env.PUBLIC_URL}/assets/img/${params.constructorId}.png`} alt="Teams" style={{ maxHeight: '60px' }} /></p>
           <div>
             <p>{getFlag(teamDetails.Constructor.nationality, 20)}</p>
             <p>{teamDetails.Constructor.name}</p>

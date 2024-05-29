@@ -43,12 +43,12 @@ const RacesDetails = (props) => {
   }
 
   const handelTime = (race) => {
-    let min = race.Q1;
-    if (typeof(race.Q2) !== 'undefined') min = min < race.Q2 ? min : race.Q2;
-    if (typeof(race.Q3) !== 'undefined') min = min < race.Q3 ? min : race.Q3;
-    min = typeof(min) !== 'undefined' ? min : "Didn't Attend";
-    return min
+    const handleBestTime = [race.Q1, race.Q2, race.Q3]
+    handleBestTime.sort()
+    return handleBestTime[0]
+
   }
+
 
 
   if (isLoading) {
@@ -93,7 +93,7 @@ const RacesDetails = (props) => {
             {RacesQualifying.map((race) =>
               <tr key={race.position}>
                 <td>{race.position}</td>
-                <td>{race.Driver.nationality} {race.Driver.familyName}</td>
+                <td>{getFlag(race.Driver.nationality, 40)} {race.Driver.familyName}</td>
                 <td>{race.Constructor.name}</td>
                 <td>{handelTime(race)}</td>
               </tr>
@@ -119,9 +119,9 @@ const RacesDetails = (props) => {
             {RacesDetails.map((race) =>
               <tr key={race.position}>
                 <td>{race.position}</td>
-                <td>{race.Driver.nationality} {race.Driver.familyName}</td>
+                <td>{getFlag(race.Driver.nationality, 40)} {race.Driver.familyName}</td>
                 <td>{race.Constructor.name}</td>
-                {/* <td>{race.Time.time}</td> */}
+                <td>{race.Time ? race.Time.time : "0"}</td>
                 <td>{race.points}</td>
               </tr>
             )}
