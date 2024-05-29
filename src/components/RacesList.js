@@ -3,6 +3,17 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Flag from 'react-flagkit';
 
+import * as React from 'react';
+import { styled } from '@mui/material/styles';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell, { tableCellClasses } from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import { grey } from "@mui/material/colors";
+
 
 const RacesList = (props) => {
 
@@ -36,29 +47,52 @@ const RacesList = (props) => {
     return <Flag country={alpha2Code} size={size} />
   }
 
+
+
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: grey.A200,
+    color: theme.palette.common.black,
+    fontWeight: 600,
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+  },
+}));
+
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+
+}));
+
+
   return (
-    <div>
-      <h2>Race Calendar</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Race Calendar - 2013</th>
-          </tr>
-        </thead>
-        <tbody>
-          {races.map((race)=>
-            <tr key={race.round}
-              onClick={() => handelClickDetails(race.round)}>
-              <td>{race.round}</td>
-              <td>{getFlag(race.Circuit.Location.country, 40)} {race.raceName}</td>
-              <td>{race.Circuit.circuitName}</td>
-              <td>{race.date}</td>
-              <td>{getFlag(race.Results[0].Driver.nationality, 40)} {race.Results[0].Driver.driverId}</td>
-            </tr>
-          )}
-        </tbody>
-      </table>
-    </div>
+    <TableContainer component={Paper}>
+      <Table sx={{ minWidth: 700 }} aria-label="customized table">
+        <TableHead>
+          <TableRow>Race Calendar</TableRow>
+          <TableRow>Race Calendar - 2013</TableRow>
+          <TableRow>
+            <StyledTableCell>Round</StyledTableCell>
+            <StyledTableCell >Grand Prix</StyledTableCell>
+            <StyledTableCell >Circuit</StyledTableCell>
+            <StyledTableCell >Date</StyledTableCell>
+            <StyledTableCell >Winner</StyledTableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {races.map((race) => (
+            <StyledTableRow key={race.round} onClick={() => handelClickDetails(race.round)}>
+              <StyledTableCell component="th" scope="row" >{race.round}</StyledTableCell>
+              <StyledTableCell><div style={{ display: "flex", alignItems: 'center' }}><div style={{margin:"0 10px"}}>{getFlag(race.Circuit.Location.country, 40)}</div> {race.raceName}</div></StyledTableCell>
+              <StyledTableCell>{race.Circuit.circuitName}</StyledTableCell>
+              <StyledTableCell>{race.date}</StyledTableCell>
+              <StyledTableCell><div style={{ display: "flex", alignItems: 'center' }}><div style={{margin:"0 10px"}}>{getFlag(race.Results[0].Driver.nationality, 40)}</div> {race.Results[0].Driver.familyName}</div></StyledTableCell>
+            </StyledTableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
   );
 }
+
 export default RacesList;
