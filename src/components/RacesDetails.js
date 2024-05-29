@@ -57,7 +57,10 @@ const RacesDetails = (props) => {
 
   
   const getFlag = (filter, size) => {
-    const flagData = props.flags.filter(flag => flag.en_short_name.toLowerCase() === filter.toLowerCase() );
+    const flagData = props.flags.filter(flag => 
+        flag.en_short_name.toLowerCase() === filter.toLowerCase() 
+      || flag.nationality.toLowerCase() === filter.toLowerCase()
+      );
     const alpha2Code = flagData.length == 1 ? flagData[0].alpha_2_code : (filter == "UK" ? "GB" : filter);
     return <Flag country={alpha2Code} size={size} />
   }

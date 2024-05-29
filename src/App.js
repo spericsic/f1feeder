@@ -44,11 +44,11 @@ const App = () => {
         </nav>
         <Routes>
           <Route path="/" element={<div></div>}/> 
-          <Route path="/drivers" element={<DriversList/>}/>
-          <Route path="/drivers/details/:driverId" element={<DriverDetails/>}/>
-          <Route path="/teams" element={<TeamsList/>}/>
-          <Route path="/teams/details/:constructorId" element={<TeamDetails/>}/>
-          <Route path="/races" element={<RacesList/>}/>
+          <Route path="/drivers" element={<DriversList  flags={flagsList}/>}/>
+          <Route path="/drivers/details/:driverId" element={<DriverDetails  flags={flagsList}/>}/>
+          <Route path="/teams" element={<TeamsList  flags={flagsList}/>}/>
+          <Route path="/teams/details/:constructorId" element={<TeamDetails  flags={flagsList}/>}/>
+          <Route path="/races" element={<RacesList flags={flagsList}/>}/>
           <Route path="/races/details/:raceId" element={<RacesDetails flags={flagsList}/>}/>
         </Routes>
       </Router>
