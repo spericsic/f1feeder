@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Flag from 'react-flagkit';
 
 
-const TeamsList = () => {
+const TeamsList = (props) => {
 
   const [teams, setTeams] = useState([]);
 
@@ -25,6 +26,14 @@ const TeamsList = () => {
     navigate(linkTo);
   };
 
+  const getFlag = (filter, size) => {
+    const flagData = props.flags.filter(flag => 
+        flag.en_short_name.toLowerCase() === filter.toLowerCase() 
+      || flag.nationality.toLowerCase() === filter.toLowerCase()
+      );
+    const alpha2Code = flagData.length == 1 ? flagData[0].alpha_2_code : (filter == "UK" ? "GB" : filter);
+    return <Flag country={alpha2Code} size={size} />
+  }
 
   return (
     <div>
@@ -43,7 +52,7 @@ const TeamsList = () => {
           <tr key={team.position}
             onClick={() => handelClickDetails(team.Constructor.constructorId)}>
             <td>{team.position}</td>
-            <td>{team.Constructor.nationality} {team.Constructor.name}</td>
+            <td>{getFlag(team.Constructor.nationality, 15)} {team.Constructor.name}</td>
             <td>{team.Constructor.url}</td>
             <td>{team.points}</td>
           </tr>

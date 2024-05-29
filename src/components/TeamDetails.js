@@ -3,9 +3,10 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import LinearProgress from '@mui/material/LinearProgress';
 import TeamsLogo from "../img/TeamsLogo.png";
+import Flag from "react-flagkit";
 
 
-const TeamDetails = () => {
+const TeamDetails = (props) => {
   const [teamDetails, setTeamDetails] = useState([]);
   const [teamList, setTeamList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -37,6 +38,16 @@ const TeamDetails = () => {
   if (isLoading) {
     return <LinearProgress />;
   }
+
+  const getFlag = (filter, size) => {
+    const flagData = props.flags.filter(flag => 
+        flag.en_short_name.toLowerCase() === filter.toLowerCase() 
+      || flag.nationality.toLowerCase() === filter.toLowerCase()
+      );
+    const alpha2Code = flagData.length == 1 ? flagData[0].alpha_2_code : (filter == "UK" ? "GB" : filter);
+    return <Flag country={alpha2Code} size={size} />
+  }
+  console.log(teamList);
   
   return (
     <div>
@@ -45,7 +56,7 @@ const TeamDetails = () => {
         <div>
           <p><img src={TeamsLogo} alt="Teams" style={{ maxWidth: '150px' }} /></p>
           <div>
-            <p>{teamDetails.Constructor.nationality}</p>
+            <p>{getFlag(teamDetails.Constructor.nationality, 20)}</p>
             <p>{teamDetails.Constructor.name}</p>
           </div>
         </div>
@@ -75,7 +86,8 @@ const TeamDetails = () => {
           {teamList.map((result) => 
             <tr key={result.round}>
               <td>{result.round}</td>
-              <td>{result.raceName}</td>
+           
+              <td>{getFlag(result.Circuit.Location.country, 20)} {result.raceName}</td>
               <td>{result.Results[0].position}</td>
               <td>{result.Results[1].position}</td>
               <td>{parseInt(result.Results[0].points) + parseInt(result.Results[1].points)}</td>
