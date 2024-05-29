@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Flag from 'react-flagkit';
 
-const RacesList = () => {
+
+const RacesList = (props) => {
 
   const [races, setRaces] = useState([]);
 
@@ -25,6 +27,14 @@ const RacesList = () => {
     navigate(linkTo);
   };
   
+  const getFlag = (filter, size) => {
+    const flagData = props.flags.filter(flag => 
+        flag.en_short_name.toLowerCase() === filter.toLowerCase() 
+      || flag.nationality.toLowerCase() === filter.toLowerCase()
+      );
+    const alpha2Code = flagData.length == 1 ? flagData[0].alpha_2_code : (filter == "UK" ? "GB" : filter);
+    return <Flag country={alpha2Code} size={size} />
+  }
 
   return (
     <div>
@@ -40,10 +50,10 @@ const RacesList = () => {
             <tr key={race.round}
               onClick={() => handelClickDetails(race.round)}>
               <td>{race.round}</td>
-              <td>{race.Circuit.Location.country} {race.raceName}</td>
+              <td>{getFlag(race.Circuit.Location.country, 40)} {race.raceName}</td>
               <td>{race.Circuit.circuitName}</td>
               <td>{race.date}</td>
-              <td>{race.Results[0].Driver.nationality} {race.Results[0].Driver.driverId}</td>
+              <td>{getFlag(race.Results[0].Driver.nationality, 40)} {race.Results[0].Driver.driverId}</td>
             </tr>
           )}
         </tbody>
