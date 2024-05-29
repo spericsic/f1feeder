@@ -1,9 +1,10 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import Flag from 'react-flagkit';
 import LinearProgress from '@mui/material/LinearProgress';
 
-const RacesDetails = () => {
+const RacesDetails = (props) => {
 
   const [RacesDetails, setRacesDetails] = useState([]);
   const [RacesQualifying, setRacesQualifying] = useState([]);
@@ -41,15 +42,32 @@ const RacesDetails = () => {
     setIsLoading(false);
   }
 
+  const handelTime = (race) => {
+    let min = race.Q1;
+    if (typeof(race.Q2) !== 'undefined') min = min < race.Q2 ? min : race.Q2;
+    if (typeof(race.Q3) !== 'undefined') min = min < race.Q3 ? min : race.Q3;
+    min = typeof(min) !== 'undefined' ? min : "Didn't Attend";
+    return min
+  }
+
+
   if (isLoading) {
     return <LinearProgress />;
   } 
 
+  
+  const getFlag = (filter, size) => {
+    const flagData = props.flags.filter(flag => flag.en_short_name.toLowerCase() === filter.toLowerCase() );
+    const alpha2Code = flagData.length == 1 ? flagData[0].alpha_2_code : (filter == "UK" ? "GB" : filter);
+    return <Flag country={alpha2Code} size={size} />
+  }
+
   return (
     <div style={{ display: "flex" }}>
       <div>
-        <p>IMG {Card.Circuit.Location.country}</p>
-        <p>Country: {Card.raceName}</p>
+        
+        <p>{getFlag(Card.Circuit.Location.country, 150)}</p>
+        <p>{Card.raceName}</p>
         <p>Country: {Card.Circuit.Location.country}</p>
         <p>Location: {Card.Circuit.Location.locality}</p>
         <p>Date: {Card.date}</p>
@@ -74,7 +92,7 @@ const RacesDetails = () => {
                 <td>{race.position}</td>
                 <td>{race.Driver.nationality} {race.Driver.familyName}</td>
                 <td>{race.Constructor.name}</td>
-                <td>{race.Q3}</td>
+                <td>{handelTime(race)}</td>
               </tr>
             )}
           </tbody>
