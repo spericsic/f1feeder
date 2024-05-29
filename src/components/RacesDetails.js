@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Flag from 'react-flagkit';
 import LinearProgress from '@mui/material/LinearProgress';
+import { getAlphaCode } from '../Utils.js';
 
 const RacesDetails = (props) => {
 
@@ -55,21 +56,11 @@ const RacesDetails = (props) => {
     return <LinearProgress />;
   } 
 
-  
-  const getFlag = (filter, size) => {
-    const flagData = props.flags.filter(flag => 
-        flag.en_short_name.toLowerCase() === filter.toLowerCase() 
-      || flag.nationality.toLowerCase() === filter.toLowerCase()
-      );
-    const alpha2Code = flagData.length == 1 ? flagData[0].alpha_2_code : (filter == "UK" ? "GB" : filter);
-    return <Flag country={alpha2Code} size={size} />
-  }
-
   return (
     <div style={{ display: "flex" }}>
       <div>
         
-        <p>{getFlag(Card.Circuit.Location.country, 150)}</p>
+        <p><Flag country={getAlphaCode(props.flags, Card.Circuit.Location.country)} size={150} /></p>
         <p>{Card.raceName}</p>
         <p>Country: {Card.Circuit.Location.country}</p>
         <p>Location: {Card.Circuit.Location.locality}</p>
@@ -93,7 +84,9 @@ const RacesDetails = (props) => {
             {RacesQualifying.map((race) =>
               <tr key={race.position}>
                 <td>{race.position}</td>
-                <td>{getFlag(race.Driver.nationality, 40)} {race.Driver.familyName}</td>
+                <td>
+                  <Flag country={getAlphaCode(props.flags,race.Driver.nationality)} size={20} /> {race.Driver.familyName}
+                </td>
                 <td>{race.Constructor.name}</td>
                 <td>{handelTime(race)}</td>
               </tr>
@@ -119,7 +112,9 @@ const RacesDetails = (props) => {
             {RacesDetails.map((race) =>
               <tr key={race.position}>
                 <td>{race.position}</td>
-                <td>{getFlag(race.Driver.nationality, 40)} {race.Driver.familyName}</td>
+                <td>
+                  <Flag country={getAlphaCode(props.flags,race.Driver.nationality)} size={20} /> {race.Driver.familyName}
+                </td>
                 <td>{race.Constructor.name}</td>
                 <td>{race.Time ? race.Time.time : "0"}</td>
                 <td>{race.points}</td>

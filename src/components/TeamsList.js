@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Flag from 'react-flagkit';
-
+import { getAlphaCode } from '../Utils.js';
 
 import * as React from 'react';
 import { styled } from '@mui/material/styles';
@@ -36,15 +36,6 @@ const TeamsList = (props) => {
     const linkTo = `/teams/details/${id}`;
     navigate(linkTo);
   };
-
-  const getFlag = (filter, size) => {
-    const flagData = props.flags.filter(flag =>
-      flag.en_short_name.toLowerCase() === filter.toLowerCase()
-      || flag.nationality.toLowerCase() === filter.toLowerCase()
-    );
-    const alpha2Code = flagData.length == 1 ? flagData[0].alpha_2_code : (filter == "UK" ? "GB" : filter);
-    return <Flag country={alpha2Code} size={size} />
-  }
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -80,7 +71,13 @@ const TeamsList = (props) => {
                   <StyledTableCell component="th" scope="row" >{team.position}</StyledTableCell>
                   <StyledTableCell>{team.position}</StyledTableCell>
 
-                  <StyledTableCell><div style={{ display: "flex", alignItems: 'center' }}><div style={{ margin: "0 10px" }}>{getFlag(team.Constructor.nationality, 15)}</div> {team.Constructor.name}</div></StyledTableCell>
+                  <StyledTableCell>
+                    <div style={{ display: "flex", alignItems: 'center' }}>
+                      <div style={{ margin: "0 10px" }}>
+                        <Flag country={getAlphaCode(props.flags, team.Constructor.nationality)} size={20} />
+                      </div> {team.Constructor.name}
+                    </div>
+                  </StyledTableCell>
                   <StyledTableCell>{team.Constructor.url}</StyledTableCell>
                   <StyledTableCell>{team.points}</StyledTableCell>
                 </TableRow>

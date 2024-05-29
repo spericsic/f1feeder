@@ -7,10 +7,6 @@ import RacesList from "./components/RacesList";
 import DriverDetails from "./components/DriverDetails";
 import TeamDetails from "./components/TeamDetails";
 import RacesDetails from "./components/RacesDetails";
-import NavHelmet from "./img/Kaciga.png";
-import NavTeams from "./img/Teams.png";
-import NavRaces from "./img/Races.png";
-import NavLogo from "./img/rteam.jpg";
 
 const App = () => {
 
@@ -21,7 +17,7 @@ const App = () => {
   }, []);
 
   const getFlagsList = async () => {
-    const url = `https://raw.githubusercontent.com/Dinuks/country-nationality-list/master/countries.json`;
+    const url = 'https://raw.githubusercontent.com/Dinuks/country-nationality-list/master/countries.json';
 
     const response = await axios.get(url);
     setFlagsList(response.data);
@@ -31,15 +27,15 @@ const App = () => {
     <div className="main-screen">
       <Router>
         <nav>
-          <Link to="/"><img src={NavLogo} alt="Logo"></img></Link>
+          <Link to="/"><img src={`${process.env.PUBLIC_URL}/assets/img/rteam.jpg`} alt="Logo"></img></Link>
           <li>
-            <NavLink to="/drivers"><img src={NavHelmet} alt="Helmet"></img></NavLink>
+            <NavLink to="/drivers"><img src={`${process.env.PUBLIC_URL}/assets/img/Kaciga.png`} alt="Helmet"></img></NavLink>
           </li>
           <li>
-            <NavLink to="/teams"><img src={NavTeams} alt="Teams"></img></NavLink>
+            <NavLink to="/teams"><img src={`${process.env.PUBLIC_URL}/assets/img/Teams.png`} alt="Teams"></img></NavLink>
           </li>
           <li>
-            <NavLink to="/races"><img src={NavRaces} alt="Races"></img></NavLink>
+            <NavLink to="/races"><img src={`${process.env.PUBLIC_URL}/assets/img/Races.png`} alt="Races"></img></NavLink>
           </li>
         </nav>
         <Routes>

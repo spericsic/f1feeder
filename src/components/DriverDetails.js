@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import LinearProgress from '@mui/material/LinearProgress';
 import Flag from 'react-flagkit';
+import { getAlphaCode } from '../Utils.js';
 
 import * as React from 'react';
 import { styled } from '@mui/material/styles';
@@ -46,15 +47,6 @@ const DriverDetails = (props) => {
     return <LinearProgress />;
   }
 
-  const getFlag = (filter, size) => {
-    const flagData = props.flags.filter(flag =>
-      flag.en_short_name.toLowerCase() === filter.toLowerCase()
-      || flag.nationality.toLowerCase() === filter.toLowerCase()
-    );
-    const alpha2Code = flagData.length == 1 ? flagData[0].alpha_2_code : (filter == "UK" ? "GB" : filter);
-    return <Flag country={alpha2Code} size={size} />
-  }
-
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
       backgroundColor: grey.A200,
@@ -72,7 +64,7 @@ const DriverDetails = (props) => {
         <div>
           <p><img src={`${process.env.PUBLIC_URL}/assets/img/${params.driverId}.jpg`}  alt="Drivers" style={{ maxHeight: `60px` }} /></p>
         <div>
-          <p>{getFlag(driverDetails.Driver.nationality, 20)}</p>
+          <p><Flag country={getAlphaCode(props.flags,driverDetails.Driver.nationality)} size={20} /></p>
           <p>{driverDetails.Driver.givenName} {driverDetails.Driver.familyName}</p>
         </div>
       </div>
@@ -105,7 +97,13 @@ const DriverDetails = (props) => {
           {driverList.map((race, i) =>
             <TableRow key={i}>
               <StyledTableCell>{race.round}</StyledTableCell>
-              <StyledTableCell><div style={{ display: "flex", alignItems: 'center' }}><div style={{margin:"0 10px"}}>{getFlag(race.Circuit.Location.country, 20)}</div>{race.raceName}</div></StyledTableCell>
+              <StyledTableCell>
+                  <div style={{ display: "flex", alignItems: 'center' }}>
+                    <div style={{margin:"0 10px"}}>
+                      <Flag country={getAlphaCode(props.flags, race.Circuit.Location.country)} size={20} />
+                    </div>{race.raceName}
+                  </div>
+              </StyledTableCell>
               <StyledTableCell>{race.Results[0].Constructor.name}</StyledTableCell>
               <StyledTableCell>{race.Results[0].grid}</StyledTableCell>
               <StyledTableCell>{race.Results[0].position}</StyledTableCell>

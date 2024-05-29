@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Flag from 'react-flagkit';
+import { getAlphaCode } from '../Utils.js';
 
 import * as React from 'react';
 import { styled } from '@mui/material/styles';
@@ -35,15 +36,6 @@ const [drivers, setDrivers] = useState([]);
     navigate(linkTo);
   };
 
-  const getFlag = (filter, size) => {
-    const flagData = props.flags.filter(flag => 
-        flag.en_short_name.toLowerCase() === filter.toLowerCase() 
-      || flag.nationality.toLowerCase() === filter.toLowerCase()
-      );
-    const alpha2Code = flagData.length == 1 ? flagData[0].alpha_2_code : (filter == "UK" ? "GB" : filter);
-    return <Flag country={alpha2Code} size={size} />
-  }
-
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
       backgroundColor: grey.A200,
@@ -71,7 +63,13 @@ const [drivers, setDrivers] = useState([]);
               <TableRow key={driver.position}
                 onClick={() => handelClickDetails(driver.Driver.driverId)}>
                 <StyledTableCell>{driver.position}</StyledTableCell>
-                <StyledTableCell><div style={{ display: "flex", alignItems: 'center' }}><div style={{margin:"0 10px"}}>{getFlag(driver.Driver.nationality, 20)}</div> {driver.Driver.givenName} {driver.Driver.familyName}</div></StyledTableCell>
+                <StyledTableCell>
+                  <div style={{ display: "flex", alignItems: 'center' }}>
+                    <div style={{margin:"0 10px"}}>
+                    <Flag country={getAlphaCode(props.flags, driver.Driver.nationality)} size={20} />
+                    </div> {driver.Driver.givenName} {driver.Driver.familyName}
+                  </div>
+                </StyledTableCell>
                 <StyledTableCell>{driver.Constructors[0].name}</StyledTableCell>
                 <StyledTableCell>{driver.points}</StyledTableCell>
               </TableRow>
