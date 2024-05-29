@@ -2,8 +2,18 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import LinearProgress from '@mui/material/LinearProgress';
-import driverProfil from '../img/driverProfil.png';
 import Flag from 'react-flagkit';
+
+import * as React from 'react';
+import { styled } from '@mui/material/styles';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell, { tableCellClasses } from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import { grey } from "@mui/material/colors";
 
 const DriverDetails = (props) => {
   const [driverDetails, setDriverDetails] = useState([]);
@@ -44,7 +54,18 @@ const DriverDetails = (props) => {
     const alpha2Code = flagData.length == 1 ? flagData[0].alpha_2_code : (filter == "UK" ? "GB" : filter);
     return <Flag country={alpha2Code} size={size} />
   }
-  console.log(driverList);
+
+  const StyledTableCell = styled(TableCell)(({ theme }) => ({
+    [`&.${tableCellClasses.head}`]: {
+      backgroundColor: grey.A200,
+      color: theme.palette.common.black,
+      fontWeight: 600,
+    },
+    [`&.${tableCellClasses.body}`]: {
+      fontSize: 14,
+    },
+  }));
+
   return (
     <div>
       <div>
@@ -64,32 +85,35 @@ const DriverDetails = (props) => {
       </div>
     </div>
 
-      <table>
-        <thead>
-          <tr>
-            <th>Formula 1 2013 Results</th>
-          </tr>
-          <tr>
-            <th>Round</th>
-            <th>Grand Prix</th>
-            <th>Team</th>
-            <th>Grid</th>
-            <th>Race</th>
-          </tr>
-        </thead>
+    <TableContainer component={Paper}>
 
-        <tbody>
+      <Table sx={{ minWidth: 700 }} aria-label="customized table">
+        <TableHead>
+          <TableRow>
+            <StyledTableCell>Formula 1 2013 Results</StyledTableCell>
+          </TableRow>
+          <TableRow>
+            <StyledTableCell>Round</StyledTableCell>
+            <StyledTableCell>Grand Prix</StyledTableCell>
+            <StyledTableCell>Team</StyledTableCell>
+            <StyledTableCell>Grid</StyledTableCell>
+            <StyledTableCell>Race</StyledTableCell>
+          </TableRow>
+        </TableHead>
+
+        <TableBody>
           {driverList.map((race, i) =>
-            <tr key={i}>
-              <td>{race.round}</td>
-              <td>{getFlag(race.Circuit.Location.country, 20)}{race.raceName}</td>
-              <td>{race.Results[0].Constructor.name}</td>
-              <td>{race.Results[0].grid}</td>
-              <td>{race.Results[0].position}</td>
-            </tr>
+            <TableRow key={i}>
+              <StyledTableCell>{race.round}</StyledTableCell>
+              <StyledTableCell><div style={{ display: "flex", alignItems: 'center' }}><div style={{margin:"0 10px"}}>{getFlag(race.Circuit.Location.country, 20)}</div>{race.raceName}</div></StyledTableCell>
+              <StyledTableCell>{race.Results[0].Constructor.name}</StyledTableCell>
+              <StyledTableCell>{race.Results[0].grid}</StyledTableCell>
+              <StyledTableCell>{race.Results[0].position}</StyledTableCell>
+            </TableRow>
           )}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
+    </TableContainer>
 
     </div>
   );

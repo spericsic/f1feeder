@@ -3,6 +3,17 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Flag from 'react-flagkit';
 
+import * as React from 'react';
+import { styled } from '@mui/material/styles';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell, { tableCellClasses } from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import { grey } from "@mui/material/colors";
+
 const DriversList = (props) => {
 const [drivers, setDrivers] = useState([]);
 
@@ -33,28 +44,42 @@ const [drivers, setDrivers] = useState([]);
     return <Flag country={alpha2Code} size={size} />
   }
 
+  const StyledTableCell = styled(TableCell)(({ theme }) => ({
+    [`&.${tableCellClasses.head}`]: {
+      backgroundColor: grey.A200,
+      color: theme.palette.common.black,
+      fontWeight: 600,
+    },
+    [`&.${tableCellClasses.body}`]: {
+      fontSize: 14,
+    },
+  }));
+
+
   return (
     <div>
-        <h2>Drivers Championship</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>Drivers Championship Standings - 2013</th>
-            </tr>
-          </thead>
-          <tbody>
+      <h2>Drivers Championship</h2>
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 700 }} aria-label="customized table">
+          <TableHead>
+            <TableRow>
+              <StyledTableCell>Drivers Championship Standings - 2013</StyledTableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
             {drivers.map((driver) =>
-              <tr key={driver.position}
+              <TableRow key={driver.position}
                 onClick={() => handelClickDetails(driver.Driver.driverId)}>
-                <td>{driver.position}</td>
-                <td>{getFlag(driver.Driver.nationality, 20)} {driver.Driver.givenName} {driver.Driver.familyName}</td>
-                <td>{driver.Constructors[0].name}</td>
-                <td>{driver.points}</td>
-              </tr>
+                <StyledTableCell>{driver.position}</StyledTableCell>
+                <StyledTableCell><div style={{ display: "flex", alignItems: 'center' }}><div style={{margin:"0 10px"}}>{getFlag(driver.Driver.nationality, 20)}</div> {driver.Driver.givenName} {driver.Driver.familyName}</div></StyledTableCell>
+                <StyledTableCell>{driver.Constructors[0].name}</StyledTableCell>
+                <StyledTableCell>{driver.points}</StyledTableCell>
+              </TableRow>
             )}
 
-          </tbody>
-        </table>
+          </TableBody>
+        </Table>
+      </TableContainer>
     </div>
   );
 }
