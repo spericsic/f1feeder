@@ -70,7 +70,7 @@ const RacesList = (props) => {
           </TableHead>
           <TableBody>
             {races.map((race) => (
-              <TableRow key={race.round} onClick={() => handelClickDetails(race.round)}>
+              <TableRow key={race.round} onClick={() => handelClickDetails(race.round)}  hover sx={{ cursor: 'pointer' }}>
                 <StyledTableCell component="th" scope="row" >{race.round}</StyledTableCell>
                 <StyledTableCell>
                   <div style={{ display: "flex", alignItems: 'center' }}>

@@ -13,14 +13,20 @@ import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
 import { grey } from "@mui/material/colors";
+
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Typography from '@mui/material/Typography';
+import { CardActionArea } from '@mui/material';
+import Box from "@mui/material/Box";
+
 
 const RacesDetails = (props) => {
 
   const [RacesDetails, setRacesDetails] = useState([]);
   const [RacesQualifying, setRacesQualifying] = useState([]);
-  const [Card, setCard] = useState([]);
+  const [CardX, setCard] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const params = useParams()
@@ -79,16 +85,34 @@ const RacesDetails = (props) => {
 
 
   return (
-    <div>
-      <div>
-        <p><Flag country={getAlphaCode(props.flags, Card.Circuit.Location.country)} size={150} /></p>
-        <p>{Card.raceName}</p>
-        <p>Country: {Card.Circuit.Location.country}</p>
-        <p>Location: {Card.Circuit.Location.locality}</p>
-        <p>Date: {Card.date}</p>
-        <p>Full Report: {Card.url}</p>
-      </div>
-      <div style={{ display: "flex", width: "90vw"}}>
+    <div style={{ display: "flex" }}>
+
+      <Card sx={{ maxWidth: 235 }}>
+        <CardActionArea>
+          <CardContent>
+            <Box
+              display='flex'
+              flex='1'
+              justifyContent='center'
+              flexDirection='column'
+              alignItems='center'
+              margin='auto'>
+
+              <Typography variant="caption" fontWeight={700} style={{ fontSize: "20px" }}>
+                <Flag country={getAlphaCode(props.flags, CardX.Circuit.Location.country)} size={200} />
+              </Typography>
+            </Box>
+
+            <Typography variant="caption" display="block" fontWeight={900}>{CardX.raceName}</Typography>
+            <Typography variant="caption" display="block" fontWeight={900}>Country: {CardX.Circuit.Location.country}</Typography>
+            <Typography variant="caption" display="block" fontWeight={900}>Location: {CardX.Circuit.Location.locality}</Typography>
+            <Typography variant="caption" display="block" fontWeight={900}>Date: {CardX.date}</Typography>
+            <Typography variant="caption" display="block" fontWeight={900}>Full Report: {CardX.url}</Typography>
+          </CardContent>
+        </CardActionArea>
+      </Card>
+
+      <div style={{ display: "flex", width: "80vw" }}>
         <TableContainer sx={{ color: 'grey.A400', border: 15, borderTopLeftRadius: 5, }}>
           <Table>
             <TableHead>
@@ -102,7 +126,7 @@ const RacesDetails = (props) => {
             </TableHead>
             <TableBody>
               {RacesQualifying.map((race) => (
-                <TableRow key={race.position}>
+                <TableRow key={race.position} hover sx={{ cursor: 'pointer' }}>
                   <StyledTableCell component="th" scope="row" >{race.position}</StyledTableCell>
                   <StyledTableCell>
                     <div style={{ display: "flex", alignItems: 'center' }}>
@@ -134,7 +158,7 @@ const RacesDetails = (props) => {
             </TableHead>
             <TableBody>
               {RacesDetails.map((race) => (
-                <TableRow key={race.position}>
+                <TableRow key={race.position} hover sx={{ cursor: 'pointer' }}>
                   <StyledTableCell component="th" scope="row" >{race.position}</StyledTableCell>
                   <StyledTableCell>
                     <div style={{ display: "flex", alignItems: 'center' }}>
