@@ -66,8 +66,8 @@ const TeamsList = (props) => {
 
             {teams.map((team) => {
               return (
-                <TableRow key={team.position}
-                  onClick={() => handelClickDetails(team.Constructor.constructorId)}>
+                <TableRow hover key={team.position}
+                  onClick={() => handelClickDetails(team.Constructor.constructorId)} sx={{cursor: "pointer"}} >
                   <StyledTableCell component="th" scope="row" >{team.position}</StyledTableCell>
                   <StyledTableCell>{team.position}</StyledTableCell>
 

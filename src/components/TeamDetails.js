@@ -5,7 +5,6 @@ import LinearProgress from '@mui/material/LinearProgress';
 import Flag from "react-flagkit";
 import { getAlphaCode } from '../Utils.js';
 
-import * as React from 'react';
 import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -15,6 +14,15 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { grey } from "@mui/material/colors";
+
+
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+
+import Typography from '@mui/material/Typography';
+import { CardActionArea } from '@mui/material';
+import Box from "@mui/material/Box";
+
 
 
 
@@ -60,30 +68,58 @@ const TeamDetails = (props) => {
 
 
 
+
+
   if (isLoading) {
     return <LinearProgress />;
   }
 
   return (
-    <div>
-      <div>
+    <div style={{ display: "flex" }}>
+      <Card
+        sx={{ maxWidth: 235 }}>
+        <CardActionArea>
 
-        <div>
-          <p><img src={`${process.env.PUBLIC_URL}/assets/img/${params.constructorId}.png`} alt="Teams" style={{ maxHeight: '60px' }} /></p>
-          <div>
-            <p><Flag country={getAlphaCode(props.flags, teamDetails.Constructor.nationality)} size={20} /></p>
-            <p>{teamDetails.Constructor.name}</p>
-          </div>
-        </div>
+          <CardContent>
+            <Box
+              display='flex'
+              flex='1'
+              justifyContent='center'
+              flexDirection='column'
+              alignItems='center'
+              margin='auto'
+              >
+              <Box
+              sx = {{
+              objectFit:"contain"
+              }}
+                component='img'
+                width={140}
+                height={190}
+                margin="auto"
+                alt='Teams'
+                src={`${process.env.PUBLIC_URL}/assets/img/${params.constructorId}.png`}
+              />
 
-        <div>
-          <p>Country: {teamDetails.Constructor.nationality}</p>
-          <p>Position: {teamDetails.position}</p>
-          <p>Points: {teamDetails.points}</p>
-          <p>History: {teamDetails.Constructor.url}</p>
-        </div>
+              <Typography variant="caption" fontWeight={700} style={{ fontSize: "20px" }} >
+                <Flag country={getAlphaCode(props.flags, teamDetails.Constructor.nationality)} size={40} />
+              </Typography>
 
-      </div>
+              <Typography variant="caption" fontWeight={700} style={{ fontSize: "20px", color: "pink" }} >
+                {teamDetails.Constructor.name}
+              </Typography>
+            </Box>
+
+            <Typography variant="caption" display="block" fontWeight={900}>Country: {teamDetails.Constructor.nationality}</Typography>
+            <Typography variant="caption" display="block" fontWeight={900} >Position: {teamDetails.position}</Typography>
+            <Typography variant="caption" display="block" fontWeight={900}>Points: {teamDetails.points}</Typography>
+            <Typography variant="caption" display="block" fontWeight={900}>History:  {teamDetails.Constructor.url}</Typography>
+
+          </CardContent>
+        </CardActionArea>
+      </Card>
+
+
 
 
       <TableContainer component={Paper}>
@@ -106,7 +142,7 @@ const TeamDetails = (props) => {
           <TableBody>
 
             {teamList.map((result) =>
-              <TableRow key={result.round}>
+              <TableRow hover key={result.round} sx={{ cursor: "pointer" }}>
                 <StyledTableCell>{result.round}</StyledTableCell>
 
                 <StyledTableCell>
