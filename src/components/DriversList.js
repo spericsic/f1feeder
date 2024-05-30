@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import Flag from 'react-flagkit';
 import { getAlphaCode } from '../Utils.js';
 
-import * as React from 'react';
 import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -60,9 +59,9 @@ const [drivers, setDrivers] = useState([]);
           </TableHead>
           <TableBody>
             {drivers.map((driver) =>
-              <TableRow key={driver.position}
-                onClick={() => handelClickDetails(driver.Driver.driverId)}>
-                <StyledTableCell>{driver.position}</StyledTableCell>
+              <TableRow hover key={driver.position}
+                onClick={() => handelClickDetails(driver.Driver.driverId)} sx={{ cursor: 'pointer' }}>
+                <StyledTableCell>{driver.position}</StyledTableCell>               
                 <StyledTableCell>
                   <div style={{ display: "flex", alignItems: 'center' }}>
                     <div style={{margin:"0 10px"}}>

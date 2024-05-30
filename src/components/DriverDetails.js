@@ -5,7 +5,7 @@ import LinearProgress from '@mui/material/LinearProgress';
 import Flag from 'react-flagkit';
 import { getAlphaCode } from '../Utils.js';
 
-import * as React from 'react';
+
 import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -15,6 +15,12 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { grey } from "@mui/material/colors";
+
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Typography from '@mui/material/Typography';
+import { CardActionArea } from '@mui/material';
+import Box from "@mui/material/Box";
 
 const DriverDetails = (props) => {
   const [driverDetails, setDriverDetails] = useState([]);
@@ -59,23 +65,41 @@ const DriverDetails = (props) => {
   }));
 
   return (
-    <div>
-      <div>
-        <div>
-          <p><img src={`${process.env.PUBLIC_URL}/assets/img/${params.driverId}.jpg`}  alt="Drivers" style={{ maxHeight: `60px` }} /></p>
-        <div>
-          <p><Flag country={getAlphaCode(props.flags,driverDetails.Driver.nationality)} size={20} /></p>
-          <p>{driverDetails.Driver.givenName} {driverDetails.Driver.familyName}</p>
-        </div>
-      </div>
+    <div style={{ display: "flex"}}>
+      <Card sx={{ maxWidth: 235 }}>
+        <CardActionArea>
+          <CardContent>
+            <Box
+              display='flex'
+              flex='1'
+              justifyContent='center'
+              flexDirection='column'
+              alignItems='center'
+              margin='auto'>
+                <Box 
+                  component='img'
+                  sx={{ 
+                    width: 140,
+                  }}
+                  alt='Drivers'
+                  src={`${process.env.PUBLIC_URL}/assets/img/${params.driverId}.jpg`}/>
+            
+              <Typography variant="caption" fontWeight={700} style={{fontSize: "20px"}}>
+                <Flag country={getAlphaCode(props.flags,driverDetails.Driver.nationality)} size={40} />
+              </Typography>
+              <Typography variant="caption" fontWeight={700} style={{fontSize: "20px", color: "pink"}}>
+                {driverDetails.Driver.givenName} 
+                {driverDetails.Driver.familyName}
+              </Typography>
+            </Box>
 
-      <div>
-        <p>Country: {driverDetails.Driver.nationality}</p>
-        <p>Team: {driverDetails.Constructors[0].name}</p>
-        <p>Birth: {driverDetails.Driver.dateOfBirth}</p>
-        <p>Biography: {driverDetails.Driver.url}</p>
-      </div>
-    </div>
+            <Typography variant="caption" display="block" fontWeight={900}>Country: {driverDetails.Driver.nationality}</Typography>
+            <Typography variant="caption" display="block" fontWeight={900}>Team: {driverDetails.Constructors[0].name}</Typography>
+            <Typography variant="caption" display="block" fontWeight={900}>Birth: {driverDetails.Driver.dateOfBirth}</Typography>
+            <Typography variant="caption" display="block" fontWeight={900}>Biography: {driverDetails.Driver.url}</Typography>
+          </CardContent>
+        </CardActionArea>
+      </Card>
 
     <TableContainer component={Paper}>
 
@@ -95,7 +119,7 @@ const DriverDetails = (props) => {
 
         <TableBody>
           {driverList.map((race, i) =>
-            <TableRow key={i}>
+            <TableRow hover key={i} sx={{ cursor: 'pointer' }}>
               <StyledTableCell>{race.round}</StyledTableCell>
               <StyledTableCell>
                   <div style={{ display: "flex", alignItems: 'center' }}>
