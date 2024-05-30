@@ -73,14 +73,14 @@ const RacesDetails = (props) => {
     },
     [`&.${tableCellClasses.body}`]: {
       fontSize: 14,
+      width: 1 / 1,
     },
   }));
 
 
   return (
-    <div style={{ display: "flex" }}>
+    <div>
       <div>
-
         <p><Flag country={getAlphaCode(props.flags, Card.Circuit.Location.country)} size={150} /></p>
         <p>{Card.raceName}</p>
         <p>Country: {Card.Circuit.Location.country}</p>
@@ -88,68 +88,70 @@ const RacesDetails = (props) => {
         <p>Date: {Card.date}</p>
         <p>Full Report: {Card.url}</p>
       </div>
-      
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 700 }} aria-label="customized table">
-          <TableHead>
-            <TableRow><StyledTableCell>Qualifying results</StyledTableCell></TableRow>
-            <TableRow>
-              <StyledTableCell>Pos</StyledTableCell>
-              <StyledTableCell >Driver</StyledTableCell>
-              <StyledTableCell >Team</StyledTableCell>
-              <StyledTableCell >Best Time</StyledTableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {RacesQualifying.map((race) => (
-              <TableRow key={race.position}>
-                <StyledTableCell component="th" scope="row" >{race.position}</StyledTableCell>
-                <StyledTableCell>
-                  <div style={{ display: "flex", alignItems: 'center' }}>
-                    <div style={{ margin: "0 10px" }}>
-                      <Flag country={getAlphaCode(props.flags, race.Driver.nationality)} size={20} />
-                    </div> {race.Driver.familyName}
-                  </div>
-                </StyledTableCell>
-                <StyledTableCell>{race.Constructor.name}</StyledTableCell>
-                <StyledTableCell>{handelTime(race)}</StyledTableCell>
+      <div style={{ display: "flex", width: "90vw"}}>
+        <TableContainer sx={{ color: 'grey.A400', border: 15, borderTopLeftRadius: 5, }}>
+          <Table>
+            <TableHead>
+              <TableRow><StyledTableCell colSpan={5}>Qualifying results</StyledTableCell></TableRow>
+              <TableRow>
+                <StyledTableCell>Pos</StyledTableCell>
+                <StyledTableCell >Driver</StyledTableCell>
+                <StyledTableCell >Team</StyledTableCell>
+                <StyledTableCell >Best Time</StyledTableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+            </TableHead>
+            <TableBody>
+              {RacesQualifying.map((race) => (
+                <TableRow key={race.position}>
+                  <StyledTableCell component="th" scope="row" >{race.position}</StyledTableCell>
+                  <StyledTableCell>
+                    <div style={{ display: "flex", alignItems: 'center' }}>
+                      <div style={{ margin: "0 10px" }}>
+                        <Flag country={getAlphaCode(props.flags, race.Driver.nationality)} size={20} />
+                      </div> {race.Driver.familyName}
+                    </div>
+                  </StyledTableCell>
+                  <StyledTableCell>{race.Constructor.name}</StyledTableCell>
+                  <StyledTableCell>{handelTime(race)}</StyledTableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
 
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 700 }} aria-label="customized table">
-          <TableHead>
-            <TableRow><StyledTableCell>Race results</StyledTableCell></TableRow>
-            <TableRow>
-              <StyledTableCell>Pos</StyledTableCell>
-              <StyledTableCell >Driver</StyledTableCell>
-              <StyledTableCell >Team</StyledTableCell>
-              <StyledTableCell >Result</StyledTableCell>
-              <StyledTableCell >Points</StyledTableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {RacesDetails.map((race) => (
-              <TableRow key={race.position}>
-                <StyledTableCell component="th" scope="row" >{race.position}</StyledTableCell>
-                <StyledTableCell>
-                  <div style={{ display: "flex", alignItems: 'center' }}>
-                    <div style={{ margin: "0 10px" }}>
-                      <Flag country={getAlphaCode(props.flags, race.Driver.nationality)} size={20} />
-                    </div> {race.Driver.familyName}
-                  </div>
-                </StyledTableCell>
-                <StyledTableCell>{race.Constructor.name}</StyledTableCell>
-                <StyledTableCell>{race.Time ? race.Time.time : "0"}</StyledTableCell>
-                <StyledTableCell>{race.points}</StyledTableCell>
+
+        <TableContainer sx={{ color: 'grey.A400', border: 15, borderTopRightRadius: 5, }}>
+          <Table>
+            <TableHead>
+              <TableRow><StyledTableCell colSpan={5}>Race results</StyledTableCell></TableRow>
+              <TableRow>
+                <StyledTableCell>Pos</StyledTableCell>
+                <StyledTableCell >Driver</StyledTableCell>
+                <StyledTableCell >Team</StyledTableCell>
+                <StyledTableCell >Result</StyledTableCell>
+                <StyledTableCell >Points</StyledTableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+            </TableHead>
+            <TableBody>
+              {RacesDetails.map((race) => (
+                <TableRow key={race.position}>
+                  <StyledTableCell component="th" scope="row" >{race.position}</StyledTableCell>
+                  <StyledTableCell>
+                    <div style={{ display: "flex", alignItems: 'center' }}>
+                      <div style={{ margin: "0 10px" }}>
+                        <Flag country={getAlphaCode(props.flags, race.Driver.nationality)} size={20} />
+                      </div> {race.Driver.familyName}
+                    </div>
+                  </StyledTableCell>
+                  <StyledTableCell>{race.Constructor.name}</StyledTableCell>
+                  <StyledTableCell>{race.Time ? race.Time.time : "0"}</StyledTableCell>
+                  <StyledTableCell>{race.points}</StyledTableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </div>
 
     </div>
   );

@@ -15,7 +15,6 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { grey } from "@mui/material/colors";
 
-
 const RacesList = (props) => {
 
   const [races, setRaces] = useState([]);
@@ -48,16 +47,19 @@ const RacesList = (props) => {
     },
     [`&.${tableCellClasses.body}`]: {
       fontSize: 14,
+      width: 1/1,
     },
   }));
 
+
+
   return (
-    <div>
+    <div  style={{width: "100vw",  overflow: "hidden"}}>
       <h2>Race Calendar</h2>
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 700 }} aria-label="customized table">
+      <TableContainer sx={{ color: 'grey.A400' , border: 15, borderRadius: 2,}}>
+        <Table>
           <TableHead>
-            <TableRow><StyledTableCell>Race Calendar - 2013</StyledTableCell></TableRow>
+            <TableRow><StyledTableCell colSpan={5}>Race Calendar - 2013</StyledTableCell></TableRow>
             <TableRow>
               <StyledTableCell>Round</StyledTableCell>
               <StyledTableCell >Grand Prix</StyledTableCell>
