@@ -12,7 +12,6 @@ import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
 import { grey } from "@mui/material/colors";
 
 
@@ -22,6 +21,8 @@ import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
 import Box from "@mui/material/Box";
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+
 
 
 
@@ -60,13 +61,14 @@ const TeamDetails = (props) => {
       backgroundColor: grey.A200,
       color: theme.palette.common.black,
       fontWeight: 600,
+      padding: 10,
     },
     [`&.${tableCellClasses.body}`]: {
       fontSize: 14,
+      padding: 5,
     },
   }));
-
-
+  const handleOpenLink= () => window.open(teamDetails.Constructor.url, "_blank");
 
 
 
@@ -77,7 +79,7 @@ const TeamDetails = (props) => {
   return (
     <div style={{ display: "flex" }}>
       <Card
-        sx={{ maxWidth: 235 }}>
+        sx={{ maxWidth: 235 }} onClick={(handleOpenLink)}>
         <CardActionArea>
 
           <CardContent>
@@ -88,11 +90,11 @@ const TeamDetails = (props) => {
               flexDirection='column'
               alignItems='center'
               margin='auto'
-              >
+            >
               <Box
-              sx = {{
-              objectFit:"contain"
-              }}
+                sx={{
+                  objectFit: "contain"
+                }}
                 component='img'
                 width={140}
                 height={190}
@@ -113,7 +115,10 @@ const TeamDetails = (props) => {
             <Typography variant="caption" display="block" fontWeight={900}>Country: {teamDetails.Constructor.nationality}</Typography>
             <Typography variant="caption" display="block" fontWeight={900} >Position: {teamDetails.position}</Typography>
             <Typography variant="caption" display="block" fontWeight={900}>Points: {teamDetails.points}</Typography>
-            <Typography variant="caption" display="block" fontWeight={900}>History:  {teamDetails.Constructor.url}</Typography>
+            
+            <Box display='flex' alignItems='center'>
+            <Typography variant="caption" display="block" fontWeight={900}>History:  </Typography><OpenInNewIcon fontSize="small"/>
+            </Box>
 
           </CardContent>
         </CardActionArea>
@@ -122,11 +127,11 @@ const TeamDetails = (props) => {
 
 
 
-      <TableContainer component={Paper}>
+      <TableContainer>
         <Table sx={{ minWidth: 1000 }} aria-label="customized table">
           <TableHead>
             <TableRow>
-              <StyledTableCell>Formula 1 2013 Results </StyledTableCell>
+              <StyledTableCell colSpan={5}>Formula 1 2013 Results </StyledTableCell>
             </TableRow>
 
             <TableRow>
@@ -146,8 +151,23 @@ const TeamDetails = (props) => {
                 <StyledTableCell>{result.round}</StyledTableCell>
 
                 <StyledTableCell>
-                  <Flag country={getAlphaCode(props.flags, result.Circuit.Location.country)} size={20} /> {result.raceName}
+
+                  <Box
+                    display='flex'
+                  >
+                    <Box
+                      marginRight={2}
+                      textAlign="center"
+                    >
+                      <Flag country={getAlphaCode(props.flags, result.Circuit.Location.country)} size={20} />
+                    </Box>
+                    <Box>
+                      {result.raceName}
+                    </Box>
+                  </Box>
                 </StyledTableCell>
+
+
                 <StyledTableCell>{result.Results[0].position}</StyledTableCell>
                 <StyledTableCell>{result.Results[1].position}</StyledTableCell>
                 <StyledTableCell>{parseInt(result.Results[0].points) + parseInt(result.Results[1].points)}</StyledTableCell>

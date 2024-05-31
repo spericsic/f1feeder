@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Flag from 'react-flagkit';
 import { getAlphaCode } from '../Utils.js';
 
-import * as React from 'react';
+
 import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -12,12 +12,13 @@ import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
+import Box from "@mui/material/Box";
 import { grey } from "@mui/material/colors";
 
 const RacesList = (props) => {
 
   const [races, setRaces] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const navigate = useNavigate();
 
@@ -27,17 +28,18 @@ const RacesList = (props) => {
 
   const getRaces = async () => {
     const url = 'http://ergast.com/api/f1/2013/results/1.json'
-    
+
     const response = await axios.get(url);
     const data = response.data.MRData.RaceTable.Races;
     setRaces(data);
+    setIsLoading(false);
   }
 
   const handelClickDetails = (id) => {
     const linkTo = `/races/details/${id}`;
     navigate(linkTo);
   };
-  
+
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -52,11 +54,14 @@ const RacesList = (props) => {
     },
   }));
 
+  if (isLoading) {
+    return <div></div>;
+  }
 
   return (
-    <div  style={{width: "100vw",  overflow: "hidden"}}>
+    <div style={{ width: "100vw", overflow: "hidden" }}>
       <h2>Race Calendar</h2>
-      <TableContainer sx={{ color: 'grey.A400' , border: 15, borderRadius: 2,}}>
+      <TableContainer sx={{ color: 'grey.A400', border: 15, borderRadius: 2, }}>
         <Table>
           <TableHead>
             <TableRow><StyledTableCell colSpan={5}>Race Calendar - 2013</StyledTableCell></TableRow>
@@ -70,18 +75,25 @@ const RacesList = (props) => {
           </TableHead>
           <TableBody>
             {races.map((race) => (
-              <TableRow key={race.round} onClick={() => handelClickDetails(race.round)}  hover sx={{ cursor: 'pointer' }}>
+              <TableRow key={race.round} onClick={() => handelClickDetails(race.round)} hover sx={{ cursor: 'pointer' }}>
                 <StyledTableCell component="th" scope="row" >{race.round}</StyledTableCell>
+
                 <StyledTableCell>
-                  <div style={{ display: "flex", alignItems: 'center' }}>
-                    <div style={{margin:"0 10px"}}>
+                  <Box
+                    display="flex">
+                    <Box
+                      marginRight={2}
+                      textAlign="center">
                       <Flag country={getAlphaCode(props.flags, race.Circuit.Location.country)} size={20} />
-                    </div> {race.raceName}
-                  </div>
+                    </Box>
+                    <Box>
+                      {race.raceName}
+                    </Box>
+                  </Box>                 
                 </StyledTableCell>
                 <StyledTableCell>{race.Circuit.circuitName}</StyledTableCell>
                 <StyledTableCell>{race.date}</StyledTableCell>
-                <StyledTableCell><div style={{ display: "flex", alignItems: 'center' }}><div style={{margin:"0 10px"}}><Flag country={getAlphaCode(props.flags, race.Results[0].Driver.nationality)} size={20} /></div> {race.Results[0].Driver.familyName}</div></StyledTableCell>
+                <StyledTableCell><div style={{ display: "flex", alignItems: 'center' }}><div style={{ margin: "0 10px" }}><Flag country={getAlphaCode(props.flags, race.Results[0].Driver.nationality)} size={20} /></div> {race.Results[0].Driver.familyName}</div></StyledTableCell>
               </TableRow>
             ))}
           </TableBody>

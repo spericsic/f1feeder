@@ -1,11 +1,11 @@
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Flag from 'react-flagkit';
 import LinearProgress from '@mui/material/LinearProgress';
 import { getAlphaCode } from '../Utils.js';
 
-import * as React from 'react';
+
 import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -18,7 +18,7 @@ import { grey } from "@mui/material/colors";
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
-import { CardActionArea, Icon } from '@mui/material';
+import { CardActionArea } from '@mui/material';
 import Box from "@mui/material/Box";
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 
@@ -68,10 +68,7 @@ const RacesDetails = (props) => {
 
   }
 
-  if (isLoading) {
-    return <LinearProgress />;
-  }
-
+  
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
       backgroundColor: grey.A200,
@@ -86,6 +83,10 @@ const RacesDetails = (props) => {
   }));
 
   const handleOpenLink= ()=> window.open(CardX.url, "_blank");
+
+  if (isLoading) {
+    return <LinearProgress />;
+  }
 
   return (
     <div style={{ display: "flex" }}>
@@ -115,8 +116,8 @@ const RacesDetails = (props) => {
       </Card>
 
       <div style={{ display: "flex", width: "80vw" }}>
-        <TableContainer sx={{ color: 'grey.A400', border: 15, borderTopLeftRadius: 5, }}>
-          <Table>
+      <TableContainer>
+        <Table sx={{ minWidth: 1000 }} aria-label="customized table">
             <TableHead>
               <TableRow><StyledTableCell colSpan={5}>Qualifying results</StyledTableCell></TableRow>
               <TableRow>
@@ -129,13 +130,18 @@ const RacesDetails = (props) => {
             <TableBody>
               {RacesQualifying.map((race) => (
                 <TableRow key={race.position} hover sx={{ cursor: 'pointer' }}>
-                  <StyledTableCell component="th" scope="row" >{race.position}</StyledTableCell>
+                  <StyledTableCell >{race.position}</StyledTableCell>
                   <StyledTableCell>
-                    <div style={{ display: "flex", alignItems: 'center' }}>
-                      <div style={{ margin: "0 10px" }}>
+                    <Box
+                    display="flex">
+                      <Box
+                      marginRight={2}
+                      textAlign="center">
                         <Flag country={getAlphaCode(props.flags, race.Driver.nationality)} size={20} />
-                      </div> {race.Driver.familyName}
-                    </div>
+                      </Box>
+                      {race.Driver.familyName}
+                    </Box>
+                    
                   </StyledTableCell>
                   <StyledTableCell>{race.Constructor.name}</StyledTableCell>
                   <StyledTableCell>{handelTime(race)}</StyledTableCell>
@@ -146,8 +152,8 @@ const RacesDetails = (props) => {
         </TableContainer>
 
 
-        <TableContainer sx={{ color: 'grey.A400', border: 15, borderTopRightRadius: 5, }}>
-          <Table>
+        <TableContainer>
+        <Table sx={{ minWidth: 1000 }} aria-label="customized table">
             <TableHead>
               <TableRow><StyledTableCell colSpan={5}>Race results</StyledTableCell></TableRow>
               <TableRow>
@@ -161,13 +167,22 @@ const RacesDetails = (props) => {
             <TableBody>
               {RacesDetails.map((race) => (
                 <TableRow key={race.position} hover sx={{ cursor: 'pointer' }}>
-                  <StyledTableCell component="th" scope="row" >{race.position}</StyledTableCell>
+                  <StyledTableCell>{race.position}</StyledTableCell>
                   <StyledTableCell>
-                    <div style={{ display: "flex", alignItems: 'center' }}>
-                      <div style={{ margin: "0 10px" }}>
-                        <Flag country={getAlphaCode(props.flags, race.Driver.nationality)} size={20} />
-                      </div> {race.Driver.familyName}
-                    </div>
+                    
+                  <Box
+                    display='flex'
+                  >
+                    <Box
+                      marginRight={2}
+                      textAlign="center"
+                    >
+                      <Flag country={getAlphaCode(props.flags, race.Driver.nationality)} size={20} />
+                    </Box> 
+                      <Box>
+                        {race.Driver.familyName}
+                      </Box>
+                    </Box>
                   </StyledTableCell>
                   <StyledTableCell>{race.Constructor.name}</StyledTableCell>
                   <StyledTableCell>{race.Time ? race.Time.time : "0"}</StyledTableCell>
