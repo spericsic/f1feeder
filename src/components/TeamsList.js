@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Flag from 'react-flagkit';
-import { getAlphaCode } from '../Utils.js';
+import { getAlphaCode , setSearchData } from '../Utils.js';
 
 import * as React from 'react';
 import { styled } from '@mui/material/styles';
@@ -21,16 +21,26 @@ const TeamsList = (props) => {
 
   const [teams, setTeams] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [filteredTeams, setFilteredTeams] = useState([]);
+
   const navigate = useNavigate();
 
   useEffect(() => {
     getTeams();
   }, []);
 
+  useEffect(() => {
+    const filtered = setSearchData(props.searchValue, teams);
+    setFilteredTeams(filtered);
+  },[props.searchValue]);
+
   const getTeams = async () => {
     const url = "http://ergast.com/api/f1/2013/constructorStandings.json";
     const response = await axios.get(url);
     const data = response.data.MRData.StandingsTable.StandingsLists[0].ConstructorStandings;
+    const filtered = setSearchData(props.searchValue, data);
+
+    setFilteredTeams(filtered);
     setTeams(data);
     setIsLoading(false);
   };

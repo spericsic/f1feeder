@@ -8,10 +8,13 @@ import DriverDetails from "./components/DriverDetails";
 import TeamDetails from "./components/TeamDetails";
 import RacesDetails from "./components/RacesDetails";
 import { Box } from "@mui/system";
+import { TextField } from "@mui/material";
 
 const App = () => {
 
   const [flagsList, setFlagsList] = useState([]);
+  
+  const [searchValue, setSearchValue] = useState("");
 
   useEffect(() => {
     getFlagsList();
@@ -23,6 +26,11 @@ const App = () => {
     const response = await axios.get(url);
     setFlagsList(response.data);
   }
+
+  const handleSearchInput = (e) => {
+    const value = e.target.value;
+    setSearchValue(value);
+  };
 
   return (
     <div className="main-screen">
@@ -39,13 +47,20 @@ const App = () => {
             <NavLink to="/races"><img src={`${process.env.PUBLIC_URL}/assets/img/Races.png`} alt="Races"></img></NavLink>
           </li>
         </nav>
+        <TextField
+          value = {searchValue}
+          id="main-search"
+          onChange={handleSearchInput}
+          variant="outlined"
+          label="Search for..."
+        />
         <Routes>
           <Route path="/" element={<div></div>} />
-          <Route path="/drivers" element={<DriversList flags={flagsList} />} />
+          <Route path="/drivers" element={<DriversList flags={flagsList} searchValue={searchValue} />} />
           <Route path="/drivers/details/:driverId" element={<DriverDetails flags={flagsList} />} />
-          <Route path="/teams" element={<TeamsList flags={flagsList} />} />
+          <Route path="/teams" element={<TeamsList flags={flagsList} />} searchValue={searchValue} />
           <Route path="/teams/details/:constructorId" element={<TeamDetails flags={flagsList} />} />
-          <Route path="/races" element={<RacesList flags={flagsList} />} />
+          <Route path="/races" element={<RacesList flags={flagsList} />} searchValue={searchValue} />
           <Route path="/races/details/:raceId" element={<RacesDetails flags={flagsList} />} />
         </Routes>
       </Router>

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Flag from 'react-flagkit';
-import { getAlphaCode } from '../Utils.js';
+import { getAlphaCode , setSearchData } from '../Utils.js';
 
 
 import { styled } from '@mui/material/styles';
@@ -18,6 +18,7 @@ import { grey } from "@mui/material/colors";
 const RacesList = (props) => {
 
   const [races, setRaces] = useState([]);
+  const [filteredRaces, setFilteredRaces] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const navigate = useNavigate();
@@ -25,12 +26,20 @@ const RacesList = (props) => {
   useEffect(() => {
     getRaces();
   }, []);
+  
+  useEffect(() => {
+    const filtered = setSearchData(props.searchValue, races);
+    setFilteredRaces(filtered);
+  }, [props.searchValue]);
 
   const getRaces = async () => {
     const url = 'http://ergast.com/api/f1/2013/results/1.json'
 
     const response = await axios.get(url);
     const data = response.data.MRData.RaceTable.Races;
+    const filtered = setSearchData(props.searchValue, data);
+    
+    setFilteredRaces(filtered);
     setRaces(data);
     setIsLoading(false);
   }

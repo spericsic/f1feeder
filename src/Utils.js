@@ -40,3 +40,38 @@ export function getAlphaCode(flags, value) {
 
     return flagsHelperData.length === 1 ? flagsHelperData.alpha_2_code : value;
 }
+
+export function setSearchData(value, table) {
+    const search = value.toLowerCase();
+    const filteredData = table.filter((el) => {
+        if (search === '') {
+        return el;
+        }
+        else {
+            if (el.Driver){ 
+                return el.Driver.givenName.toLowerCase().includes(search)
+                    || el.Driver.familyName.toLowerCase().includes(search)
+                    || el.Constructors[0].name.toLowerCase().includes(search)
+            }else if(el.Constructor) {
+                return el.Constructor.name.toLowerCase().includes(search)
+            }else if(el.Circuit) {
+                return el.Results[0].Driver.familyName.toLowerCase().includes(search)
+                    || el.Circuit.circuitName.toLowerCase().includes(search)
+                    || el.Circuit.Location.country.toLowerCase().includes(search)
+            }
+        }  
+    })
+    return filteredData;
+}
+
+export function getCellBackgroundColor(value) {
+    console.log(value)
+    switch(value) {
+        case 1:
+            return "black";
+            break;
+        default:
+            return "red";
+    };
+}
+//className={()=>metoda(race.Results[0].grid)}
