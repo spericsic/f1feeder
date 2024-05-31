@@ -13,7 +13,6 @@ import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
 import { grey } from "@mui/material/colors";
 
 import Card from '@mui/material/Card';
@@ -21,6 +20,7 @@ import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
 import Box from "@mui/material/Box";
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 
 const DriverDetails = (props) => {
   const [driverDetails, setDriverDetails] = useState([]);
@@ -58,15 +58,19 @@ const DriverDetails = (props) => {
       backgroundColor: grey.A200,
       color: theme.palette.common.black,
       fontWeight: 600,
+      padding: 10,
     },
     [`&.${tableCellClasses.body}`]: {
       fontSize: 14,
+      padding: 5,
     },
   }));
 
+  const handleOpenLink= ()=> window.open(driverDetails.Driver.url, "_blank");
+
   return (
     <div style={{ display: "flex"}}>
-      <Card sx={{ maxWidth: 235 }}>
+      <Card sx={{ maxWidth: 235 }} onClick={(handleOpenLink)}>
         <CardActionArea>
           <CardContent>
             <Box
@@ -96,17 +100,17 @@ const DriverDetails = (props) => {
             <Typography variant="caption" display="block" fontWeight={900}>Country: {driverDetails.Driver.nationality}</Typography>
             <Typography variant="caption" display="block" fontWeight={900}>Team: {driverDetails.Constructors[0].name}</Typography>
             <Typography variant="caption" display="block" fontWeight={900}>Birth: {driverDetails.Driver.dateOfBirth}</Typography>
-            <Typography variant="caption" display="block" fontWeight={900}>Biography: {driverDetails.Driver.url}</Typography>
+            <Box display='flex' alignItems='center'><Typography variant="caption" display="block" fontWeight={900}>Biography: </Typography><OpenInNewIcon fontSize="small" /></Box>
           </CardContent>
         </CardActionArea>
       </Card>
 
-    <TableContainer component={Paper}>
+    <TableContainer>
 
-      <Table sx={{ minWidth: 700 }} aria-label="customized table">
+    <Table sx={{ minWidth: 1000 }} aria-label="customized table">
         <TableHead>
           <TableRow>
-            <StyledTableCell>Formula 1 2013 Results</StyledTableCell>
+            <StyledTableCell colSpan={5}>Formula 1 2013 Results</StyledTableCell>
           </TableRow>
           <TableRow>
             <StyledTableCell>Round</StyledTableCell>
@@ -119,16 +123,23 @@ const DriverDetails = (props) => {
 
         <TableBody>
           {driverList.map((race, i) =>
-            <TableRow hover key={i} sx={{ cursor: 'pointer' }}>
+            <TableRow hover key={i}>
               <StyledTableCell>{race.round}</StyledTableCell>
-              <StyledTableCell>
-                  <div style={{ display: "flex", alignItems: 'center' }}>
-                    <div style={{margin:"0 10px"}}>
-                      <Flag country={getAlphaCode(props.flags, race.Circuit.Location.country)} size={20} />
-                    </div>{race.raceName}
-                  </div>
+              <StyledTableCell sx={{ cursor: 'pointer' }}>
+                <Box
+                 display='flex' 
+                 >
+                  <Box
+                  marginRight={2}
+                  textAlign="center">
+                    <Flag country={getAlphaCode(props.flags, race.Circuit.Location.country)} size={20} />
+                  </Box>
+                  <Box>
+                      {race.raceName}
+                  </Box>
+                </Box>      
               </StyledTableCell>
-              <StyledTableCell>{race.Results[0].Constructor.name}</StyledTableCell>
+              <StyledTableCell sx={{ cursor: 'pointer' }}>{race.Results[0].Constructor.name}</StyledTableCell>
               <StyledTableCell>{race.Results[0].grid}</StyledTableCell>
               <StyledTableCell>{race.Results[0].position}</StyledTableCell>
             </TableRow>
