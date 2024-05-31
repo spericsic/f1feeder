@@ -7,6 +7,7 @@ import RacesList from "./components/RacesList";
 import DriverDetails from "./components/DriverDetails";
 import TeamDetails from "./components/TeamDetails";
 import RacesDetails from "./components/RacesDetails";
+import { Box } from "@mui/system";
 
 const App = () => {
 
@@ -39,15 +40,20 @@ const App = () => {
           </li>
         </nav>
         <Routes>
-          <Route path="/" element={<div></div>}/> 
-          <Route path="/drivers" element={<DriversList  flags={flagsList}/>}/>
-          <Route path="/drivers/details/:driverId" element={<DriverDetails  flags={flagsList}/>}/>
-          <Route path="/teams" element={<TeamsList  flags={flagsList}/>}/>
-          <Route path="/teams/details/:constructorId" element={<TeamDetails  flags={flagsList}/>}/>
-          <Route path="/races" element={<RacesList flags={flagsList}/>}/>
-          <Route path="/races/details/:raceId" element={<RacesDetails flags={flagsList}/>}/>
+          <Route path="/" element={<div></div>} />
+          <Route path="/drivers" element={<DriversList flags={flagsList} />} />
+          <Route path="/drivers/details/:driverId" element={<DriverDetails flags={flagsList} />} />
+          <Route path="/teams" element={<TeamsList flags={flagsList} />} />
+          <Route path="/teams/details/:constructorId" element={<TeamDetails flags={flagsList} />} />
+          <Route path="/races" element={<RacesList flags={flagsList} />} />
+          <Route path="/races/details/:raceId" element={<RacesDetails flags={flagsList} />} />
         </Routes>
       </Router>
+      {/* <Box>
+        <video autoPlay muted loop style={{ width: "100%" }}>
+          <source src={`${process.env.PUBLIC_URL}/assets/video/F1 2024.mp4`} type="video/mp4" />
+        </video>
+      </Box> */}
     </div>
   );
 }

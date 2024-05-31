@@ -53,7 +53,6 @@ const RacesList = (props) => {
   }));
 
 
-
   return (
     <div  style={{width: "100vw",  overflow: "hidden"}}>
       <h2>Race Calendar</h2>
@@ -88,6 +87,7 @@ const RacesList = (props) => {
           </TableBody>
         </Table>
       </TableContainer>
+
     </div>
   );
 }
