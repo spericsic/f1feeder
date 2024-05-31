@@ -44,10 +44,11 @@ const RacesList = (props) => {
       backgroundColor: grey.A200,
       color: theme.palette.common.black,
       fontWeight: 600,
+      padding: 10,
     },
     [`&.${tableCellClasses.body}`]: {
       fontSize: 14,
-      width: 1/1,
+      padding: 5,
     },
   }));
 
@@ -75,13 +76,13 @@ const RacesList = (props) => {
                 <StyledTableCell>
                   <div style={{ display: "flex", alignItems: 'center' }}>
                     <div style={{margin:"0 10px"}}>
-                      <Flag country={getAlphaCode(props.flags, race.Circuit.Location.country)} size={40} />
+                      <Flag country={getAlphaCode(props.flags, race.Circuit.Location.country)} size={20} />
                     </div> {race.raceName}
                   </div>
                 </StyledTableCell>
                 <StyledTableCell>{race.Circuit.circuitName}</StyledTableCell>
                 <StyledTableCell>{race.date}</StyledTableCell>
-                <StyledTableCell><div style={{ display: "flex", alignItems: 'center' }}><div style={{margin:"0 10px"}}><Flag country={getAlphaCode(props.flags, race.Results[0].Driver.nationality)} size={40} /></div> {race.Results[0].Driver.familyName}</div></StyledTableCell>
+                <StyledTableCell><div style={{ display: "flex", alignItems: 'center' }}><div style={{margin:"0 10px"}}><Flag country={getAlphaCode(props.flags, race.Results[0].Driver.nationality)} size={20} /></div> {race.Results[0].Driver.familyName}</div></StyledTableCell>
               </TableRow>
             ))}
           </TableBody>

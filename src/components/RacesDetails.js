@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Flag from 'react-flagkit';
@@ -18,8 +18,9 @@ import { grey } from "@mui/material/colors";
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
-import { CardActionArea } from '@mui/material';
+import { CardActionArea, Icon } from '@mui/material';
 import Box from "@mui/material/Box";
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 
 
 const RacesDetails = (props) => {
@@ -76,18 +77,19 @@ const RacesDetails = (props) => {
       backgroundColor: grey.A200,
       color: theme.palette.common.black,
       fontWeight: 600,
+      padding: 10,
     },
     [`&.${tableCellClasses.body}`]: {
       fontSize: 14,
-      width: 1 / 1,
+      padding: 5,
     },
   }));
 
+  const handleOpenLink= ()=> window.open(CardX.url, "_blank");
 
   return (
     <div style={{ display: "flex" }}>
-
-      <Card sx={{ maxWidth: 235 }}>
+      <Card sx={{ maxWidth: 235 }} onClick={(handleOpenLink)}>
         <CardActionArea>
           <CardContent>
             <Box
@@ -107,7 +109,7 @@ const RacesDetails = (props) => {
             <Typography variant="caption" display="block" fontWeight={900}>Country: {CardX.Circuit.Location.country}</Typography>
             <Typography variant="caption" display="block" fontWeight={900}>Location: {CardX.Circuit.Location.locality}</Typography>
             <Typography variant="caption" display="block" fontWeight={900}>Date: {CardX.date}</Typography>
-            <Typography variant="caption" display="block" fontWeight={900}>Full Report: {CardX.url}</Typography>
+            <Box display='flex' alignItems='center'><Typography variant="caption" display="block" fontWeight={900}>Full Report: </Typography><OpenInNewIcon fontSize="small" /></Box>
           </CardContent>
         </CardActionArea>
       </Card>
