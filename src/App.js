@@ -49,11 +49,11 @@ const App = () => {
           <Route path="/races/details/:raceId" element={<RacesDetails flags={flagsList} />} />
         </Routes>
       </Router>
-      <Box>
+      {/* <Box>
         <video autoPlay muted loop style={{ width: "100%" }}>
           <source src={`${process.env.PUBLIC_URL}/assets/video/F1 2024.mp4`} type="video/mp4" />
         </video>
-      </Box>
+      </Box> */}
     </div>
   );
 }
