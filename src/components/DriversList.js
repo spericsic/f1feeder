@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Flag from 'react-flagkit';
 import { getAlphaCode } from '../Utils.js';
 
+import * as React from 'react';
 import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -11,8 +12,9 @@ import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
 import { grey } from "@mui/material/colors";
+import Box from "@mui/material/Box";
+import Typography from '@mui/material/Typography';
 
 const DriversList = (props) => {
 const [drivers, setDrivers] = useState([]);
@@ -40,9 +42,11 @@ const [drivers, setDrivers] = useState([]);
       backgroundColor: grey.A200,
       color: theme.palette.common.black,
       fontWeight: 600,
+      padding: 10,
     },
     [`&.${tableCellClasses.body}`]: {
       fontSize: 14,
+      padding: 5,
     },
   }));
 
@@ -50,26 +54,33 @@ const [drivers, setDrivers] = useState([]);
   return (
     <div>
       <h2>Drivers Championship</h2>
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 700 }} aria-label="customized table">
+      <TableContainer>
+        <Table sx={{ minWidth: 1200 }} aria-label="customized table">
           <TableHead>
             <TableRow>
-              <StyledTableCell>Drivers Championship Standings - 2013</StyledTableCell>
+              <StyledTableCell colSpan={5}>Drivers Championship Standings - 2013</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {drivers.map((driver) =>
               <TableRow hover key={driver.position}
-                onClick={() => handelClickDetails(driver.Driver.driverId)} sx={{ cursor: 'pointer' }}>
+                onClick={() => handelClickDetails(driver.Driver.driverId)}>
                 <StyledTableCell>{driver.position}</StyledTableCell>               
-                <StyledTableCell>
-                  <div style={{ display: "flex", alignItems: 'center' }}>
-                    <div style={{margin:"0 10px"}}>
-                    <Flag country={getAlphaCode(props.flags, driver.Driver.nationality)} size={20} />
-                    </div> {driver.Driver.givenName} {driver.Driver.familyName}
-                  </div>
+                <StyledTableCell sx={{ cursor: 'pointer' }}>
+                <Box
+                 display='flex' 
+                 >
+                    <Box
+                  marginRight={2}
+                  textAlign="center">
+                      <Flag country={getAlphaCode(props.flags, driver.Driver.nationality)} size={20} />
+                    </Box>
+                      <Box>
+                        {driver.Driver.givenName} {driver.Driver.familyName}
+                      </Box>
+                    </Box>
                 </StyledTableCell>
-                <StyledTableCell>{driver.Constructors[0].name}</StyledTableCell>
+                <StyledTableCell sx={{ cursor: 'pointer' }}>{driver.Constructors[0].name}</StyledTableCell>
                 <StyledTableCell>{driver.points}</StyledTableCell>
               </TableRow>
             )}
