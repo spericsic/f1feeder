@@ -68,9 +68,11 @@ const RacesList = (props) => {
   }
 
   return (
-    <div style={{ width: "100vw", overflow: "hidden" }}>
-      <h2>Race Calendar</h2>
-      <TableContainer sx={{ color: 'grey.A400', border: 15, borderRadius: 2, }}>
+    <>
+    <Box className="list-title">
+    Race Calendar
+    </Box>
+      <TableContainer sx={{ color: 'grey.A400', border: 15 }}>
         <Table>
           <TableHead>
             <TableRow><StyledTableCell colSpan={5}>Race Calendar - 2013</StyledTableCell></TableRow>
@@ -120,8 +122,7 @@ const RacesList = (props) => {
           </TableBody>
         </Table>
       </TableContainer>
-
-    </div>
+    </>
   );
 }
 

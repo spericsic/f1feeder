@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Flag from 'react-flagkit';
-import { getAlphaCode , goToExternalLink} from '../Utils.js';
+import { getAlphaCode , goToExternalLink, getCellBackgroundColor} from '../Utils.js';
 
 
 import { styled } from '@mui/material/styles';
@@ -87,7 +87,7 @@ const RacesDetails = (props) => {
   }
 
   return (
-    <div style={{ display: "flex" }}>
+    <Box display="flex">
       <Card sx={{ maxWidth: 235 }} onClick={()=>goToExternalLink(CardX.url)}>
         <CardActionArea>
           <CardContent>
@@ -113,9 +113,9 @@ const RacesDetails = (props) => {
         </CardActionArea>
       </Card>
 
-      <div style={{ display: "flex", width: "80vw" }}>
+      <Box display="flex" width={"75vw"}>
       <TableContainer>
-        <Table sx={{ minWidth: 1000 }} aria-label="customized table">
+        <Table aria-label="customized table">
             <TableHead>
               <TableRow><StyledTableCell colSpan={5}>Qualifying results</StyledTableCell></TableRow>
               <TableRow>
@@ -151,7 +151,7 @@ const RacesDetails = (props) => {
 
 
         <TableContainer>
-        <Table sx={{ minWidth: 1000 }} aria-label="customized table">
+        <Table aria-label="customized table">
             <TableHead>
               <TableRow><StyledTableCell colSpan={5}>Race results</StyledTableCell></TableRow>
               <TableRow>
@@ -184,15 +184,16 @@ const RacesDetails = (props) => {
                   </StyledTableCell>
                   <StyledTableCell>{race.Constructor.name}</StyledTableCell>
                   <StyledTableCell>{race.Time ? race.Time.time : "0"}</StyledTableCell>
-                  <StyledTableCell>{race.points}</StyledTableCell>
+                  <TableCell sx={{ backgroundColor: getCellBackgroundColor(race.points)}}>
+                  {race.points}
+                </TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
         </TableContainer>
-      </div>
-
-    </div>
+      </Box>
+    </Box>
   );
 }
 export default RacesDetails;
