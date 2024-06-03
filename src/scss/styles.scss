@@ -1,13 +1,21 @@
 @import "reset";
 
-.main-screen{
+@import url('https://fonts.cdnfonts.com/css/velvetquilt-display-font');
+
+
+
+
+
+
+.main-screen {
     display: flex;
     flex-direction: column;
-    
+    min-height: 100vh;
+
     .nav-box {
         display: flex;
         flex-direction: row;
-       
+
         .nav-links {
             width: 15vh;
 
@@ -20,4 +28,19 @@
     .app-bar {
         align-items: flex-end;
     }
+
+}
+
+.list-title {
+
+    font-family: 'VelvetQuilt Display font', sans-serif;
+    text-shadow: 2px 2px 8px black;
+    font-weight: 400;
+    font-size: 8vh;
+    background-color: grey;
+    padding: 10px 0 0 15px;
+    color: white;
+    align-items: center;
+
+
 }

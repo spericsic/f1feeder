@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Flag from 'react-flagkit';
-import { getAlphaCode , setSearchData } from '../Utils.js';
+import { getAlphaCode, setSearchData, goToExternalLink } from '../Utils.js';
 
 import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
@@ -14,6 +14,8 @@ import TableRow from '@mui/material/TableRow';
 import { grey } from "@mui/material/colors";
 import Box from "@mui/material/Box";
 import LoaderFlag from "./LoaderFlag.js";
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+
 
 const TeamsList = (props) => {
 
@@ -30,7 +32,7 @@ const TeamsList = (props) => {
   useEffect(() => {
     const filtered = setSearchData(props.searchValue, teams);
     setFilteredTeams(filtered);
-  },[props.searchValue]);
+  }, [props.searchValue]);
 
   const getTeams = async () => {
     const url = "http://ergast.com/api/f1/2013/constructorStandings.json";
@@ -55,6 +57,7 @@ const TeamsList = (props) => {
       fontWeight: 600,
       padding: 10,
 
+
     },
     [`&.${tableCellClasses.body}`]: {
       fontSize: 14,
@@ -63,55 +66,66 @@ const TeamsList = (props) => {
   }));
 
   if (isLoading) {
-    return <LoaderFlag/>
+    return <LoaderFlag />
   }
 
   return (
     <>
-      <h2>Construction Championship</h2>
+      <Box className="list-title">
+        Constructions Championship
+      </Box>
 
 
-      <TableContainer>
-        <Table sx={{ minWidth: 1200 }} aria-label="customized table">
-          <TableHead>
-            <TableRow>
-              <StyledTableCell colSpan={4}> Constructors Championship Standings - 2013 </StyledTableCell>
-            </TableRow>
-          </TableHead>
+      <Box
+        sx={{ border: 15, borderColor: grey }}
+        color="gray"
+      >
+        <TableContainer>
+
+          <Table>
+            <TableHead>
+              <TableRow>
+                <StyledTableCell colSpan={4}> Constructors Championship Standings - 2013 </StyledTableCell>
+              </TableRow>
+            </TableHead>
 
 
-          <TableBody>
+            <TableBody>
 
-            {filteredTeams.map((team) => {
-              return (
-                <TableRow hover key={team.position}
-                  onClick={() => handelClickDetails(team.Constructor.constructorId)} sx={{ cursor: "pointer" }} >
-                  <StyledTableCell>{team.position}</StyledTableCell>
+              {filteredTeams.map((team) => {
+                return (
+                  <TableRow hover key={team.position}
+                    onClick={() => handelClickDetails(team.Constructor.constructorId)}>
+                    <StyledTableCell>{team.position}</StyledTableCell>
 
-                  <StyledTableCell>
+                    <StyledTableCell sx={{ cursor: "pointer" }}>
 
-                    <Box
-                      display="flex">
                       <Box
-                        marginRight={2}
-                        textAlign="center">
-                        <Flag country={getAlphaCode(props.flags, team.Constructor.nationality)} size={20} />
+                        display="flex">
+                        <Box
+                          marginRight={2}
+                          textAlign="center">
+                          <Flag country={getAlphaCode(props.flags, team.Constructor.nationality)} size={20} />
+                        </Box>
+                        <Box >
+                          {team.Constructor.name}
+                        </Box>
                       </Box>
-                      <Box >
-                        {team.Constructor.name}
-                      </Box>
-                    </Box>
 
-                  </StyledTableCell>
-                  <StyledTableCell>{team.Constructor.url}</StyledTableCell>
-                  <StyledTableCell>{team.points}</StyledTableCell>
-                </TableRow>
-              );
-            })}
+                    </StyledTableCell>
+                    <StyledTableCell
+                      onClick={() => goToExternalLink(team.Constructor.url)}
+                      sx={{ cursor: "pointer" }}>Details<OpenInNewIcon fontSize="small" /></StyledTableCell>
+                    <StyledTableCell>{team.points}</StyledTableCell>
+                  </TableRow>
+                );
+              })}
 
-          </TableBody>
-        </Table>
-      </TableContainer>
+            </TableBody>
+          </Table>
+
+        </TableContainer>
+      </Box>
     </>
   );
 }

@@ -75,8 +75,9 @@ const TeamDetails = (props) => {
 
   return (
     <Box display="flex">
-      <Card
-        sx={{ maxWidth: 235 }} onClick={()=>goToExternalLink(teamDetails.Constructor.url)}>
+      <Card 
+        sx={{ maxWidth: 235 }} 
+        onClick={()=>goToExternalLink(teamDetails.Constructor.url)}>
         <CardActionArea>
 
           <CardContent>
@@ -95,7 +96,7 @@ const TeamDetails = (props) => {
                 component='img'
                 width={140}
                 height={190}
-                margin="auto"
+                //margin="auto"
                 alt='Teams'
                 src={`${process.env.PUBLIC_URL}/assets/img/${params.constructorId}.png`}
               />
@@ -148,7 +149,6 @@ const TeamDetails = (props) => {
                 <StyledTableCell>{result.round}</StyledTableCell>
 
                 <StyledTableCell>
-
                   <Box
                     display='flex'
                   >
@@ -164,9 +164,8 @@ const TeamDetails = (props) => {
                   </Box>
                 </StyledTableCell>
 
-
-                <StyledTableCell>{result.Results[0].position}</StyledTableCell>
-                <StyledTableCell>{result.Results[1].position}</StyledTableCell>
+                <TableCell sx={{backgroundColor: getCellBackgroundColor(result.Results[0].position)}}>{result.Results[0].position}</TableCell>
+                <TableCell sx={{backgroundColor: getCellBackgroundColor(result.Results[0].points)}}>{result.Results[1].points}</TableCell>
                 <StyledTableCell>{parseInt(result.Results[0].points) + parseInt(result.Results[1].points)}</StyledTableCell>
               </TableRow>
             )}
