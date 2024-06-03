@@ -35,6 +35,9 @@ const TeamsList = (props) => {
   }, [props.searchValue]);
 
   const getTeams = async () => {
+
+    props.breadcrumbs({ name: 'Teams', link: '/teams/'})
+
     const url = "http://ergast.com/api/f1/2013/constructorStandings.json";
     const response = await axios.get(url);
     const data = response.data.MRData.StandingsTable.StandingsLists[0].ConstructorStandings;
@@ -46,8 +49,9 @@ const TeamsList = (props) => {
   };
 
   const handelClickDetails = (id) => {
-    const linkTo = `/teams/details/${id}`;
+    const linkTo = `/teams/${id}`;
     navigate(linkTo);
+    props.breadcrumbs({ name: `Team${id}`, link: linkTo , disable: true})
   };
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({

@@ -45,7 +45,7 @@ const RacesList = (props) => {
   }
 
   const handelClickDetails = (id) => {
-    const linkTo = `/races/details/${id}`;
+    const linkTo = `/races/${id}`;
     navigate(linkTo);
   };
 

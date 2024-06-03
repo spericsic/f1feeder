@@ -33,12 +33,13 @@ export function getAlphaCode(flags, value) {
     );
 
     if (flagsData.length === 1) return flagsData[0].alpha_2_code;
-    
-    const flagsHelperData = FlagHelperList.filter(flag => 
-        flag.en_short_name.toLocaleLowerCase() === value.toLocaleLowerCase() ||
-        flag.nationality.toLowerCase() === value.toLocaleLowerCase());
+    else {
+        const flagsHelperData = FlagHelperList.filter(flag => 
+            flag.en_short_name.toLowerCase() === value.toLowerCase() ||
+            flag.nationality.toLowerCase() === value.toLowerCase());
 
-    return flagsHelperData.length === 1 ? flagsHelperData.alpha_2_code : value;
+        return flagsHelperData.length === 1 ? flagsHelperData.alpha_2_code : value;
+    }
 }
 
 export function setSearchData(value, table) {
@@ -65,20 +66,27 @@ export function setSearchData(value, table) {
 }
 
 export function getCellBackgroundColor(value) {
+    let colorClass
     switch(value) {
-        case 1:
-            return "yellow";
-        case 2:
-            return "gray";
-        case 3:
-            return "orange";
-        case 4:
-            return "lightgreen";
-        case 5:
-            return "lightblue";
+        case '1':
+            colorClass = "#ffe66aab";
+            break;
+        case '2':
+            colorClass = "#e5e5edab";
+            break;
+        case '3':
+            colorClass = "#ff9657ab";
+            break;
+        case '4':
+            colorClass = "#8cea97ab";
+            break;
+        case '5':
+            colorClass = "#cbecf7ab";
+            break;
         default:
-            return '';
+            colorClass = "#ffc0cbab";
     };
+    return colorClass;
 }
 
 export function goToExternalLink(value) {

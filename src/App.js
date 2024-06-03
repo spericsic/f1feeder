@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route, Link, NavLink } from "react-router-dom";
 import axios from "axios";
-import { AppBar, Box, Button, CardMedia, TextField, Toolbar } from "@mui/material";
+import { AppBar, Box, Breadcrumbs, Button, CardMedia, Chip, TextField, Toolbar } from "@mui/material";
 import DriversList from "./components/DriversList";
 import TeamsList from "./components/TeamsList";
 import RacesList from "./components/RacesList";
@@ -14,6 +14,7 @@ const App = () => {
 
   const [flagsList, setFlagsList] = useState([]);
   const [searchValue, setSearchValue] = useState("");
+  const [breadCrumbs, setBreadCrumbs] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
 
@@ -25,9 +26,15 @@ const App = () => {
     const url = 'https://raw.githubusercontent.com/Dinuks/country-nationality-list/master/countries.json';
 
     const response = await axios.get(url);
+
+    const breadCrumbsList = [];
+    const item = {name: 'Home', link: '/'}
+    breadCrumbsList.push(item);
+
+    setBreadCrumbs(breadCrumbsList);
     setFlagsList(response.data);
-    setIsLoading(false)
-  }
+    setIsLoading(false);
+  };
 
   const handleSearchInput = (e) => {
     const value = e.target.value;
@@ -38,6 +45,12 @@ const App = () => {
     return <LoaderFlag/>
   };
 
+  const getBreadCrums = (value) => {
+    const breadCrumbsList = breadCrumbs.slice();
+    breadCrumbsList.push(value);
+    setBreadCrumbs(breadCrumbsList);
+  }
+
   return (
     <>
       <Router>
@@ -45,6 +58,16 @@ const App = () => {
           <AppBar 
             position="static" 
             className="app-bar">
+            <Breadcrumbs aria-label="breadcrumb">
+              {breadCrumbs.map((bread, i) =>
+                <Chip key={i}
+                  component="a"
+                  href= {bread.link}
+                  label= {bread.name}
+                  disabled= {bread.disable}
+                /> 
+              )}
+            </Breadcrumbs>
             <Toolbar>
               <TextField
                 value = {searchValue}
@@ -84,12 +107,23 @@ const App = () => {
                   />
                   </Box>
                 }/>
-                <Route path="/drivers" element={<DriversList flags={flagsList} searchValue={searchValue} />} />
-                <Route path="/drivers/details/:driverId" element={<DriverDetails flags={flagsList} />} />
-                <Route path="/teams" element={<TeamsList flags={flagsList} searchValue={searchValue} />} />
-                <Route path="/teams/details/:constructorId" element={<TeamDetails flags={flagsList} />} />
+                <Route path="/drivers" element={<DriversList 
+                                                  flags={flagsList} 
+                                                  searchValue={searchValue} 
+                                                  breadcrumbs={getBreadCrums}/>} 
+                                                  />
+                <Route path="/drivers/:driverId" element={<DriverDetails 
+                                                            flags={flagsList} />} 
+                                                            breadcrumbs={getBreadCrums} />
+                <Route path="/teams" element={<TeamsList 
+                                                flags={flagsList} 
+                                                searchValue={searchValue} 
+                                                breadcrumbs={getBreadCrums} />} />
+                <Route path="/teams/:constructorId" element={<TeamDetails 
+                                                                flags={flagsList} 
+                                                                breadcrumbs={getBreadCrums} />} />
                 <Route path="/races" element={<RacesList flags={flagsList} searchValue={searchValue} />}  />
-                <Route path="/races/details/:raceId" element={<RacesDetails flags={flagsList} />} />
+                <Route path="/races/:raceId" element={<RacesDetails flags={flagsList} />} />
               </Routes>
             </Box>
           </Box>

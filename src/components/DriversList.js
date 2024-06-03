@@ -32,6 +32,9 @@ const DriversList = (props) => {
   }, [props.searchValue]);
 
   const getDrivers = async () => {
+
+    props.breadcrumbs({ name: 'Drivers', link: '/drivers/'})
+
     const url ="http://ergast.com/api/f1/2013/driverStandings.json";
     const response = await axios.get(url);
     const data = response.data.MRData.StandingsTable.StandingsLists[0].DriverStandings;
@@ -43,8 +46,9 @@ const DriversList = (props) => {
   };
 
   const handelClickDetails = (id) => {
-    const linkTo = `/drivers/details/${id}`;
+    const linkTo = `/drivers/${id}`;
     navigate(linkTo);
+    props.breadcrumbs({ name: `Driver${id}`, link: linkTo , disable: true})
   };
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
