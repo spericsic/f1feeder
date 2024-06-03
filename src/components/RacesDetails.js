@@ -2,8 +2,7 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Flag from 'react-flagkit';
-import LinearProgress from '@mui/material/LinearProgress';
-import { getAlphaCode } from '../Utils.js';
+import { getAlphaCode , goToExternalLink} from '../Utils.js';
 
 
 import { styled } from '@mui/material/styles';
@@ -21,6 +20,7 @@ import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
 import Box from "@mui/material/Box";
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import LoaderFlag from "./LoaderFlag.js";
 
 
 const RacesDetails = (props) => {
@@ -82,15 +82,13 @@ const RacesDetails = (props) => {
     },
   }));
 
-  const handleOpenLink= ()=> window.open(CardX.url, "_blank");
-
   if (isLoading) {
-    return <LinearProgress />;
+    return <LoaderFlag/>
   }
 
   return (
     <div style={{ display: "flex" }}>
-      <Card sx={{ maxWidth: 235 }} onClick={(handleOpenLink)}>
+      <Card sx={{ maxWidth: 235 }} onClick={()=>goToExternalLink(CardX.url)}>
         <CardActionArea>
           <CardContent>
             <Box

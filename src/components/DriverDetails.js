@@ -1,9 +1,8 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import LinearProgress from '@mui/material/LinearProgress';
 import Flag from 'react-flagkit';
-import { getAlphaCode } from '../Utils.js';
+import { getAlphaCode , goToExternalLink} from '../Utils.js';
 
 
 import { styled } from '@mui/material/styles';
@@ -21,6 +20,7 @@ import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
 import Box from "@mui/material/Box";
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import LoaderFlag from "./LoaderFlag.js";
 
 const DriverDetails = (props) => {
   const [driverDetails, setDriverDetails] = useState([]);
@@ -50,8 +50,8 @@ const DriverDetails = (props) => {
   }
 
   if (isLoading) {
-    return <LinearProgress />;
-  }
+    return <LoaderFlag/>
+  };
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -66,11 +66,9 @@ const DriverDetails = (props) => {
     },
   }));
 
-  const handleOpenLink= ()=> window.open(driverDetails.Driver.url, "_blank");
-
   return (
-    <div style={{ display: "flex"}}>
-      <Card sx={{ maxWidth: 235 }} onClick={(handleOpenLink)}>
+    <Box display="flex">
+      <Card sx={{ maxWidth: 235 }} onClick={()=>goToExternalLink(driverDetails.Driver.url)}>
         <CardActionArea>
           <CardContent>
             <Box
@@ -148,7 +146,7 @@ const DriverDetails = (props) => {
       </Table>
     </TableContainer>
 
-    </div>
+    </Box>
   );
 }
 export default DriverDetails;

@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import Flag from 'react-flagkit';
 import { getAlphaCode , setSearchData } from '../Utils.js';
 
-
 import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -14,6 +13,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Box from "@mui/material/Box";
 import { grey } from "@mui/material/colors";
+import LoaderFlag from "./LoaderFlag.js";
 
 const RacesList = (props) => {
 
@@ -64,7 +64,7 @@ const RacesList = (props) => {
   }));
 
   if (isLoading) {
-    return <div></div>;
+    return <LoaderFlag/>
   }
 
   return (
@@ -83,7 +83,7 @@ const RacesList = (props) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {races.map((race) => (
+            {filteredRaces.map((race) => (
               <TableRow key={race.round} onClick={() => handelClickDetails(race.round)} hover sx={{ cursor: 'pointer' }}>
                 <StyledTableCell component="th" scope="row" >{race.round}</StyledTableCell>
 
@@ -102,7 +102,19 @@ const RacesList = (props) => {
                 </StyledTableCell>
                 <StyledTableCell>{race.Circuit.circuitName}</StyledTableCell>
                 <StyledTableCell>{race.date}</StyledTableCell>
-                <StyledTableCell><div style={{ display: "flex", alignItems: 'center' }}><div style={{ margin: "0 10px" }}><Flag country={getAlphaCode(props.flags, race.Results[0].Driver.nationality)} size={20} /></div> {race.Results[0].Driver.familyName}</div></StyledTableCell>
+                <StyledTableCell>
+                  <Box
+                    display="flex">
+                    <Box
+                      marginRight={2}
+                      textAlign="center">
+                      <Flag country={getAlphaCode(props.flags, race.Results[0].Driver.nationality)} size={20} />
+                    </Box>
+                    <Box>
+                      {race.Results[0].Driver.familyName}
+                    </Box>
+                  </Box>
+                </StyledTableCell>
               </TableRow>
             ))}
           </TableBody>

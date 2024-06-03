@@ -2,12 +2,22 @@
 
 .main-screen{
     display: flex;
+    flex-direction: column;
     
-    nav {
-        max-width: 15%;
-        
-        img {
-            width: 100%;
+    .nav-box {
+        display: flex;
+        flex-direction: row;
+       
+        .nav-links {
+            width: 15vh;
+
+            img {
+                width: 100%;
+            }
         }
+    }
+
+    .app-bar {
+        align-items: flex-end;
     }
 }

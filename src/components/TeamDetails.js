@@ -1,9 +1,8 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import LinearProgress from '@mui/material/LinearProgress';
 import Flag from "react-flagkit";
-import { getAlphaCode } from '../Utils.js';
+import { getAlphaCode , getCellBackgroundColor , goToExternalLink } from '../Utils.js';
 
 import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
@@ -22,6 +21,7 @@ import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
 import Box from "@mui/material/Box";
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import LoaderFlag from "./LoaderFlag.js";
 
 
 
@@ -68,18 +68,15 @@ const TeamDetails = (props) => {
       padding: 5,
     },
   }));
-  const handleOpenLink= () => window.open(teamDetails.Constructor.url, "_blank");
-
-
 
   if (isLoading) {
-    return <LinearProgress />;
+    return <LoaderFlag/>
   }
 
   return (
-    <div style={{ display: "flex" }}>
+    <Box display="flex">
       <Card
-        sx={{ maxWidth: 235 }} onClick={(handleOpenLink)}>
+        sx={{ maxWidth: 235 }} onClick={()=>goToExternalLink(teamDetails.Constructor.url)}>
         <CardActionArea>
 
           <CardContent>
@@ -177,7 +174,7 @@ const TeamDetails = (props) => {
           </TableBody>
         </Table>
       </TableContainer>
-    </div>
+    </Box>
   );
 }
 export default TeamDetails;

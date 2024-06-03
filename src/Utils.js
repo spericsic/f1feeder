@@ -45,7 +45,7 @@ export function setSearchData(value, table) {
     const search = value.toLowerCase();
     const filteredData = table.filter((el) => {
         if (search === '') {
-        return el;
+            return el;
         }
         else {
             if (el.Driver){ 
@@ -65,13 +65,22 @@ export function setSearchData(value, table) {
 }
 
 export function getCellBackgroundColor(value) {
-    console.log(value)
     switch(value) {
         case 1:
-            return "black";
-            break;
+            return "yellow";
+        case 2:
+            return "gray";
+        case 3:
+            return "orange";
+        case 4:
+            return "lightgreen";
+        case 5:
+            return "lightblue";
         default:
-            return "red";
+            return '';
     };
 }
-//className={()=>metoda(race.Results[0].grid)}
+
+export function goToExternalLink(value) {
+    window.open(value, "_blank");
+}

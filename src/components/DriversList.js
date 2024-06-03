@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import Flag from 'react-flagkit';
 import { getAlphaCode , setSearchData } from '../Utils.js';
 
-import * as React from 'react';
 import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -14,11 +13,12 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { grey } from "@mui/material/colors";
 import Box from "@mui/material/Box";
-import Typography from '@mui/material/Typography';
+import LoaderFlag from "./LoaderFlag.js";
 
 const DriversList = (props) => {
-const [drivers, setDrivers] = useState([]);
-const [filteredDrivers, setFilteredDrivers] = useState([]);
+  const [drivers, setDrivers] = useState([]);
+  const [filteredDrivers, setFilteredDrivers] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const navigate = useNavigate();
 
@@ -39,6 +39,7 @@ const [filteredDrivers, setFilteredDrivers] = useState([]);
 
     setFilteredDrivers(filtered);
     setDrivers(data);
+    setIsLoading(false);
   };
 
   const handelClickDetails = (id) => {
@@ -59,9 +60,12 @@ const [filteredDrivers, setFilteredDrivers] = useState([]);
     },
   }));
 
+  if (isLoading) {
+    return <LoaderFlag/>
+  }
 
   return (
-    <div>
+    <>
       <h2>Drivers Championship</h2>
       <TableContainer>
         <Table sx={{ minWidth: 1200 }} aria-label="customized table">
@@ -71,7 +75,7 @@ const [filteredDrivers, setFilteredDrivers] = useState([]);
             </TableRow>
           </TableHead>
           <TableBody>
-            {drivers.map((driver) =>
+            {filteredDrivers.map((driver) =>
               <TableRow hover key={driver.position}
                 onClick={() => handelClickDetails(driver.Driver.driverId)}>
                 <StyledTableCell>{driver.position}</StyledTableCell>               
@@ -97,7 +101,7 @@ const [filteredDrivers, setFilteredDrivers] = useState([]);
           </TableBody>
         </Table>
       </TableContainer>
-    </div>
+    </>
   );
 }
 export default DriversList;

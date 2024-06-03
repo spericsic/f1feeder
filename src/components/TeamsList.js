@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import Flag from 'react-flagkit';
 import { getAlphaCode , setSearchData } from '../Utils.js';
 
-import * as React from 'react';
 import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -12,16 +11,15 @@ import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-
 import { grey } from "@mui/material/colors";
-
 import Box from "@mui/material/Box";
+import LoaderFlag from "./LoaderFlag.js";
 
 const TeamsList = (props) => {
 
   const [teams, setTeams] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
   const [filteredTeams, setFilteredTeams] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const navigate = useNavigate();
 
@@ -40,8 +38,8 @@ const TeamsList = (props) => {
     const data = response.data.MRData.StandingsTable.StandingsLists[0].ConstructorStandings;
     const filtered = setSearchData(props.searchValue, data);
 
-    setFilteredTeams(filtered);
     setTeams(data);
+    setFilteredTeams(filtered);
     setIsLoading(false);
   };
 
@@ -65,12 +63,11 @@ const TeamsList = (props) => {
   }));
 
   if (isLoading) {
-    return <div></div>;
+    return <LoaderFlag/>
   }
 
-
   return (
-    <div>
+    <>
       <h2>Construction Championship</h2>
 
 
@@ -85,7 +82,7 @@ const TeamsList = (props) => {
 
           <TableBody>
 
-            {teams.map((team) => {
+            {filteredTeams.map((team) => {
               return (
                 <TableRow hover key={team.position}
                   onClick={() => handelClickDetails(team.Constructor.constructorId)} sx={{ cursor: "pointer" }} >
@@ -115,7 +112,7 @@ const TeamsList = (props) => {
           </TableBody>
         </Table>
       </TableContainer>
-    </div>
+    </>
   );
 }
 export default TeamsList;
