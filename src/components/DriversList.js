@@ -66,41 +66,47 @@ const DriversList = (props) => {
 
   return (
     <>
-      <h2>Drivers Championship</h2>
-      <TableContainer>
-        <Table sx={{ minWidth: 1200 }} aria-label="customized table">
-          <TableHead>
-            <TableRow>
-              <StyledTableCell colSpan={5}>Drivers Championship Standings - 2013</StyledTableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {filteredDrivers.map((driver) =>
-              <TableRow hover key={driver.position}
-                onClick={() => handelClickDetails(driver.Driver.driverId)}>
-                <StyledTableCell>{driver.position}</StyledTableCell>               
-                <StyledTableCell sx={{ cursor: 'pointer' }}>
-                <Box
-                 display='flex' 
-                 >
-                    <Box
-                  marginRight={2}
-                  textAlign="center">
-                      <Flag country={getAlphaCode(props.flags, driver.Driver.nationality)} size={20} />
-                    </Box>
-                      <Box>
-                        {driver.Driver.givenName} {driver.Driver.familyName}
-                      </Box>
-                    </Box>
-                </StyledTableCell>
-                <StyledTableCell sx={{ cursor: 'pointer' }}>{driver.Constructors[0].name}</StyledTableCell>
-                <StyledTableCell>{driver.points}</StyledTableCell>
+    <Box className="list-title">
+      Drivers Championship
+    </Box>
+      <Box 
+        border={15}
+        color="gray">
+        <TableContainer>
+          <Table sx={{ minWidth: 1200 }} aria-label="customized table">
+            <TableHead>
+              <TableRow>
+                <StyledTableCell colSpan={5}>Drivers Championship Standings - 2013</StyledTableCell>
               </TableRow>
-            )}
+            </TableHead>
+            <TableBody>
+              {filteredDrivers.map((driver) =>
+                <TableRow hover key={driver.position}
+                  onClick={() => handelClickDetails(driver.Driver.driverId)}>
+                  <StyledTableCell>{driver.position}</StyledTableCell>               
+                  <StyledTableCell sx={{ cursor: 'pointer' }}>
+                  <Box
+                  display='flex' 
+                  >
+                      <Box
+                    marginRight={2}
+                    textAlign="center">
+                        <Flag country={getAlphaCode(props.flags, driver.Driver.nationality)} size={20} />
+                      </Box>
+                        <Box>
+                          {driver.Driver.givenName} {driver.Driver.familyName}
+                        </Box>
+                      </Box>
+                  </StyledTableCell>
+                  <StyledTableCell sx={{ cursor: 'pointer' }}>{driver.Constructors[0].name}</StyledTableCell>
+                  <StyledTableCell>{driver.points}</StyledTableCell>
+                </TableRow>
+              )}
 
-          </TableBody>
-        </Table>
-      </TableContainer>
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Box>
     </>
   );
 }

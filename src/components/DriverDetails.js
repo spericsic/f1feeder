@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Flag from 'react-flagkit';
-import { getAlphaCode , goToExternalLink} from '../Utils.js';
+import { getAlphaCode , goToExternalLink, getCellBackgroundColor} from '../Utils.js';
 
 
 import { styled } from '@mui/material/styles';
@@ -68,7 +68,9 @@ const DriverDetails = (props) => {
 
   return (
     <Box display="flex">
-      <Card sx={{ maxWidth: 235 }} onClick={()=>goToExternalLink(driverDetails.Driver.url)}>
+      <Card 
+        sx={{ maxWidth: 235 }} 
+        onClick={()=>goToExternalLink(driverDetails.Driver.url)}>
         <CardActionArea>
           <CardContent>
             <Box
@@ -79,10 +81,13 @@ const DriverDetails = (props) => {
               alignItems='center'
               margin='auto'>
                 <Box 
-                  component='img'
                   sx={{ 
-                    width: 140,
+                    objectFit: "contain"
+                    
                   }}
+                  component='img'
+                  width={140}
+                  height={190}
                   alt='Drivers'
                   src={`${process.env.PUBLIC_URL}/assets/img/${params.driverId}.jpg`}/>
             
@@ -105,7 +110,7 @@ const DriverDetails = (props) => {
 
     <TableContainer>
 
-    <Table sx={{ minWidth: 1000 }} aria-label="customized table">
+    <Table>
         <TableHead>
           <TableRow>
             <StyledTableCell colSpan={5}>Formula 1 2013 Results</StyledTableCell>
@@ -120,8 +125,8 @@ const DriverDetails = (props) => {
         </TableHead>
 
         <TableBody>
-          {driverList.map((race, i) =>
-            <TableRow hover key={i}>
+          {driverList.map((race) =>
+            <TableRow hover key={race.round}>
               <StyledTableCell>{race.round}</StyledTableCell>
               <StyledTableCell sx={{ cursor: 'pointer' }}>
                 <Box
@@ -139,7 +144,9 @@ const DriverDetails = (props) => {
               </StyledTableCell>
               <StyledTableCell sx={{ cursor: 'pointer' }}>{race.Results[0].Constructor.name}</StyledTableCell>
               <StyledTableCell>{race.Results[0].grid}</StyledTableCell>
-              <StyledTableCell>{race.Results[0].position}</StyledTableCell>
+                <TableCell sx={{ backgroundColor: getCellBackgroundColor(race.Results[0].position)}}>
+                  {race.Results[0].position}
+                </TableCell>
             </TableRow>
           )}
         </TableBody>
