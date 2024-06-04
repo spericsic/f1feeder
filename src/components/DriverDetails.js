@@ -6,19 +6,10 @@ import { getAlphaCode , goToExternalLink, getCellBackgroundColor} from '../Utils
 
 
 import { styled } from '@mui/material/styles';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell, { tableCellClasses } from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Card, CardContent, Typography, Box }from '@mui/material';
+import { tableCellClasses } from '@mui/material/TableCell';
 import { grey } from "@mui/material/colors";
-
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
-import Box from "@mui/material/Box";
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import LoaderFlag from "./LoaderFlag.js";
 
@@ -55,104 +46,127 @@ const DriverDetails = (props) => {
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
-      backgroundColor: grey.A200,
+      backgroundColor: grey[500],
       color: theme.palette.common.black,
       fontWeight: 600,
       padding: 10,
     },
     [`&.${tableCellClasses.body}`]: {
       fontSize: 14,
+      fontWeight: 600,
+      color: `#3a587f`,
       padding: 5,
+    },
+  }));
+
+  const StyledTableRow = styled(TableRow)(({ theme }) => ({
+    '&:nth-of-type(odd)': {
+      backgroundColor: grey[300],
+    },
+    '&:last-child td, &:last-child th': {
+      border: 0,
     },
   }));
 
   return (
     <Box display="flex">
-      <Card 
-        sx={{ maxWidth: 235 }} 
-        onClick={()=>goToExternalLink(driverDetails.Driver.url)}>
-        <CardActionArea>
-          <CardContent>
-            <Box
-              display='flex'
-              flex='1'
-              justifyContent='center'
-              flexDirection='column'
-              alignItems='center'
-              margin='auto'>
-                <Box 
-                  sx={{ 
-                    objectFit: "contain"
-                    
-                  }}
-                  component='img'
-                  width={140}
-                  height={190}
-                  alt='Drivers'
-                  src={`${process.env.PUBLIC_URL}/assets/img/${params.driverId}.jpg`}/>
-            
-              <Typography variant="caption" fontWeight={700} style={{fontSize: "20px"}}>
-                <Flag country={getAlphaCode(props.flags,driverDetails.Driver.nationality)} size={40} />
-              </Typography>
-              <Typography variant="caption" fontWeight={700} style={{fontSize: "20px", color: "pink"}}>
-                {driverDetails.Driver.givenName} 
-                {driverDetails.Driver.familyName}
-              </Typography>
-            </Box>
+      <Box
+        width={1/5}
+      >
+        <Card 
+          sx={{ Width: 235 }} 
+          >
+          <CardActionArea>
+            <CardContent>
+              <Box
+                display='flex'
+                flex='1'
+                justifyContent='center'
+                flexDirection='column'
+                alignItems='center'
+                margin='auto'>
+                  <Box 
+                    sx={{ 
+                      objectFit: "contain"
+                      
+                    }}
+                    component='img'
+                    width={140}
+                    height={190}
+                    alt='Drivers'
+                    src={`${process.env.PUBLIC_URL}/assets/img/${params.driverId}.jpg`}/>
+              
+                <Typography variant="caption" fontWeight={700} style={{fontSize: "20px"}}>
+                  <Flag country={getAlphaCode(props.flags,driverDetails.Driver.nationality)} size={40} />
+                </Typography>
+                <Typography variant="caption" fontWeight={700} style={{fontSize: "20px", color: "pink"}}>
+                  {driverDetails.Driver.givenName} 
+                  {driverDetails.Driver.familyName}
+                </Typography>
+              </Box>
 
-            <Typography variant="caption" display="block" fontWeight={900}>Country: {driverDetails.Driver.nationality}</Typography>
-            <Typography variant="caption" display="block" fontWeight={900}>Team: {driverDetails.Constructors[0].name}</Typography>
-            <Typography variant="caption" display="block" fontWeight={900}>Birth: {driverDetails.Driver.dateOfBirth}</Typography>
-            <Box display='flex' alignItems='center'><Typography variant="caption" display="block" fontWeight={900}>Biography: </Typography><OpenInNewIcon fontSize="small" /></Box>
-          </CardContent>
-        </CardActionArea>
-      </Card>
+              <Typography variant="caption" display="block" fontWeight={900}>Country: {driverDetails.Driver.nationality}</Typography>
+              <Typography variant="caption" display="block" fontWeight={900}>Team: {driverDetails.Constructors[0].name}</Typography>
+              <Typography variant="caption" display="block" fontWeight={900}>Birth: {driverDetails.Driver.dateOfBirth}</Typography>
+              <Box display='flex' alignItems='center'><Typography variant="caption" display="block" fontWeight={900}>Biography: </Typography><OpenInNewIcon fontSize="small" onClick={()=>goToExternalLink(driverDetails.Driver.url)} /></Box>
+            </CardContent>
+          </CardActionArea>
+        </Card>
+      </Box>
+      <Box 
+        display="flex"
+        width={1/1}
+        border={15}
+        color="gray">              
+        <TableContainer>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <StyledTableCell  colSpan={5}>Formula 1 2013 Results</StyledTableCell>
+              </TableRow>
+              <TableRow>
+                <StyledTableCell>Round</StyledTableCell>
+                <StyledTableCell>Grand Prix</StyledTableCell>
+                <StyledTableCell>Team</StyledTableCell>
+                <StyledTableCell>Grid</StyledTableCell>
+                <StyledTableCell>Race</StyledTableCell>
+              </TableRow>
+            </TableHead>
 
-    <TableContainer>
-
-    <Table>
-        <TableHead>
-          <TableRow>
-            <StyledTableCell colSpan={5}>Formula 1 2013 Results</StyledTableCell>
-          </TableRow>
-          <TableRow>
-            <StyledTableCell>Round</StyledTableCell>
-            <StyledTableCell>Grand Prix</StyledTableCell>
-            <StyledTableCell>Team</StyledTableCell>
-            <StyledTableCell>Grid</StyledTableCell>
-            <StyledTableCell>Race</StyledTableCell>
-          </TableRow>
-        </TableHead>
-
-        <TableBody>
-          {driverList.map((race) =>
-            <TableRow hover key={race.round}>
-              <StyledTableCell>{race.round}</StyledTableCell>
-              <StyledTableCell sx={{ cursor: 'pointer' }}>
-                <Box
-                 display='flex' 
-                 >
-                  <Box
-                  marginRight={2}
-                  textAlign="center">
-                    <Flag country={getAlphaCode(props.flags, race.Circuit.Location.country)} size={20} />
-                  </Box>
-                  <Box>
-                      {race.raceName}
-                  </Box>
-                </Box>      
-              </StyledTableCell>
-              <StyledTableCell sx={{ cursor: 'pointer' }}>{race.Results[0].Constructor.name}</StyledTableCell>
-              <StyledTableCell>{race.Results[0].grid}</StyledTableCell>
-                <TableCell sx={{ backgroundColor: getCellBackgroundColor(race.Results[0].position)}}>
-                  {race.Results[0].position}
-                </TableCell>
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
-    </TableContainer>
-
+            <TableBody>
+              {driverList.map((race) =>
+                <StyledTableRow hover key={race.round}>
+                  <StyledTableCell>{race.round}</StyledTableCell>
+                  <StyledTableCell sx={{ cursor: 'pointer' }}>
+                    <Box
+                    display='flex'
+                    justifyItems='center'
+                    alignItems='center'
+                    >
+                      <Box
+                      marginRight={2}
+                      display='flex'
+                      justifyItems='center'
+                      alignItems='center'
+                      >
+                        <Flag country={getAlphaCode(props.flags, race.Circuit.Location.country)} size={30} />
+                      </Box>
+                      <Box>
+                        {race.raceName}
+                      </Box>
+                    </Box>      
+                  </StyledTableCell>
+                  <StyledTableCell sx={{ cursor: 'pointer' }}>{race.Results[0].Constructor.name}</StyledTableCell>
+                  <StyledTableCell>{race.Results[0].grid}</StyledTableCell>
+                    <TableCell sx={{ backgroundColor: getCellBackgroundColor(race.Results[0].position), padding: 0 }}>
+                      {race.Results[0].position}
+                    </TableCell>
+                </StyledTableRow>
+              )}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Box>  
     </Box>
   );
 }

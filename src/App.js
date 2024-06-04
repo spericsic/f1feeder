@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { BrowserRouter as Router, Routes, Route, Link, NavLink } from "react-router-dom";
 import axios from "axios";
-import { AppBar, Box, Breadcrumbs, Button, CardMedia, Chip, TextField, Toolbar } from "@mui/material";
+import { BrowserRouter as Router, Routes, Route, Link, NavLink } from "react-router-dom";
+import { AppBar, Box, Breadcrumbs, Button, CardMedia, Chip, TextField, Toolbar, Typography } from "@mui/material";
 import DriversList from "./components/DriversList";
 import TeamsList from "./components/TeamsList";
 import RacesList from "./components/RacesList";
@@ -9,6 +9,7 @@ import DriverDetails from "./components/DriverDetails";
 import TeamDetails from "./components/TeamDetails";
 import RacesDetails from "./components/RacesDetails";
 import LoaderFlag from "./components/LoaderFlag";
+import HomeIcon from '@mui/icons-material/Home';
 
 const App = () => {
 
@@ -28,7 +29,7 @@ const App = () => {
     const response = await axios.get(url);
 
     const breadCrumbsList = [];
-    const item = {name: 'Home', link: '/'}
+    const item = {name: 'Home', link: '/', icon: <HomeIcon/>}
     breadCrumbsList.push(item);
 
     setBreadCrumbs(breadCrumbsList);
@@ -46,9 +47,21 @@ const App = () => {
   };
 
   const getBreadCrums = (value) => {
-    const breadCrumbsList = breadCrumbs.slice();
-    breadCrumbsList.push(value);
+    const breadCrumbsList = value.slice();
     setBreadCrumbs(breadCrumbsList);
+  }
+
+  const breadCrumbsRender = (bread, i) => {
+    if (i == breadCrumbs.length-1 && breadCrumbs.length != 1 ) {
+      return <Typography key={i} variant="caption" display="block" fontWeight={900} > {bread.name}</Typography>
+    } else {
+      return <Chip key={i}
+                icon={bread.icon}
+                component="a"
+                href= {bread.link}
+                label= {bread.name}
+              /> 
+    }
   }
 
   return (
@@ -60,12 +73,7 @@ const App = () => {
             className="app-bar">
             <Breadcrumbs aria-label="breadcrumb">
               {breadCrumbs.map((bread, i) =>
-                <Chip key={i}
-                  component="a"
-                  href= {bread.link}
-                  label= {bread.name}
-                  disabled= {bread.disable}
-                /> 
+                breadCrumbsRender(bread, i)
               )}
             </Breadcrumbs>
             <Toolbar>
@@ -112,16 +120,12 @@ const App = () => {
                                                   searchValue={searchValue} 
                                                   breadcrumbs={getBreadCrums}/>} 
                                                   />
-                <Route path="/drivers/:driverId" element={<DriverDetails 
-                                                            flags={flagsList} />} 
-                                                            breadcrumbs={getBreadCrums} />
+                <Route path="/drivers/:driverId" element={<DriverDetails flags={flagsList} />} />
                 <Route path="/teams" element={<TeamsList 
                                                 flags={flagsList} 
                                                 searchValue={searchValue} 
                                                 breadcrumbs={getBreadCrums} />} />
-                <Route path="/teams/:constructorId" element={<TeamDetails 
-                                                                flags={flagsList} 
-                                                                breadcrumbs={getBreadCrums} />} />
+                <Route path="/teams/:constructorId" element={<TeamDetails flags={flagsList} />} />
                 <Route path="/races" element={<RacesList flags={flagsList} searchValue={searchValue} />}  />
                 <Route path="/races/:raceId" element={<RacesDetails flags={flagsList} />} />
               </Routes>
