@@ -121,12 +121,18 @@ const App = () => {
                                                   breadcrumbs={getBreadCrums}/>} 
                                                   />
                 <Route path="/drivers/:driverId" element={<DriverDetails flags={flagsList} />} />
+
                 <Route path="/teams" element={<TeamsList 
                                                 flags={flagsList} 
                                                 searchValue={searchValue} 
                                                 breadcrumbs={getBreadCrums} />} />
                 <Route path="/teams/:constructorId" element={<TeamDetails flags={flagsList} />} />
-                <Route path="/races" element={<RacesList flags={flagsList} searchValue={searchValue} />}  />
+
+                <Route path="/races" element={<RacesList 
+                                                flags={flagsList} 
+                                                searchValue={searchValue} 
+                                                breadcrumbs={getBreadCrums}/>}  />
+
                 <Route path="/races/:raceId" element={<RacesDetails flags={flagsList} />} />
               </Routes>
             </Box>

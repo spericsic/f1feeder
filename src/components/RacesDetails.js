@@ -65,7 +65,7 @@ const RacesDetails = (props) => {
   
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
-      backgroundColor: grey.A200,
+      backgroundColor: grey[500],
       color: theme.palette.common.black,
       fontWeight: 600,
       padding: 10,
@@ -82,6 +82,9 @@ const RacesDetails = (props) => {
 
   return (
     <Box display="flex">
+      <Box
+        width={1/5}
+      >
       <Card sx={{ maxWidth: 235 }} onClick={()=>goToExternalLink(CardX.url)}>
         <CardActionArea>
           <CardContent>
@@ -98,7 +101,7 @@ const RacesDetails = (props) => {
               </Typography>
             </Box>
 
-            <Typography variant="caption" display="block" fontWeight={900}>{CardX.raceName}</Typography>
+            <Typography variant="caption" display="block" fontWeight={900} style={{fontSize: "20px", color: "pink", textAlign:"center"}}>{CardX.raceName}</Typography>
             <Typography variant="caption" display="block" fontWeight={900}>Country: {CardX.Circuit.Location.country}</Typography>
             <Typography variant="caption" display="block" fontWeight={900}>Location: {CardX.Circuit.Location.locality}</Typography>
             <Typography variant="caption" display="block" fontWeight={900}>Date: {CardX.date}</Typography>
@@ -106,9 +109,9 @@ const RacesDetails = (props) => {
           </CardContent>
         </CardActionArea>
       </Card>
-
-      <Box display="flex" width={"75vw"}>
-      <TableContainer  sx={{ color: 'grey.A400', border: 15 }}>
+      </Box>
+      <Box display="flex" width={1/1}>
+      <TableContainer  sx={{ color: grey[600], border: 15 }}>
         <Table aria-label="customized table"  >
             <TableHead>
               <TableRow><StyledTableCell colSpan={5}>Qualifying results</StyledTableCell></TableRow>
@@ -140,7 +143,7 @@ const RacesDetails = (props) => {
         </TableContainer>
 
 
-        <TableContainer  sx={{ color: 'grey.A400', border: 15 }}>
+        <TableContainer  sx={{ color: grey[600], border: 15 }}>
         <Table aria-label="customized table">
             <TableHead>
               <TableRow><StyledTableCell colSpan={5}>Race results</StyledTableCell></TableRow>

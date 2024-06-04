@@ -1,22 +1,16 @@
-import { useEffect, useState } from "react";
 import axios from "axios";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Flag from 'react-flagkit';
 import { getAlphaCode , setSearchData } from '../Utils.js';
-
 import { styled } from '@mui/material/styles';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell, { tableCellClasses } from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Box from "@mui/material/Box";
+import {Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Box} from '@mui/material';
+import { tableCellClasses } from '@mui/material/TableCell';
 import { grey } from "@mui/material/colors";
 import LoaderFlag from "./LoaderFlag.js";
+import {SportsScore, Home} from '@mui/icons-material';
 
 const RacesList = (props) => {
-
   const [races, setRaces] = useState([]);
   const [filteredRaces, setFilteredRaces] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -33,8 +27,13 @@ const RacesList = (props) => {
   }, [props.searchValue]);
 
   const getRaces = async () => {
-    const url = 'http://ergast.com/api/f1/2013/results/1.json'
+    const items = [
+      {name: 'Home', link: '/', icon: <Home/>},
+      { name: 'Races', link: '/races/', icon: <SportsScore/>},
+    ]
+    props.breadcrumbs(items)
 
+    const url = "http://ergast.com/api/f1/2013/results/1.json";
     const response = await axios.get(url);
     const data = response.data.MRData.RaceTable.Races;
     const filtered = setSearchData(props.searchValue, data);
@@ -42,24 +41,42 @@ const RacesList = (props) => {
     setFilteredRaces(filtered);
     setRaces(data);
     setIsLoading(false);
-  }
+  };
 
-  const handelClickDetails = (id) => {
+  const handelClickDetails = (id, name) => {
     const linkTo = `/races/${id}`;
     navigate(linkTo);
+    const items = [
+      {name: 'Home', link: '/', icon: <Home/>},
+      { name: 'Races', link: '/races/', icon: <SportsScore/>},
+      { name: `${name}`}
+    ]
+    props.breadcrumbs(items)
   };
+
 
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
-      backgroundColor: grey.A200,
+      backgroundColor: grey[500],
       color: theme.palette.common.black,
       fontWeight: 600,
       padding: 10,
     },
     [`&.${tableCellClasses.body}`]: {
       fontSize: 14,
+      fontWeight: 600,
+      color: `#3a587f`,
       padding: 5,
+    },
+  }));
+
+  const StyledTableRow = styled(TableRow)(({ theme }) => ({
+    '&:nth-of-type(odd)': {
+      backgroundColor: grey[300],
+    },
+    '&:last-child td, &:last-child th': {
+      border: 0,
     },
   }));
 
@@ -72,7 +89,7 @@ const RacesList = (props) => {
     <Box className="list-title">
     Race Calendar
     </Box>
-      <TableContainer sx={{ color: 'grey.A400', border: 15 }}>
+      <TableContainer sx={{ color: 'grey', border: 15 }}>
         <Table>
           <TableHead>
             <TableRow><StyledTableCell colSpan={5}>Race Calendar - 2013</StyledTableCell></TableRow>
@@ -87,6 +104,7 @@ const RacesList = (props) => {
           <TableBody>
             {filteredRaces.map((race) => (
               <TableRow key={race.round} onClick={() => handelClickDetails(race.round)} hover sx={{ cursor: 'pointer' }}>
+
                 <StyledTableCell component="th" scope="row" >{race.round}</StyledTableCell>
 
                 <StyledTableCell>
