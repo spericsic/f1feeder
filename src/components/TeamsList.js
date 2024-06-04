@@ -3,18 +3,13 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Flag from 'react-flagkit';
 import { getAlphaCode, setSearchData, goToExternalLink } from '../Utils.js';
-
 import { styled } from '@mui/material/styles';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell, { tableCellClasses } from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
+import {Table, TableBody, TableCell, TableContainer, TableHead,TableRow} from '@mui/material';
+import { tableCellClasses } from '@mui/material/TableCell';
 import { grey } from "@mui/material/colors";
 import Box from "@mui/material/Box";
 import LoaderFlag from "./LoaderFlag.js";
-import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import { OpenInNew, Home, Groups } from '@mui/icons-material';
 
 
 const TeamsList = (props) => {
@@ -36,7 +31,11 @@ const TeamsList = (props) => {
 
   const getTeams = async () => {
 
-    props.breadcrumbs({ name: 'Teams', link: '/teams/'})
+    const items = [
+      {name: 'Home', link: '/', icon: <Home/>},
+      { name: 'Teams', link: '/teams/', icon: <Groups/>},
+    ]
+    props.breadcrumbs(items)
 
     const url = "http://ergast.com/api/f1/2013/constructorStandings.json";
     const response = await axios.get(url);
@@ -48,24 +47,36 @@ const TeamsList = (props) => {
     setIsLoading(false);
   };
 
-  const handelClickDetails = (id) => {
+  const handelClickDetails = (id, name) => {
     const linkTo = `/teams/${id}`;
     navigate(linkTo);
-    props.breadcrumbs({ name: `Team${id}`, link: linkTo , disable: true})
+    const items = [
+      {name: 'Home', link: '/', icon: <Home/>},
+      { name: 'Teams', link: '/teams/', icon: <Groups/>},
+      { name: `${name}`}
+    ]
+    props.breadcrumbs(items)
   };
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
-      backgroundColor: grey.A200,
+      backgroundColor: grey[500],
       color: theme.palette.common.black,
       fontWeight: 600,
       padding: 10,
-
-
     },
     [`&.${tableCellClasses.body}`]: {
       fontSize: 14,
       padding: 5,
+    },
+  }));
+
+  const StyledTableRow = styled(TableRow)(({ theme }) => ({
+    '&:nth-of-type(odd)': {
+      backgroundColor: grey[300],
+    },
+    '&:last-child td, &:last-child th': {
+      border: 0,
     },
   }));
 
@@ -98,30 +109,50 @@ const TeamsList = (props) => {
 
               {filteredTeams.map((team) => {
                 return (
-                  <TableRow hover key={team.position}
-                    onClick={() => handelClickDetails(team.Constructor.constructorId)}>
+                  <StyledTableRow hover key={team.position}>
                     <StyledTableCell>{team.position}</StyledTableCell>
 
-                    <StyledTableCell sx={{ cursor: "pointer" }}>
-
+                    <StyledTableCell 
+                      sx={{ cursor: "pointer" }}
+                      onClick={() => handelClickDetails(team.Constructor.constructorId, team.Constructor.name)} 
+                      >
                       <Box
-                        display="flex">
-                        <Box
-                          marginRight={2}
-                          textAlign="center">
-                          <Flag country={getAlphaCode(props.flags, team.Constructor.nationality)} size={20} />
+                        display='flex'
+                        justifyItems='center'
+                        alignItems='center'>
+                      <Box
+                        marginRight={2}
+                        display='flex'
+                        justifyItems='center'
+                        alignItems='center'
+                        >
+                          <Flag country={getAlphaCode(props.flags, team.Constructor.nationality)} size={30} />
                         </Box>
                         <Box >
                           {team.Constructor.name}
                         </Box>
                       </Box>
-
                     </StyledTableCell>
                     <StyledTableCell
                       onClick={() => goToExternalLink(team.Constructor.url)}
-                      sx={{ cursor: "pointer" }}>Details<OpenInNewIcon fontSize="small" /></StyledTableCell>
+                      sx={{ cursor: "pointer" }}>
+                        <Box
+                          display='flex'
+                          justifyItems='center'
+                          alignItems='center'>
+                          Details 
+                          <Box
+                            marginLeft={2}
+                            display='flex'
+                            justifyItems='center'
+                            alignItems='center'
+                            >
+                            <OpenInNew fontSize="small" />
+                          </Box>
+                        </Box>
+                    </StyledTableCell>
                     <StyledTableCell>{team.points}</StyledTableCell>
-                  </TableRow>
+                  </StyledTableRow>
                 );
               })}
 

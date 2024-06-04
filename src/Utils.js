@@ -38,7 +38,7 @@ export function getAlphaCode(flags, value) {
             flag.en_short_name.toLowerCase() === value.toLowerCase() ||
             flag.nationality.toLowerCase() === value.toLowerCase());
 
-        return flagsHelperData.length === 1 ? flagsHelperData.alpha_2_code : value;
+        return flagsHelperData.length === 1 ? flagsHelperData[0].alpha_2_code : value;
     }
 }
 

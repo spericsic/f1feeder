@@ -3,17 +3,12 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Flag from 'react-flagkit';
 import { getAlphaCode , setSearchData } from '../Utils.js';
-
 import { styled } from '@mui/material/styles';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell, { tableCellClasses } from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
+import {Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Box} from '@mui/material';
+import { tableCellClasses } from '@mui/material/TableCell';
 import { grey } from "@mui/material/colors";
-import Box from "@mui/material/Box";
 import LoaderFlag from "./LoaderFlag.js";
+import { SportsMotorsports, Home } from '@mui/icons-material';
 
 const DriversList = (props) => {
   const [drivers, setDrivers] = useState([]);
@@ -32,8 +27,11 @@ const DriversList = (props) => {
   }, [props.searchValue]);
 
   const getDrivers = async () => {
-
-    props.breadcrumbs({ name: 'Drivers', link: '/drivers/'})
+    const items = [
+      {name: 'Home', link: '/', icon: <Home/>},
+      { name: 'Drivers', link: '/drivers/', icon: <SportsMotorsports/>},
+    ]
+    props.breadcrumbs(items)
 
     const url ="http://ergast.com/api/f1/2013/driverStandings.json";
     const response = await axios.get(url);
@@ -45,15 +43,20 @@ const DriversList = (props) => {
     setIsLoading(false);
   };
 
-  const handelClickDetails = (id) => {
-    const linkTo = `/drivers/${id}`;
+  const handelClickDetails = (path, id, name) => {
+    const linkTo = `/${path}/${id}`;
     navigate(linkTo);
-    props.breadcrumbs({ name: `Driver${id}`, link: linkTo , disable: true})
+    const items = [
+      {name: 'Home', link: '/', icon: <Home/>},
+      { name: `${path.charAt(0).toUpperCase() + path.slice(1)}`, link: `/${path}/`, icon: <SportsMotorsports/>},
+      { name: `${name}`}
+    ]
+    props.breadcrumbs(items)
   };
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
-      backgroundColor: grey.A200,
+      backgroundColor: grey[500],
       color: theme.palette.common.black,
       fontWeight: 600,
       padding: 10,
@@ -61,6 +64,15 @@ const DriversList = (props) => {
     [`&.${tableCellClasses.body}`]: {
       fontSize: 14,
       padding: 5,
+    },
+  }));
+
+  const StyledTableRow = styled(TableRow)(({ theme }) => ({
+    '&:nth-of-type(odd)': {
+      backgroundColor: grey[300],
+    },
+    '&:last-child td, &:last-child th': {
+      border: 0,
     },
   }));
 
@@ -85,26 +97,35 @@ const DriversList = (props) => {
             </TableHead>
             <TableBody>
               {filteredDrivers.map((driver) =>
-                <TableRow hover key={driver.position}
-                  onClick={() => handelClickDetails(driver.Driver.driverId)}>
+                <StyledTableRow hover key={driver.position}>
                   <StyledTableCell>{driver.position}</StyledTableCell>               
-                  <StyledTableCell sx={{ cursor: 'pointer' }}>
+                  <StyledTableCell 
+                    sx={{ cursor: 'pointer' }}
+                    onClick={() => handelClickDetails('drivers',driver.Driver.driverId, driver.Driver.familyName)}>
                   <Box
-                  display='flex' 
-                  >
+                    display='flex'
+                    justifyItems='center'
+                    alignItems='center'>
                       <Box
-                    marginRight={2}
-                    textAlign="center">
-                        <Flag country={getAlphaCode(props.flags, driver.Driver.nationality)} size={20} />
+                        marginRight={2}
+                        display='flex'
+                        justifyItems='center'
+                        alignItems='center'
+                        >
+                        <Flag country={getAlphaCode(props.flags, driver.Driver.nationality)} size={30} />
                       </Box>
                         <Box>
                           {driver.Driver.givenName} {driver.Driver.familyName}
                         </Box>
                       </Box>
                   </StyledTableCell>
-                  <StyledTableCell sx={{ cursor: 'pointer' }}>{driver.Constructors[0].name}</StyledTableCell>
+                  <StyledTableCell 
+                    sx={{ cursor: 'pointer' }}
+                    onClick={() => handelClickDetails('teams',driver.Constructors[0].constructorId, driver.Constructors[0].name)}>
+                      {driver.Constructors[0].name}
+                  </StyledTableCell>
                   <StyledTableCell>{driver.points}</StyledTableCell>
-                </TableRow>
+                </StyledTableRow>
               )}
 
             </TableBody>
