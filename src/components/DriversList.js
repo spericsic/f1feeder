@@ -63,6 +63,8 @@ const DriversList = (props) => {
     },
     [`&.${tableCellClasses.body}`]: {
       fontSize: 14,
+      fontWeight: 600,
+      color: `#3a587f`,
       padding: 5,
     },
   }));
@@ -85,7 +87,9 @@ const DriversList = (props) => {
     <Box className="list-title">
       Drivers Championship
     </Box>
-      <Box 
+      <Box
+        display="flex"
+        width={1/1}
         border={15}
         color="gray">
         <TableContainer>
