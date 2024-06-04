@@ -26,7 +26,6 @@ import LoaderFlag from "./LoaderFlag.js";
 const RacesDetails = (props) => {
 
   const [RacesDetails, setRacesDetails] = useState([]);
-  const [RacesQualifying, setRacesQualifying] = useState([]);
   const [CardX, setCard] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -47,16 +46,11 @@ const RacesDetails = (props) => {
     const dataCard = responseDetails.data.MRData.RaceTable.Races;
     const dataCards = dataCard[0];
 
-
-    const data = responseDetails.data.MRData.RaceTable.Races;
-    const dataQualifying = data[0].QualifyingResults;
-
     const responseDetailsList = await axios.get(urlList);
     const dataList = responseDetailsList.data.MRData.RaceTable.Races;
     const dataRacesDetails = dataList[0].Results;
 
     setCard(dataCards);
-    setRacesQualifying(dataQualifying);
     setRacesDetails(dataRacesDetails);
     setIsLoading(false);
   }
@@ -114,8 +108,8 @@ const RacesDetails = (props) => {
       </Card>
 
       <Box display="flex" width={"75vw"}>
-      <TableContainer>
-        <Table aria-label="customized table">
+      <TableContainer  sx={{ color: 'grey.A400', border: 15 }}>
+        <Table aria-label="customized table"  >
             <TableHead>
               <TableRow><StyledTableCell colSpan={5}>Qualifying results</StyledTableCell></TableRow>
               <TableRow>
@@ -126,20 +120,16 @@ const RacesDetails = (props) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {RacesQualifying.map((race) => (
+              {CardX.QualifyingResults.map((race) => (
                 <TableRow key={race.position} hover sx={{ cursor: 'pointer' }}>
                   <StyledTableCell >{race.position}</StyledTableCell>
                   <StyledTableCell>
-                    <Box
-                    display="flex">
-                      <Box
-                      marginRight={2}
-                      textAlign="center">
+                    <Box display="flex">
+                      <Box marginRight={2} textAlign="center">
                         <Flag country={getAlphaCode(props.flags, race.Driver.nationality)} size={20} />
                       </Box>
                       {race.Driver.familyName}
                     </Box>
-                    
                   </StyledTableCell>
                   <StyledTableCell>{race.Constructor.name}</StyledTableCell>
                   <StyledTableCell>{handelTime(race)}</StyledTableCell>
@@ -150,7 +140,7 @@ const RacesDetails = (props) => {
         </TableContainer>
 
 
-        <TableContainer>
+        <TableContainer  sx={{ color: 'grey.A400', border: 15 }}>
         <Table aria-label="customized table">
             <TableHead>
               <TableRow><StyledTableCell colSpan={5}>Race results</StyledTableCell></TableRow>
@@ -168,13 +158,8 @@ const RacesDetails = (props) => {
                   <StyledTableCell>{race.position}</StyledTableCell>
                   <StyledTableCell>
                     
-                  <Box
-                    display='flex'
-                  >
-                    <Box
-                      marginRight={2}
-                      textAlign="center"
-                    >
+                  <Box display='flex'>
+                    <Box marginRight={2} textAlign="center">
                       <Flag country={getAlphaCode(props.flags, race.Driver.nationality)} size={20} />
                     </Box> 
                       <Box>
@@ -184,9 +169,9 @@ const RacesDetails = (props) => {
                   </StyledTableCell>
                   <StyledTableCell>{race.Constructor.name}</StyledTableCell>
                   <StyledTableCell>{race.Time ? race.Time.time : "0"}</StyledTableCell>
-                  <TableCell sx={{ backgroundColor: getCellBackgroundColor(race.points)}}>
+                  <StyledTableCell sx={{ backgroundColor: getCellBackgroundColor(race.points)}}>
                   {race.points}
-                </TableCell>
+                </StyledTableCell>
                 </TableRow>
               ))}
             </TableBody>
