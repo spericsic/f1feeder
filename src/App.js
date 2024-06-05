@@ -53,7 +53,12 @@ const App = () => {
 
   const breadCrumbsRender = (bread, i) => {
     if (i == breadCrumbs.length-1 && breadCrumbs.length != 1 ) {
-      return <Typography key={i} variant="caption" display="block" fontWeight={900} > {bread.name}</Typography>
+      return <Typography key={i} 
+                variant="caption" 
+                display="block" 
+                fontWeight={900}>
+                  {bread.name}
+              </Typography>
     } else {
       return <Chip key={i}
                 icon={bread.icon}
@@ -112,6 +117,8 @@ const App = () => {
                       title="Main Video"
                       image={`${process.env.PUBLIC_URL}/assets/video/F1 2024.mp4`}
                       autoPlay
+                      loop
+                      muted
                   />
                   </Box>
                 }/>
@@ -120,20 +127,24 @@ const App = () => {
                                                   searchValue={searchValue} 
                                                   breadcrumbs={getBreadCrums}/>} 
                                                   />
-                <Route path="/drivers/:driverId" element={<DriverDetails flags={flagsList} />} />
-
+                <Route path="/drivers/:driverId" element={<DriverDetails 
+                                                            flags={flagsList} 
+                                                            breadcrumbs={getBreadCrums}/>} />
                 <Route path="/teams" element={<TeamsList 
                                                 flags={flagsList} 
                                                 searchValue={searchValue} 
                                                 breadcrumbs={getBreadCrums} />} />
-                <Route path="/teams/:constructorId" element={<TeamDetails flags={flagsList} />} />
-
+                <Route path="/teams/:constructorId" element={<TeamDetails 
+                                                                flags={flagsList} 
+                                                                breadcrumbs={getBreadCrums}/>} />
                 <Route path="/races" element={<RacesList 
                                                 flags={flagsList} 
                                                 searchValue={searchValue} 
                                                 breadcrumbs={getBreadCrums}/>}  />
 
-                <Route path="/races/:raceId" element={<RacesDetails flags={flagsList} />} />
+                <Route path="/races/:raceId" element={<RacesDetails 
+                                                        flags={flagsList} 
+                                                        breadcrumbs={getBreadCrums} />} />
               </Routes>
             </Box>
           </Box>

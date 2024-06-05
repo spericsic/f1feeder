@@ -1,23 +1,16 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import Flag from "react-flagkit";
 import { getAlphaCode, getCellBackgroundColor, goToExternalLink } from '../Utils.js';
-
 import { styled } from '@mui/material/styles';
-import { Table, TableBody, TableContainer, TableHead, TableRow, TableCell, Card, CardContent, Typography } from '@mui/material';
+import { Box, Table, TableBody, TableContainer, TableHead, TableRow, TableCell, Card, CardContent, Typography } from '@mui/material';
 import { tableCellClasses } from '@mui/material/TableCell';
 import { grey } from "@mui/material/colors";
-
 import { CardActionArea } from '@mui/material';
-import Box from "@mui/material/Box";
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import LoaderFlag from "./LoaderFlag.js";
-
-
-
-
-
+import {SportsScore, Home} from '@mui/icons-material';
 
 
 const TeamDetails = (props) => {
@@ -26,6 +19,7 @@ const TeamDetails = (props) => {
   const [isLoading, setIsLoading] = useState(true);
 
   const params = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
     getTeam();
@@ -72,6 +66,17 @@ const TeamDetails = (props) => {
       border: 0,
     },
   }));
+
+  const handelClickDetails = (id, name) => {
+    const linkTo = `/races/${id}`;
+    navigate(linkTo);
+    const items = [
+      {name: 'Home', link: '/', icon: <Home/>},
+      { name: `Races`, link: `/races/`, icon: <SportsScore/>},
+      { name: `${name}`}
+    ]
+    props.breadcrumbs(items)
+  };
 
   if (isLoading) {
     return <LoaderFlag />
@@ -151,7 +156,7 @@ const TeamDetails = (props) => {
 
             <TableBody >
               {teamList.map((result) =>
-                <StyledTableRow hover key={result.round} sx={{ cursor: "pointer" }}>
+                <StyledTableRow key={result.round}>
                   <StyledTableCell>{result.round}</StyledTableCell>
 
                   <StyledTableCell>
@@ -166,7 +171,7 @@ const TeamDetails = (props) => {
                         alignItems='center'>
                         <Flag country={getAlphaCode(props.flags, result.Circuit.Location.country)} size={30} />
                       </Box>
-                      <Box>
+                      <Box onClick={() => handelClickDetails(result.round,result.raceName)} hover sx={{ cursor: 'pointer' }}>
                         {result.raceName}
                       </Box>
                     </Box>

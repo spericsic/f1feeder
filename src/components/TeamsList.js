@@ -112,10 +112,7 @@ const TeamsList = (props) => {
                   <StyledTableRow hover key={team.position}>
                     <StyledTableCell>{team.position}</StyledTableCell>
 
-                    <StyledTableCell 
-                      sx={{ cursor: "pointer" }}
-                      onClick={() => handelClickDetails(team.Constructor.constructorId, team.Constructor.name)} 
-                      >
+                    <StyledTableCell>
                       <Box
                         display='flex'
                         justifyItems='center'
@@ -128,7 +125,8 @@ const TeamsList = (props) => {
                         >
                           <Flag country={getAlphaCode(props.flags, team.Constructor.nationality)} size={30} />
                         </Box>
-                        <Box >
+                        <Box sx={{ cursor: "pointer" }}
+                      onClick={() => handelClickDetails(team.Constructor.constructorId, team.Constructor.name)}>
                           {team.Constructor.name}
                         </Box>
                       </Box>

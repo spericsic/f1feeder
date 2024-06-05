@@ -8,7 +8,7 @@ import {Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Box} f
 import { tableCellClasses } from '@mui/material/TableCell';
 import { grey } from "@mui/material/colors";
 import LoaderFlag from "./LoaderFlag.js";
-import { SportsMotorsports, Home } from '@mui/icons-material';
+import { SportsMotorsports, Home, Groups } from '@mui/icons-material';
 
 const DriversList = (props) => {
   const [drivers, setDrivers] = useState([]);
@@ -48,7 +48,7 @@ const DriversList = (props) => {
     navigate(linkTo);
     const items = [
       {name: 'Home', link: '/', icon: <Home/>},
-      { name: `${path.charAt(0).toUpperCase() + path.slice(1)}`, link: `/${path}/`, icon: <SportsMotorsports/>},
+      { name: `${path.charAt(0).toUpperCase() + path.slice(1)}`, link: `/${path}/`, icon: path == "drivers" ? <SportsMotorsports/> : <Groups/>},
       { name: `${name}`}
     ]
     props.breadcrumbs(items)
@@ -103,14 +103,12 @@ const DriversList = (props) => {
               {filteredDrivers.map((driver) =>
                 <StyledTableRow hover key={driver.position}>
                   <StyledTableCell>{driver.position}</StyledTableCell>               
-                  <StyledTableCell 
-                    sx={{ cursor: 'pointer' }}
-                    onClick={() => handelClickDetails('drivers',driver.Driver.driverId, driver.Driver.familyName)}>
+                  <StyledTableCell>
                   <Box
                     display='flex'
                     justifyItems='center'
                     alignItems='center'>
-                      <Box
+                    <Box
                         marginRight={2}
                         display='flex'
                         justifyItems='center'
@@ -118,10 +116,11 @@ const DriversList = (props) => {
                         >
                         <Flag country={getAlphaCode(props.flags, driver.Driver.nationality)} size={30} />
                       </Box>
-                        <Box>
-                          {driver.Driver.givenName} {driver.Driver.familyName}
-                        </Box>
+                      <Box sx={{ cursor: 'pointer' }}
+                    onClick={() => handelClickDetails('drivers',driver.Driver.driverId, driver.Driver.familyName)}>
+                        {driver.Driver.givenName} {driver.Driver.familyName}
                       </Box>
+                    </Box>
                   </StyledTableCell>
                   <StyledTableCell 
                     sx={{ cursor: 'pointer' }}

@@ -8,7 +8,7 @@ import {Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Box} f
 import { tableCellClasses } from '@mui/material/TableCell';
 import { grey } from "@mui/material/colors";
 import LoaderFlag from "./LoaderFlag.js";
-import {SportsScore, Home} from '@mui/icons-material';
+import {SportsScore, Home, SportsMotorsports} from '@mui/icons-material';
 
 const RacesList = (props) => {
   const [races, setRaces] = useState([]);
@@ -43,18 +43,16 @@ const RacesList = (props) => {
     setIsLoading(false);
   };
 
-  const handelClickDetails = (id, name) => {
-    const linkTo = `/races/${id}`;
+  const handelClickDetails = (path, id, name) => {
+    const linkTo = `/${path}/${id}`;
     navigate(linkTo);
     const items = [
       {name: 'Home', link: '/', icon: <Home/>},
-      { name: 'Races', link: '/races/', icon: <SportsScore/>},
+      { name: `${path.charAt(0).toUpperCase() + path.slice(1)}`, link: `/${path}/`, icon: path == "drivers" ? <SportsMotorsports/> : <SportsScore/>},
       { name: `${name}`}
     ]
     props.breadcrumbs(items)
   };
-
-
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -103,10 +101,8 @@ const RacesList = (props) => {
           </TableHead>
           <TableBody>
             {filteredRaces.map((race) => (
-              <TableRow key={race.round} onClick={() => handelClickDetails(race.round)} hover sx={{ cursor: 'pointer' }}>
-
+              <TableRow key={race.round}>
                 <StyledTableCell component="th" scope="row" >{race.round}</StyledTableCell>
-
                 <StyledTableCell>
                   <Box
                     display="flex">
@@ -115,14 +111,14 @@ const RacesList = (props) => {
                       textAlign="center">
                       <Flag country={getAlphaCode(props.flags, race.Circuit.Location.country)} size={20} />
                     </Box>
-                    <Box>
+                    <Box onClick={() => handelClickDetails('races',race.round,race.raceName)} hover sx={{ cursor: 'pointer' }}>
                       {race.raceName}
                     </Box>
                   </Box>                 
                 </StyledTableCell>
                 <StyledTableCell>{race.Circuit.circuitName}</StyledTableCell>
                 <StyledTableCell>{race.date}</StyledTableCell>
-                <StyledTableCell>
+                <StyledTableCell onClick={() => handelClickDetails('drivers',race.Results[0].Driver.driverId,race.Results[0].Driver.familyName)} hover sx={{ cursor: 'pointer' }}>
                   <Box
                     display="flex">
                     <Box

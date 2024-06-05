@@ -1,10 +1,8 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams , useNavigate } from "react-router-dom";
 import Flag from 'react-flagkit';
 import { getAlphaCode , goToExternalLink, getCellBackgroundColor} from '../Utils.js';
-
-
 import { styled } from '@mui/material/styles';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Card, CardContent, Typography, Box }from '@mui/material';
 import { tableCellClasses } from '@mui/material/TableCell';
@@ -12,6 +10,7 @@ import { grey } from "@mui/material/colors";
 import { CardActionArea } from '@mui/material';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import LoaderFlag from "./LoaderFlag.js";
+import {SportsScore, Groups, Home} from '@mui/icons-material';
 
 const DriverDetails = (props) => {
   const [driverDetails, setDriverDetails] = useState([]);
@@ -19,6 +18,7 @@ const DriverDetails = (props) => {
   const [isLoading, setIsLoading] = useState(true);
 
   const params = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
     getDriver();
@@ -39,6 +39,17 @@ const DriverDetails = (props) => {
     setDriverList(dataList);
     setIsLoading(false);
   }
+
+  const handelClickDetails = (path, id, name) => {
+    const linkTo = `/${path}/${id}`;
+    navigate(linkTo);
+    const items = [
+      {name: 'Home', link: '/', icon: <Home/>},
+      { name: `${path.charAt(0).toUpperCase() + path.slice(1)}`, link: `/${path}/`, icon: path == "races" ? <SportsScore/> : <Groups/>},
+      { name: `${name}`}
+    ]
+    props.breadcrumbs(items)
+  };
 
   if (isLoading) {
     return <LoaderFlag/>
@@ -135,9 +146,9 @@ const DriverDetails = (props) => {
 
             <TableBody>
               {driverList.map((race) =>
-                <StyledTableRow hover key={race.round}>
+                <StyledTableRow key={race.round}>
                   <StyledTableCell>{race.round}</StyledTableCell>
-                  <StyledTableCell sx={{ cursor: 'pointer' }}>
+                  <StyledTableCell>
                     <Box
                     display='flex'
                     justifyItems='center'
@@ -151,12 +162,12 @@ const DriverDetails = (props) => {
                       >
                         <Flag country={getAlphaCode(props.flags, race.Circuit.Location.country)} size={30} />
                       </Box>
-                      <Box>
+                      <Box onClick={() => handelClickDetails('races',race.round,race.raceName)} hover sx={{ cursor: 'pointer' }}>
                         {race.raceName}
                       </Box>
                     </Box>      
                   </StyledTableCell>
-                  <StyledTableCell sx={{ cursor: 'pointer' }}>{race.Results[0].Constructor.name}</StyledTableCell>
+                  <StyledTableCell onClick={() => handelClickDetails('teams',race.Results[0].Constructor.constructorId,race.Results[0].Constructor.name)} hover sx={{ cursor: 'pointer' }} >{race.Results[0].Constructor.name}</StyledTableCell>
                   <StyledTableCell>{race.Results[0].grid}</StyledTableCell>
                     <TableCell sx={{ backgroundColor: getCellBackgroundColor(race.Results[0].position), padding: 0 }}>
                       {race.Results[0].position}

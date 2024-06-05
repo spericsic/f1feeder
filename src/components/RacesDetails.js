@@ -1,10 +1,8 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Flag from 'react-flagkit';
 import { getAlphaCode , goToExternalLink, getCellBackgroundColor} from '../Utils.js';
-
-
 import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -13,7 +11,6 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { grey } from "@mui/material/colors";
-
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
@@ -21,6 +18,7 @@ import { CardActionArea } from '@mui/material';
 import Box from "@mui/material/Box";
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import LoaderFlag from "./LoaderFlag.js";
+import {SportsMotorsports, Groups, Home} from '@mui/icons-material';
 
 
 const RacesDetails = (props) => {
@@ -29,7 +27,8 @@ const RacesDetails = (props) => {
   const [CardX, setCard] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  const params = useParams()
+  const params = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
     getRacesDetails();
@@ -75,6 +74,17 @@ const RacesDetails = (props) => {
       padding: 5,
     },
   }));
+
+  const handelClickDetails = (path, id, name) => {
+    const linkTo = `/${path}/${id}`;
+    navigate(linkTo);
+    const items = [
+      {name: 'Home', link: '/', icon: <Home/>},
+      { name: `${path.charAt(0).toUpperCase() + path.slice(1)}`, link: `/${path}/`, icon: path == "drivers" ? <SportsMotorsports/> : <Groups/>},
+      { name: `${name}`}
+    ]
+    props.breadcrumbs(items)
+  };
 
   if (isLoading) {
     return <LoaderFlag/>
@@ -124,17 +134,19 @@ const RacesDetails = (props) => {
             </TableHead>
             <TableBody>
               {CardX.QualifyingResults.map((race) => (
-                <TableRow key={race.position} hover sx={{ cursor: 'pointer' }}>
+                <TableRow key={race.position}>
                   <StyledTableCell >{race.position}</StyledTableCell>
                   <StyledTableCell>
                     <Box display="flex">
                       <Box marginRight={2} textAlign="center">
                         <Flag country={getAlphaCode(props.flags, race.Driver.nationality)} size={20} />
                       </Box>
-                      {race.Driver.familyName}
+                      <Box onClick={() => handelClickDetails('drivers', race.Driver.driverId, race.Driver.familyName)} hover sx={{ cursor: 'pointer' }}>
+                        {race.Driver.familyName}
+                      </Box>
                     </Box>
                   </StyledTableCell>
-                  <StyledTableCell>{race.Constructor.name}</StyledTableCell>
+                  <StyledTableCell onClick={() => handelClickDetails('teams',race.Constructor.constructorId,race.Constructor.name)} hover sx={{ cursor: 'pointer' }} >{race.Constructor.name}</StyledTableCell>
                   <StyledTableCell>{handelTime(race)}</StyledTableCell>
                 </TableRow>
               ))}
@@ -157,20 +169,19 @@ const RacesDetails = (props) => {
             </TableHead>
             <TableBody>
               {RacesDetails.map((race) => (
-                <TableRow key={race.position} hover sx={{ cursor: 'pointer' }}>
+                <TableRow key={race.position}>
                   <StyledTableCell>{race.position}</StyledTableCell>
                   <StyledTableCell>
-                    
-                  <Box display='flex'>
-                    <Box marginRight={2} textAlign="center">
-                      <Flag country={getAlphaCode(props.flags, race.Driver.nationality)} size={20} />
-                    </Box> 
-                      <Box>
+                    <Box display='flex'>
+                      <Box marginRight={2} textAlign="center">
+                        <Flag country={getAlphaCode(props.flags, race.Driver.nationality)} size={20} />
+                      </Box> 
+                      <Box onClick={() => handelClickDetails('drivers', race.Driver.driverId, race.Driver.familyName)} hover sx={{ cursor: 'pointer' }} >
                         {race.Driver.familyName}
                       </Box>
                     </Box>
                   </StyledTableCell>
-                  <StyledTableCell>{race.Constructor.name}</StyledTableCell>
+                  <StyledTableCell onClick={() => handelClickDetails('teams',race.Constructor.constructorId,race.Constructor.name)} hover sx={{ cursor: 'pointer' }} >{race.Constructor.name}</StyledTableCell>
                   <StyledTableCell>{race.Time ? race.Time.time : "0"}</StyledTableCell>
                   <StyledTableCell sx={{ backgroundColor: getCellBackgroundColor(race.points)}}>
                   {race.points}
