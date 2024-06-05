@@ -4,18 +4,10 @@ import axios from "axios";
 import Flag from 'react-flagkit';
 import { getAlphaCode , goToExternalLink, getCellBackgroundColor} from '../Utils.js';
 import { styled } from '@mui/material/styles';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell, { tableCellClasses } from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
+import { Table, TableBody, TableCell, TableContainer, TableHead,TableRow, Card, CardContent, Typography, Box } from '@mui/material';
+import { tableCellClasses } from '@mui/material/TableCell';
 import { grey } from "@mui/material/colors";
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
-import Box from "@mui/material/Box";
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import LoaderFlag from "./LoaderFlag.js";
 import {SportsMotorsports, Groups, Home} from '@mui/icons-material';
@@ -64,13 +56,16 @@ const RacesDetails = (props) => {
   
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
-      backgroundColor: grey[500],
+      backgroundColor: grey[400],
+      border: 0,
       color: theme.palette.common.black,
       fontWeight: 600,
       padding: 10,
     },
     [`&.${tableCellClasses.body}`]: {
       fontSize: 14,
+      fontWeight: 600,
+      color: `#3a587f`,
       padding: 5,
     },
   }));
@@ -90,41 +85,53 @@ const RacesDetails = (props) => {
     return <LoaderFlag/>
   }
 
+  const StyledTableRow = styled(TableRow)(({ theme }) => ({
+    '&:nth-of-type(odd)': {
+      backgroundColor: grey[300],
+    },
+    '&:last-child td, &:last-child th': {
+      border: 0,
+    },
+  }));
+
   return (
     <Box display="flex">
       <Box
         width={1/5}
       >
-      <Card sx={{ maxWidth: 235 }} onClick={()=>goToExternalLink(CardX.url)}>
-        <CardActionArea>
-          <CardContent>
-            <Box
-              display='flex'
-              flex='1'
-              justifyContent='center'
-              flexDirection='column'
-              alignItems='center'
-              margin='auto'>
-
-              <Typography variant="caption" fontWeight={700} style={{ fontSize: "20px" }}>
+        <Card sx={{ maxWidth: 235 }}>
+          <CardActionArea>
+            <CardContent>
+              <Box
+                display='flex'
+                flex='1'
+                justifyContent='center'
+                flexDirection='column'
+                alignItems='center'
+                margin='auto'>
                 <Flag country={getAlphaCode(props.flags, CardX.Circuit.Location.country)} size={200} />
-              </Typography>
-            </Box>
+              </Box>
 
-            <Typography variant="caption" display="block" fontWeight={900} style={{fontSize: "20px", color: "pink", textAlign:"center"}}>{CardX.raceName}</Typography>
-            <Typography variant="caption" display="block" fontWeight={900}>Country: {CardX.Circuit.Location.country}</Typography>
-            <Typography variant="caption" display="block" fontWeight={900}>Location: {CardX.Circuit.Location.locality}</Typography>
-            <Typography variant="caption" display="block" fontWeight={900}>Date: {CardX.date}</Typography>
-            <Box display='flex' alignItems='center'><Typography variant="caption" display="block" fontWeight={900}>Full Report: </Typography><OpenInNewIcon fontSize="small" /></Box>
-          </CardContent>
-        </CardActionArea>
-      </Card>
+              <Typography variant="caption" display="block" fontWeight={700} style={{fontSize: "20px", color: "pink", textAlign:"center"}}>{CardX.raceName}</Typography>
+              <Typography variant="caption" display="block" fontWeight={900}>Country: {CardX.Circuit.Location.country}</Typography>
+              <Typography variant="caption" display="block" fontWeight={900}>Location: {CardX.Circuit.Location.locality}</Typography>
+              <Typography variant="caption" display="block" fontWeight={900}>Date: {CardX.date}</Typography>
+              <Box display='flex' alignItems='center'><Typography variant="caption" display="block" fontWeight={900}>Full Report: </Typography><OpenInNewIcon fontSize="small"  onClick={()=>goToExternalLink(CardX.url)} /></Box>
+            </CardContent>
+          </CardActionArea>
+        </Card>
       </Box>
-      <Box display="flex" width={1/1}>
-      <TableContainer  sx={{ color: grey[600], border: 15 }}>
-        <Table aria-label="customized table"  >
+      <Box 
+        display="flex" 
+        width={1/1}
+        border={15}
+        color="gray">
+        <TableContainer sx={{ color: 'grey', border: 15 }}>
+          <Table>
             <TableHead>
-              <TableRow><StyledTableCell colSpan={5}>Qualifying results</StyledTableCell></TableRow>
+              <TableRow>
+                <StyledTableCell colSpan={5}>Qualifying results</StyledTableCell>
+              </TableRow>
               <TableRow>
                 <StyledTableCell>Pos</StyledTableCell>
                 <StyledTableCell >Driver</StyledTableCell>
@@ -134,31 +141,43 @@ const RacesDetails = (props) => {
             </TableHead>
             <TableBody>
               {CardX.QualifyingResults.map((race) => (
-                <TableRow key={race.position}>
+                <StyledTableRow key={race.position}>
                   <StyledTableCell >{race.position}</StyledTableCell>
                   <StyledTableCell>
-                    <Box display="flex">
-                      <Box marginRight={2} textAlign="center">
-                        <Flag country={getAlphaCode(props.flags, race.Driver.nationality)} size={20} />
+                    <Box 
+                    display="flex"
+                    justifyItems='center'
+                    alignItems='center'
+                    >
+                      <Box 
+                        marginRight={0.8} 
+                        display='flex'
+                        justifyItems='center'
+                        alignItems='center'
+                        >
+                          <Flag country={getAlphaCode(props.flags, race.Driver.nationality)} size={30} />
                       </Box>
-                      <Box onClick={() => handelClickDetails('drivers', race.Driver.driverId, race.Driver.familyName)} hover sx={{ cursor: 'pointer' }}>
-                        {race.Driver.familyName}
+                      <Box 
+                        onClick={() => handelClickDetails('drivers', race.Driver.driverId, race.Driver.familyName)} hover sx={{ cursor: 'pointer' }}>
+                          {race.Driver.familyName}
                       </Box>
                     </Box>
                   </StyledTableCell>
                   <StyledTableCell onClick={() => handelClickDetails('teams',race.Constructor.constructorId,race.Constructor.name)} hover sx={{ cursor: 'pointer' }} >{race.Constructor.name}</StyledTableCell>
                   <StyledTableCell>{handelTime(race)}</StyledTableCell>
-                </TableRow>
+                </StyledTableRow>
               ))}
             </TableBody>
           </Table>
         </TableContainer>
 
 
-        <TableContainer  sx={{ color: grey[600], border: 15 }}>
-        <Table aria-label="customized table">
+        <TableContainer  sx={{ color: 'grey', border: 15 }}>
+        <Table>
             <TableHead>
-              <TableRow><StyledTableCell colSpan={5}>Race results</StyledTableCell></TableRow>
+              <TableRow>
+                <StyledTableCell colSpan={5}>Race results</StyledTableCell>
+              </TableRow>
               <TableRow>
                 <StyledTableCell>Pos</StyledTableCell>
                 <StyledTableCell >Driver</StyledTableCell>
@@ -169,24 +188,33 @@ const RacesDetails = (props) => {
             </TableHead>
             <TableBody>
               {RacesDetails.map((race) => (
-                <TableRow key={race.position}>
+                <StyledTableRow key={race.position}>
                   <StyledTableCell>{race.position}</StyledTableCell>
                   <StyledTableCell>
-                    <Box display='flex'>
-                      <Box marginRight={2} textAlign="center">
-                        <Flag country={getAlphaCode(props.flags, race.Driver.nationality)} size={20} />
+                    <Box 
+                      display='flex'
+                      justifyItems='center'
+                      alignItems='center'>
+                      <Box 
+                        marginRight={0.8} 
+                        display='flex'
+                        justifyItems='center'
+                        alignItems='center'
+                        >
+                          <Flag country={getAlphaCode(props.flags, race.Driver.nationality)} size={30} />
                       </Box> 
-                      <Box onClick={() => handelClickDetails('drivers', race.Driver.driverId, race.Driver.familyName)} hover sx={{ cursor: 'pointer' }} >
+                      <Box 
+                        onClick={() => handelClickDetails('drivers', race.Driver.driverId, race.Driver.familyName)} hover sx={{ cursor: 'pointer' }} >
                         {race.Driver.familyName}
                       </Box>
                     </Box>
                   </StyledTableCell>
                   <StyledTableCell onClick={() => handelClickDetails('teams',race.Constructor.constructorId,race.Constructor.name)} hover sx={{ cursor: 'pointer' }} >{race.Constructor.name}</StyledTableCell>
                   <StyledTableCell>{race.Time ? race.Time.time : "0"}</StyledTableCell>
-                  <StyledTableCell sx={{ backgroundColor: getCellBackgroundColor(race.points)}}>
-                  {race.points}
-                </StyledTableCell>
-                </TableRow>
+                    <StyledTableCell sx={{ backgroundColor: getCellBackgroundColor(race.points)}}>
+                    {race.points}
+                    </StyledTableCell>
+                </StyledTableRow>
               ))}
             </TableBody>
           </Table>

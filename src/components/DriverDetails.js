@@ -57,7 +57,8 @@ const DriverDetails = (props) => {
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
-      backgroundColor: grey[500],
+      backgroundColor: grey[400],
+      border: 0,
       color: theme.palette.common.black,
       fontWeight: 600,
       padding: 10,
@@ -84,9 +85,7 @@ const DriverDetails = (props) => {
       <Box
         width={1/5}
       >
-        <Card 
-          sx={{ Width: 235 }} 
-          >
+        <Card sx={{ Width: 235 }}>
           <CardActionArea>
             <CardContent>
               <Box
@@ -98,8 +97,7 @@ const DriverDetails = (props) => {
                 margin='auto'>
                   <Box 
                     sx={{ 
-                      objectFit: "contain"
-                      
+                      objectFit: "contain"  
                     }}
                     component='img'
                     width={140}
@@ -155,15 +153,16 @@ const DriverDetails = (props) => {
                     alignItems='center'
                     >
                       <Box
-                      marginRight={2}
-                      display='flex'
-                      justifyItems='center'
-                      alignItems='center'
-                      >
-                        <Flag country={getAlphaCode(props.flags, race.Circuit.Location.country)} size={30} />
+                        marginRight={0.8}
+                        display='flex'
+                        justifyItems='center'
+                        alignItems='center'
+                        >
+                          <Flag country={getAlphaCode(props.flags, race.Circuit.Location.country)} size={30} />
                       </Box>
-                      <Box onClick={() => handelClickDetails('races',race.round,race.raceName)} hover sx={{ cursor: 'pointer' }}>
-                        {race.raceName}
+                      <Box 
+                        onClick={() => handelClickDetails('races',race.round,race.raceName)} hover sx={{ cursor: 'pointer' }}>
+                          {race.raceName}
                       </Box>
                     </Box>      
                   </StyledTableCell>

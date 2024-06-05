@@ -44,7 +44,8 @@ const TeamDetails = (props) => {
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
-      backgroundColor: grey[500],
+      backgroundColor: grey[400],
+      border: 0,
       color: theme.palette.common.black,
       fontWeight: 600,
       padding: 10,
@@ -54,7 +55,7 @@ const TeamDetails = (props) => {
       fontSize: 14,
       fontWeight: 600,
       color: `#3a587f`,
-      padding: 6,
+      padding: 5,
     },
   }));
 
@@ -105,7 +106,6 @@ const TeamDetails = (props) => {
                   component='img'
                   width={140}
                   height={190}
-                  //margin="auto"
                   alt='Teams'
                   src={`${process.env.PUBLIC_URL}/assets/img/${params.constructorId}.png`} />
 
@@ -125,7 +125,6 @@ const TeamDetails = (props) => {
               <Box display='flex' alignItems='center'>
                 <Typography variant="caption" display="block" fontWeight={900}>History:  </Typography><OpenInNewIcon fontSize="small" onClick={() => goToExternalLink(teamDetails.Constructor.url)} />
               </Box>
-
             </CardContent>
           </CardActionArea>
         </Card>
@@ -158,14 +157,13 @@ const TeamDetails = (props) => {
               {teamList.map((result) =>
                 <StyledTableRow key={result.round}>
                   <StyledTableCell>{result.round}</StyledTableCell>
-
                   <StyledTableCell>
                     <Box
                       display='flex'
                       justifyItems='center'
                       alignItems='center'>
                       <Box
-                        marginRight={2}
+                        marginRight={0.8}
                         display='flex'
                         justifyItems='center'
                         alignItems='center'>
@@ -176,19 +174,15 @@ const TeamDetails = (props) => {
                       </Box>
                     </Box>
                   </StyledTableCell>
-
                   <TableCell sx={{ backgroundColor: getCellBackgroundColor(result.Results[0].position), padding: 0 }}>{result.Results[0].position}</TableCell>
                   <TableCell sx={{ backgroundColor: getCellBackgroundColor(result.Results[0].points), padding: 0 }}>{result.Results[1].points}</TableCell>
                   <StyledTableCell>{parseInt(result.Results[0].points) + parseInt(result.Results[1].points)}</StyledTableCell>
                 </StyledTableRow>
               )}
-
             </TableBody>
           </Table>
         </TableContainer>
       </Box>
-
-
     </Box>
   );
 }

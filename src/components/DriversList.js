@@ -56,7 +56,7 @@ const DriversList = (props) => {
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
-      backgroundColor: grey[500],
+      backgroundColor: grey[400],
       color: theme.palette.common.black,
       fontWeight: 600,
       padding: 10,
@@ -89,11 +89,10 @@ const DriversList = (props) => {
     </Box>
       <Box
         display="flex"
-        width={1/1}
         border={15}
         color="gray">
         <TableContainer>
-          <Table sx={{ minWidth: 1200 }} aria-label="customized table">
+          <Table>
             <TableHead>
               <TableRow>
                 <StyledTableCell colSpan={5}>Drivers Championship Standings - 2013</StyledTableCell>
@@ -109,7 +108,7 @@ const DriversList = (props) => {
                     justifyItems='center'
                     alignItems='center'>
                     <Box
-                        marginRight={2}
+                        marginRight={0.8}
                         display='flex'
                         justifyItems='center'
                         alignItems='center'
@@ -130,7 +129,6 @@ const DriversList = (props) => {
                   <StyledTableCell>{driver.points}</StyledTableCell>
                 </StyledTableRow>
               )}
-
             </TableBody>
           </Table>
         </TableContainer>

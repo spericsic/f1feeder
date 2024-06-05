@@ -56,7 +56,8 @@ const RacesList = (props) => {
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
-      backgroundColor: grey[500],
+      backgroundColor: grey[400],
+      border: 0,
       color: theme.palette.common.black,
       fontWeight: 600,
       padding: 10,
@@ -87,55 +88,72 @@ const RacesList = (props) => {
     <Box className="list-title">
     Race Calendar
     </Box>
-      <TableContainer sx={{ color: 'grey', border: 15 }}>
-        <Table>
-          <TableHead>
-            <TableRow><StyledTableCell colSpan={5}>Race Calendar - 2013</StyledTableCell></TableRow>
-            <TableRow>
-              <StyledTableCell>Round</StyledTableCell>
-              <StyledTableCell >Grand Prix</StyledTableCell>
-              <StyledTableCell >Circuit</StyledTableCell>
-              <StyledTableCell >Date</StyledTableCell>
-              <StyledTableCell >Winner</StyledTableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {filteredRaces.map((race) => (
-              <TableRow key={race.round}>
-                <StyledTableCell component="th" scope="row" >{race.round}</StyledTableCell>
-                <StyledTableCell>
-                  <Box
-                    display="flex">
-                    <Box
-                      marginRight={2}
-                      textAlign="center">
-                      <Flag country={getAlphaCode(props.flags, race.Circuit.Location.country)} size={20} />
-                    </Box>
-                    <Box onClick={() => handelClickDetails('races',race.round,race.raceName)} hover sx={{ cursor: 'pointer' }}>
-                      {race.raceName}
-                    </Box>
-                  </Box>                 
-                </StyledTableCell>
-                <StyledTableCell>{race.Circuit.circuitName}</StyledTableCell>
-                <StyledTableCell>{race.date}</StyledTableCell>
-                <StyledTableCell onClick={() => handelClickDetails('drivers',race.Results[0].Driver.driverId,race.Results[0].Driver.familyName)} hover sx={{ cursor: 'pointer' }}>
-                  <Box
-                    display="flex">
-                    <Box
-                      marginRight={2}
-                      textAlign="center">
-                      <Flag country={getAlphaCode(props.flags, race.Results[0].Driver.nationality)} size={20} />
-                    </Box>
-                    <Box>
-                      {race.Results[0].Driver.familyName}
-                    </Box>
-                  </Box>
-                </StyledTableCell>
+      <Box
+          display="flex"
+          border={15}
+          color="gray">
+        <TableContainer>
+          <Table>
+            <TableHead>
+              <TableRow><StyledTableCell colSpan={5}>Race Calendar - 2013</StyledTableCell></TableRow>
+              <TableRow>
+                <StyledTableCell>Round</StyledTableCell>
+                <StyledTableCell >Grand Prix</StyledTableCell>
+                <StyledTableCell >Circuit</StyledTableCell>
+                <StyledTableCell >Date</StyledTableCell>
+                <StyledTableCell >Winner</StyledTableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+            </TableHead>
+            <TableBody>
+              {filteredRaces.map((race) => (
+                <StyledTableRow key={race.round}>
+                  <StyledTableCell >{race.round}</StyledTableCell>
+                  <StyledTableCell>
+                    <Box
+                      display="flex"
+                      justifyItems='center'
+                      alignItems='center'
+                      >
+                      <Box
+                        marginRight={0.8}
+                        display='flex'
+                        justifyItems='center'
+                        alignItems='center'
+                        >
+                        <Flag country={getAlphaCode(props.flags, race.Circuit.Location.country)} size={30} />
+                      </Box>
+                      <Box onClick={() => handelClickDetails('races',race.round,race.raceName)} hover sx={{ cursor: 'pointer' }}>
+                        {race.raceName}
+                      </Box>
+                    </Box>                 
+                  </StyledTableCell>
+                  <StyledTableCell>{race.Circuit.circuitName}</StyledTableCell>
+                  <StyledTableCell>{race.date}</StyledTableCell>
+                  <StyledTableCell onClick={() => handelClickDetails('drivers',race.Results[0].Driver.driverId,race.Results[0].Driver.familyName)} hover sx={{ cursor: 'pointer' }}>
+                    <Box
+                      display="flex"
+                      justifyItems='center'
+                      alignItems='center'
+                      >
+                      <Box
+                         marginRight={0.8}
+                         display='flex'
+                         justifyItems='center'
+                         alignItems='center'
+                         >
+                        <Flag country={getAlphaCode(props.flags, race.Results[0].Driver.nationality)} size={30} />
+                      </Box>
+                      <Box>
+                        {race.Results[0].Driver.familyName}
+                      </Box>
+                    </Box>
+                  </StyledTableCell>
+                </StyledTableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Box>
     </>
   );
 }

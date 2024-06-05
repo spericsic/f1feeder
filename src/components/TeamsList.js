@@ -13,7 +13,6 @@ import { OpenInNew, Home, Groups } from '@mui/icons-material';
 
 
 const TeamsList = (props) => {
-
   const [teams, setTeams] = useState([]);
   const [filteredTeams, setFilteredTeams] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -60,13 +59,15 @@ const TeamsList = (props) => {
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
-      backgroundColor: grey[500],
+      backgroundColor: grey[400],
       color: theme.palette.common.black,
       fontWeight: 600,
       padding: 10,
     },
     [`&.${tableCellClasses.body}`]: {
       fontSize: 14,
+      fontWeight: 600,
+      color: `#3a587f`,
       padding: 5,
     },
   }));
@@ -89,40 +90,34 @@ const TeamsList = (props) => {
       <Box className="list-title">
         Constructions Championship
       </Box>
-
-
       <Box
-        sx={{ border: 15, borderColor: grey }}
+        display="flex"
+        border={15}
         color="gray"
       >
         <TableContainer>
-
           <Table>
             <TableHead>
               <TableRow>
-                <StyledTableCell colSpan={4}> Constructors Championship Standings - 2013 </StyledTableCell>
+                <StyledTableCell colSpan={5}> Constructors Championship Standings - 2013 </StyledTableCell>
               </TableRow>
             </TableHead>
-
-
             <TableBody>
-
               {filteredTeams.map((team) => {
                 return (
                   <StyledTableRow hover key={team.position}>
                     <StyledTableCell>{team.position}</StyledTableCell>
-
                     <StyledTableCell>
                       <Box
                         display='flex'
                         justifyItems='center'
                         alignItems='center'>
-                      <Box
-                        marginRight={2}
-                        display='flex'
-                        justifyItems='center'
-                        alignItems='center'
-                        >
+                        <Box
+                          marginRight={0.8}
+                          display='flex'
+                          justifyItems='center'
+                          alignItems='center'
+                          >
                           <Flag country={getAlphaCode(props.flags, team.Constructor.nationality)} size={30} />
                         </Box>
                         <Box sx={{ cursor: "pointer" }}
@@ -140,7 +135,7 @@ const TeamsList = (props) => {
                           alignItems='center'>
                           Details 
                           <Box
-                            marginLeft={2}
+                            marginLeft={0.8}
                             display='flex'
                             justifyItems='center'
                             alignItems='center'
@@ -153,10 +148,8 @@ const TeamsList = (props) => {
                   </StyledTableRow>
                 );
               })}
-
             </TableBody>
           </Table>
-
         </TableContainer>
       </Box>
     </>
