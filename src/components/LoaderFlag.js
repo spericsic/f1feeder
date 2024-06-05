@@ -23,6 +23,7 @@ const LoaderFlag = () => {
                     variant='h2' 
                     display='block' 
                     textAlign='center'
+                    color="white"
                     paddingBottom={10}>Loading...</Typography>
             </Box>
     );

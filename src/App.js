@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { BrowserRouter as Router, Routes, Route, Link, NavLink } from "react-router-dom";
-import { AppBar, Box, Breadcrumbs, Button, CardMedia, Chip, TextField, Toolbar, Typography } from "@mui/material";
+import dayjs from 'dayjs';
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { AppBar, Box, Breadcrumbs, Button, CardMedia, Chip, TextField, Typography } from "@mui/material";
 import DriversList from "./components/DriversList";
 import TeamsList from "./components/TeamsList";
 import RacesList from "./components/RacesList";
@@ -9,7 +10,10 @@ import DriverDetails from "./components/DriverDetails";
 import TeamDetails from "./components/TeamDetails";
 import RacesDetails from "./components/RacesDetails";
 import LoaderFlag from "./components/LoaderFlag";
-import HomeIcon from '@mui/icons-material/Home';
+import { Home } from '@mui/icons-material';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 const App = () => {
 
@@ -17,6 +21,8 @@ const App = () => {
   const [searchValue, setSearchValue] = useState("");
   const [breadCrumbs, setBreadCrumbs] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isMain, setIsMain] = useState(true);
+  const [yearSelect, setYearSelect] = useState('2013');
 
 
   useEffect(() => {
@@ -29,18 +35,24 @@ const App = () => {
     const response = await axios.get(url);
 
     const breadCrumbsList = [];
-    const item = {name: 'Home', link: '/', icon: <HomeIcon/>}
+    const item = {name: 'Home', link: '/', icon: <Home/>}
     breadCrumbsList.push(item);
 
     setBreadCrumbs(breadCrumbsList);
     setFlagsList(response.data);
     setIsLoading(false);
+    setIsMain(true);
   };
 
   const handleSearchInput = (e) => {
     const value = e.target.value;
     setSearchValue(value);
   };
+
+  const handleYearSelected = (e) => {
+    const year = e.$y;
+    setYearSelect(year);
+  }
 
   if (isLoading) {
     return <LoaderFlag/>
@@ -51,9 +63,30 @@ const App = () => {
     setBreadCrumbs(breadCrumbsList);
   }
 
+  const getIsInMain = (value) => {
+    setIsMain(value);
+  }
+
+  const searchBoxShow = () => {
+    if (!isMain) { 
+      return <Box className="text-background-color">
+                <TextField
+                  className="searc-field"
+                  value = {searchValue}
+                  id="main-search"
+                  onChange={handleSearchInput}
+                  type="search"
+                  color="error"
+                  variant="filled"
+                  label="Search for.." />
+            </Box>
+    }
+  };
+
   const breadCrumbsRender = (bread, i) => {
-    if (i == breadCrumbs.length-1 && breadCrumbs.length != 1 ) {
-      return <Typography key={i} 
+    if (i === breadCrumbs.length-1 && breadCrumbs.length !== 1 ) {
+      return <Typography key={i}
+                color="white"
                 variant="caption" 
                 display="block" 
                 fontWeight={900}>
@@ -61,10 +94,12 @@ const App = () => {
               </Typography>
     } else {
       return <Chip key={i}
+                color="error"
                 icon={bread.icon}
                 component="a"
                 href= {bread.link}
                 label= {bread.name}
+                sx={{cursor:'pointer'}}
               /> 
     }
   }
@@ -73,37 +108,87 @@ const App = () => {
     <>
       <Router>
         <Box className="main-screen">
-          <AppBar 
-            position="static" 
-            className="app-bar">
-            <Breadcrumbs aria-label="breadcrumb">
-              {breadCrumbs.map((bread, i) =>
-                breadCrumbsRender(bread, i)
-              )}
-            </Breadcrumbs>
-            <Toolbar>
-              <TextField
-                value = {searchValue}
-                id="main-search"
-                onChange={handleSearchInput}
-                variant="standard"
-                label="Search for..."
-              />
-            </Toolbar>
-          </AppBar>
           <Box className="nav-box">
             <Box className="nav-links">
-              <Link to="/"><img src={`${process.env.PUBLIC_URL}/assets/img/rteam.jpg`} alt="Logo"></img></Link>
-              <Button variant="outlined" size="large">
-                <NavLink to="/drivers"><img src={`${process.env.PUBLIC_URL}/assets/img/Kaciga.png`} alt="Helmet"></img></NavLink>
+                <Box 
+                  className="nav-logo"
+                  sx={{ 
+                    objectFit: "cover"  
+                  }}
+                  component='img'
+                  width={1/1}
+                  alt='Logo'
+                  src={`${process.env.PUBLIC_URL}/assets/img/f1logowhite.jpg`}/>
+              <Button variant="filled" size="large">
+                <Link 
+                  className="nav-bar-link"
+                  to="/drivers">
+                  <Box 
+                    className="nav-bar-img"
+                    sx={{ 
+                      objectFit: "contain"  
+                    }}
+                    component='img'
+                    width={1/1}
+                    alt="Helmet"
+                    src={`${process.env.PUBLIC_URL}/assets/img/Kaciga.png`}/>
+                    <Box className="nav-bar-text">DRIVERS</Box>
+                </Link>
               </Button>
-              <Button variant="outlined" size="large">
-                <NavLink to="/teams"><img src={`${process.env.PUBLIC_URL}/assets/img/Teams.png`} alt="Teams"></img></NavLink>
+              <Button variant="filled" size="large">
+                <Link 
+                  className="nav-bar-link"
+                  to="/teams">
+                  <Box 
+                    className="nav-bar-img"
+                    sx={{ 
+                      objectFit: "contain"  
+                    }}
+                    component='img'
+                    width={1/1}
+                    alt="Teams"
+                    src={`${process.env.PUBLIC_URL}/assets/img/Teams.png`} />
+                    <Box className="nav-bar-text">TEAMS</Box>
+                </Link>
               </Button>
-              <Button variant="outlined" size="large">
-                <NavLink to="/races"><img src={`${process.env.PUBLIC_URL}/assets/img/Races.png`} alt="Races"></img></NavLink>
+              <Button variant="filled" size="large">
+                <Link 
+                  className="nav-bar-link"
+                  to="/races">
+                  <Box 
+                    className="nav-bar-img"
+                    sx={{ 
+                      objectFit: "contain"  
+                    }}
+                    component='img'
+                    width={1/1}
+                    alt="Races"
+                    src={`${process.env.PUBLIC_URL}/assets/img/Races1.png`} />
+                    <Box className="nav-bar-text">RACES</Box>
+                </Link>
               </Button>
             </Box>
+          </Box>
+          <Box className="main-content">
+            <AppBar 
+              position="static"
+              className="app-bar">
+              <Breadcrumbs>
+                {breadCrumbs.map((bread, i) =>
+                  breadCrumbsRender(bread, i)
+                )}
+              </Breadcrumbs>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker defaultValue={dayjs(yearSelect)} 
+                            views={['year']} 
+                            onChange={handleYearSelected} 
+                            disabled={!isMain} 
+                            sx={{border: "5px solid hsla(0, 100%, 51%, 0.28)"}}/>
+              </LocalizationProvider>
+              <Box>
+                {searchBoxShow()}
+              </Box>
+            </AppBar>
             <Box
               width={1/1}>
               <Routes>
@@ -117,7 +202,6 @@ const App = () => {
                       title="Main Video"
                       image={`${process.env.PUBLIC_URL}/assets/video/F1 2024.mp4`}
                       autoPlay
-                      loop
                       muted
                   />
                   </Box>
@@ -125,26 +209,38 @@ const App = () => {
                 <Route path="/drivers" element={<DriversList 
                                                   flags={flagsList} 
                                                   searchValue={searchValue} 
-                                                  breadcrumbs={getBreadCrums}/>} 
-                                                  />
+                                                  breadcrumbs={getBreadCrums}
+                                                  main={getIsInMain} 
+                                                  year={yearSelect} />} />
                 <Route path="/drivers/:driverId" element={<DriverDetails 
-                                                            flags={flagsList} 
-                                                            breadcrumbs={getBreadCrums}/>} />
+                                                            flags={flagsList}
+                                                            searchValue={searchValue}
+                                                            breadcrumbs={getBreadCrums}
+                                                            main={getIsInMain}
+                                                            year={yearSelect}  />} />
                 <Route path="/teams" element={<TeamsList 
                                                 flags={flagsList} 
                                                 searchValue={searchValue} 
-                                                breadcrumbs={getBreadCrums} />} />
+                                                breadcrumbs={getBreadCrums}
+                                                main={getIsInMain}
+                                                year={yearSelect}  />} />
                 <Route path="/teams/:constructorId" element={<TeamDetails 
                                                                 flags={flagsList} 
-                                                                breadcrumbs={getBreadCrums}/>} />
+                                                                searchValue={searchValue}
+                                                                breadcrumbs={getBreadCrums}
+                                                                main={getIsInMain} 
+                                                                year={yearSelect} />} />
                 <Route path="/races" element={<RacesList 
                                                 flags={flagsList} 
                                                 searchValue={searchValue} 
-                                                breadcrumbs={getBreadCrums}/>}  />
-
+                                                breadcrumbs={getBreadCrums}
+                                                main={getIsInMain}
+                                                year={yearSelect}  />}  />
                 <Route path="/races/:raceId" element={<RacesDetails 
                                                         flags={flagsList} 
-                                                        breadcrumbs={getBreadCrums} />} />
+                                                        main={getIsInMain}
+                                                        breadcrumbs={getBreadCrums}
+                                                        year={yearSelect}  />} />
               </Routes>
             </Box>
           </Box>

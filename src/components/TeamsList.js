@@ -3,10 +3,9 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Flag from 'react-flagkit';
 import { getAlphaCode, setSearchData, goToExternalLink } from '../Utils.js';
-import { styled } from '@mui/material/styles';
 import {Table, TableBody, TableCell, TableContainer, TableHead,TableRow} from '@mui/material';
+import { styled } from '@mui/material/styles';
 import { tableCellClasses } from '@mui/material/TableCell';
-import { grey } from "@mui/material/colors";
 import Box from "@mui/material/Box";
 import LoaderFlag from "./LoaderFlag.js";
 import { OpenInNew, Home, Groups } from '@mui/icons-material';
@@ -34,9 +33,11 @@ const TeamsList = (props) => {
       {name: 'Home', link: '/', icon: <Home/>},
       { name: 'Teams', link: '/teams/', icon: <Groups/>},
     ]
-    props.breadcrumbs(items)
+    props.breadcrumbs(items);
+    props.main(false);
 
-    const url = "http://ergast.com/api/f1/2013/constructorStandings.json";
+    const year = props.year
+    const url = `http://ergast.com/api/f1/${year}/constructorStandings.json`;
     const response = await axios.get(url);
     const data = response.data.MRData.StandingsTable.StandingsLists[0].ConstructorStandings;
     const filtered = setSearchData(props.searchValue, data);
@@ -57,24 +58,25 @@ const TeamsList = (props) => {
     props.breadcrumbs(items)
   };
 
-  const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  const StyledTableCell = styled(TableCell)(() => ({
     [`&.${tableCellClasses.head}`]: {
-      backgroundColor: grey[400],
-      color: theme.palette.common.black,
-      fontWeight: 600,
-      padding: 10,
+      backgroundColor: 'black',
+      color: 'white',
+      fontWeight: 900,
+      fontSize: 20,
+      padding: 15,
     },
     [`&.${tableCellClasses.body}`]: {
       fontSize: 14,
       fontWeight: 600,
-      color: `#3a587f`,
+      color: 'white',
       padding: 5,
     },
   }));
 
-  const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  const StyledTableRow = styled(TableRow)(() => ({
     '&:nth-of-type(odd)': {
-      backgroundColor: grey[300],
+      backgroundColor: "#00000040",
     },
     '&:last-child td, &:last-child th': {
       border: 0,
@@ -93,13 +95,13 @@ const TeamsList = (props) => {
       <Box
         display="flex"
         border={15}
-        color="gray"
+        className="table-background"
       >
         <TableContainer>
           <Table>
             <TableHead>
               <TableRow>
-                <StyledTableCell colSpan={5}> Constructors Championship Standings - 2013 </StyledTableCell>
+                <StyledTableCell colSpan={5}> Constructors Championship Standings - {props.year} </StyledTableCell>
               </TableRow>
             </TableHead>
             <TableBody>

@@ -6,7 +6,6 @@ import { getAlphaCode , setSearchData } from '../Utils.js';
 import { styled } from '@mui/material/styles';
 import {Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Box} from '@mui/material';
 import { tableCellClasses } from '@mui/material/TableCell';
-import { grey } from "@mui/material/colors";
 import LoaderFlag from "./LoaderFlag.js";
 import {SportsScore, Home, SportsMotorsports} from '@mui/icons-material';
 
@@ -31,9 +30,11 @@ const RacesList = (props) => {
       {name: 'Home', link: '/', icon: <Home/>},
       { name: 'Races', link: '/races/', icon: <SportsScore/>},
     ]
-    props.breadcrumbs(items)
+    props.breadcrumbs(items);
+    props.main(false);
 
-    const url = "http://ergast.com/api/f1/2013/results/1.json";
+    const year = props.year
+    const url = `http://ergast.com/api/f1/${year}/results/1.json`;
     const response = await axios.get(url);
     const data = response.data.MRData.RaceTable.Races;
     const filtered = setSearchData(props.searchValue, data);
@@ -48,31 +49,31 @@ const RacesList = (props) => {
     navigate(linkTo);
     const items = [
       {name: 'Home', link: '/', icon: <Home/>},
-      { name: `${path.charAt(0).toUpperCase() + path.slice(1)}`, link: `/${path}/`, icon: path == "drivers" ? <SportsMotorsports/> : <SportsScore/>},
+      { name: `${path.charAt(0).toUpperCase() + path.slice(1)}`, link: `/${path}/`, icon: path === "drivers" ? <SportsMotorsports/> : <SportsScore/>},
       { name: `${name}`}
     ]
     props.breadcrumbs(items)
   };
 
-  const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  const StyledTableCell = styled(TableCell)(() => ({
     [`&.${tableCellClasses.head}`]: {
-      backgroundColor: grey[400],
-      border: 0,
-      color: theme.palette.common.black,
-      fontWeight: 600,
+      backgroundColor: 'black',
+      color: 'white',
+      fontWeight: 900,
+      fontSize: 20,
       padding: 10,
     },
     [`&.${tableCellClasses.body}`]: {
       fontSize: 14,
       fontWeight: 600,
-      color: `#3a587f`,
+      color: 'white',
       padding: 5,
     },
   }));
 
-  const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  const StyledTableRow = styled(TableRow)(() => ({
     '&:nth-of-type(odd)': {
-      backgroundColor: grey[300],
+      backgroundColor: "#00000040",
     },
     '&:last-child td, &:last-child th': {
       border: 0,
@@ -91,11 +92,11 @@ const RacesList = (props) => {
       <Box
           display="flex"
           border={15}
-          color="gray">
+          className="table-background">
         <TableContainer>
           <Table>
             <TableHead>
-              <TableRow><StyledTableCell colSpan={5}>Race Calendar - 2013</StyledTableCell></TableRow>
+              <TableRow><StyledTableCell colSpan={5}>Race Calendar - {props.year}</StyledTableCell></TableRow>
               <TableRow>
                 <StyledTableCell>Round</StyledTableCell>
                 <StyledTableCell >Grand Prix</StyledTableCell>

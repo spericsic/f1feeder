@@ -2,11 +2,10 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Flag from "react-flagkit";
-import { getAlphaCode, getCellBackgroundColor, goToExternalLink } from '../Utils.js';
+import { getAlphaCode, getCellBackgroundColor, goToExternalLink, setSearchData } from '../Utils.js';
 import { styled } from '@mui/material/styles';
 import { Box, Table, TableBody, TableContainer, TableHead, TableRow, TableCell, Card, CardContent, Typography } from '@mui/material';
 import { tableCellClasses } from '@mui/material/TableCell';
-import { grey } from "@mui/material/colors";
 import { CardActionArea } from '@mui/material';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import LoaderFlag from "./LoaderFlag.js";
@@ -16,6 +15,7 @@ import {SportsScore, Home} from '@mui/icons-material';
 const TeamDetails = (props) => {
   const [teamDetails, setTeamDetails] = useState([]);
   const [teamList, setTeamList] = useState([]);
+  const [filteredTeams, setFilteredTeams] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const params = useParams();
@@ -25,43 +25,54 @@ const TeamDetails = (props) => {
     getTeam();
   }, []);
 
+  useEffect(() => {
+    const filtered = setSearchData(props.searchValue, teamList);
+    setFilteredTeams(filtered);
+  }, [props.searchValue]);
+
   const getTeam = async () => {
+    
+    props.main(false);
+
+    const year = props.year
     const id = params.constructorId;
-    const urlDetails = `http://ergast.com/api/f1/2013/constructors/${id}/constructorStandings.json`;
-    const urlList = `http://ergast.com/api/f1/2013/constructors/${id}/results.json`;
+    const urlDetails = `http://ergast.com/api/f1/${year}/constructors/${id}/constructorStandings.json`;
+    const urlList = `http://ergast.com/api/f1/${year}/constructors/${id}/results.json`;
 
     const responseDetails = await axios.get(urlDetails);
     const dataDetails = responseDetails.data.MRData.StandingsTable.StandingsLists[0].ConstructorStandings[0];
 
     const responseList = await axios.get(urlList);
     const dataList = responseList.data.MRData.RaceTable.Races;
+    const filtered = setSearchData(props.searchValue, dataList);
 
+    setFilteredTeams(filtered);
     setTeamDetails(dataDetails);
     setTeamList(dataList);
     setIsLoading(false);
 
   };
 
-  const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  const StyledTableCell = styled(TableCell)(() => ({
     [`&.${tableCellClasses.head}`]: {
-      backgroundColor: grey[400],
-      border: 0,
-      color: theme.palette.common.black,
-      fontWeight: 600,
+      backgroundColor: 'black',
+      color: 'white',
+      fontWeight: 900,
+      fontSize: 20,
       padding: 10,
 
     },
     [`&.${tableCellClasses.body}`]: {
       fontSize: 14,
       fontWeight: 600,
-      color: `#3a587f`,
+      color: 'white',
       padding: 5,
     },
   }));
 
-  const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  const StyledTableRow = styled(TableRow)(() => ({
     '&:nth-of-type(odd)': {
-      backgroundColor: grey[300],
+      backgroundColor: "#00000040",
     },
     '&:last-child td, &:last-child th': {
       border: 0,
@@ -86,11 +97,11 @@ const TeamDetails = (props) => {
   return (
     <Box display="flex"  >
 
-      <Box width={1 / 5}>
+      <Box width={1/5}>
         <Card
-          sx={{ maxWidth: 235 }}>
+          width={1/1}
+          className="detail-card">
           <CardActionArea>
-
             <CardContent>
               <Box
                 display='flex'
@@ -122,8 +133,9 @@ const TeamDetails = (props) => {
               <Typography variant="caption" display="block" fontWeight={900} >Position: {teamDetails.position}</Typography>
               <Typography variant="caption" display="block" fontWeight={900}>Points: {teamDetails.points}</Typography>
 
-              <Box display='flex' alignItems='center'>
-                <Typography variant="caption" display="block" fontWeight={900}>History:  </Typography><OpenInNewIcon fontSize="small" onClick={() => goToExternalLink(teamDetails.Constructor.url)} />
+              <Box display='flex' justifyContent='center' alignItems='center'>
+                <Typography variant="caption" display="block" fontWeight={900}>History:  </Typography>
+                <OpenInNewIcon fontSize="small" onClick={() => goToExternalLink(teamDetails.Constructor.url)} />
               </Box>
             </CardContent>
           </CardActionArea>
@@ -132,16 +144,16 @@ const TeamDetails = (props) => {
 
       {/* novi box sa parametrima sx */}
       <Box
-        display="flex" width={1 / 1}
+        display="flex" 
+        width={1/1}
         border={15}
-        borderColor="grey"
-        color="gray">
+        className="table-background-details">
 
         <TableContainer>
           <Table>
             <TableHead>
               <TableRow >
-                <StyledTableCell colSpan={5}>Formula 1 2013 Results </StyledTableCell>
+                <StyledTableCell colSpan={5}>Formula 1 {props.year} Results </StyledTableCell>
               </TableRow>
 
               <TableRow >
@@ -154,7 +166,7 @@ const TeamDetails = (props) => {
             </TableHead>
 
             <TableBody >
-              {teamList.map((result) =>
+              {filteredTeams.map((result) =>
                 <StyledTableRow key={result.round}>
                   <StyledTableCell>{result.round}</StyledTableCell>
                   <StyledTableCell>

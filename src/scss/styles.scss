@@ -2,45 +2,122 @@
 
 @import url('https://fonts.cdnfonts.com/css/velvetquilt-display-font');
 
+$backgroundMain : linear-gradient(147deg, #f50b1e 30%, #313131 54%);
+$backgroundTable : linear-gradient(147deg, #313131 30%, #f50b1e 54%);
+$backgroundCard : linear-gradient(147deg, #f7bf06 10%, #000 64%);
 
 
-
-
+body {
+    background-image: $backgroundMain;
+}
 
 .main-screen {
     display: flex;
-    flex-direction: column;
+    justify-content: stretch;
     min-height: 100vh;
 
     .nav-box {
         display: flex;
         flex-direction: row;
+        background-image: $backgroundMain;
+        width: 5%;
+
+        .nav-logo {
+            min-height: 7vh;
+        }
+
+        
+        .nav-bar-link {
+            display: flex;
+            text-align: center;
+            justify-content: space-evenly;
+            
+            text-decoration: none;
+
+            .nav-bar-text {
+                display: none;
+            }
+        }
+
+
+        &:hover {
+            width: 15%;
+
+            .nav-logo {
+                height: 15%;
+            }
+
+            .nav-bar-img {
+                width: 25%;
+            }
+
+            .nav-bar-text {
+                display: block;
+                color: #fff;
+                font-size: 25px;
+                font-weight: 900;
+            }
+        }
 
         .nav-links {
-            width: 15vh;
-
-            img {
-                width: 100%;
-            }
+            width: 100%;
         }
     }
 
-    .app-bar {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
+    .main-content {
+        width: 100%;
+
+        .app-bar {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            min-height: 7vh;
+            padding: 0px 50px;
+            background: transparent;
+
+            .text-background-color {
+                border: hsla(0, 100%, 51%, 0.28) solid 5px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+        }
+
+
+        .table-background {
+            margin-top: 5px;
+            height: 80vh;
+            background: $backgroundTable;
+            border-radius: 20px 20px 0px 0px;
+        }
+
+        .table-background-details {
+            margin-top: 5px;
+            height: 89vh;
+            background: $backgroundTable;
+            border-radius: 20px 20px 0px 0px;
+        }
+
+        .detail-card {
+            border: 0px solid black;
+            height: 45vh;
+            border-radius: 30px;
+            margin: 5px;
+            background: $backgroundCard;
+            color: #fff;
+            text-align: center;
+        }
+
+        .list-title {
+            font-family: 'VelvetQuilt Display font', sans-serif;
+            text-shadow: 2px 2px 8px black;
+            font-weight: 400;
+            font-size: 8vh;
+            background-color: $backgroundMain;
+            padding: 10px 0 0 15px;
+            color: white;
+            align-items: center; 
+        }
     }
-
-}
-
-.list-title {
-    font-family: 'VelvetQuilt Display font', sans-serif;
-    text-shadow: 2px 2px 8px black;
-    font-weight: 400;
-    font-size: 8vh;
-    background-color: grey;
-    padding: 10px 0 0 15px;
-    color: white;
-    align-items: center; 
 }

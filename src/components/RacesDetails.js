@@ -6,11 +6,9 @@ import { getAlphaCode , goToExternalLink, getCellBackgroundColor} from '../Utils
 import { styled } from '@mui/material/styles';
 import { Table, TableBody, TableCell, TableContainer, TableHead,TableRow, Card, CardContent, Typography, Box } from '@mui/material';
 import { tableCellClasses } from '@mui/material/TableCell';
-import { grey } from "@mui/material/colors";
 import { CardActionArea } from '@mui/material';
-import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import LoaderFlag from "./LoaderFlag.js";
-import {SportsMotorsports, Groups, Home} from '@mui/icons-material';
+import {SportsMotorsports, Groups, Home, OpenInNew} from '@mui/icons-material';
 
 
 const RacesDetails = (props) => {
@@ -27,11 +25,14 @@ const RacesDetails = (props) => {
   }, []);
 
   const getRacesDetails = async () => {
+    
+    props.main(true);
 
+    const year = props.year
     const raceId = params.raceId;
 
-    const urlDetails = `https://ergast.com/api/f1/2013/${params.raceId}/qualifying.json`;
-    const urlList = `http://ergast.com/api/f1/2013/${params.raceId}/results.json`;
+    const urlDetails = `https://ergast.com/api/f1/${year}/${raceId}/qualifying.json`;
+    const urlList = `http://ergast.com/api/f1/${year}/${raceId}/results.json`;
 
     const responseDetails = await axios.get(urlDetails);
     const dataCard = responseDetails.data.MRData.RaceTable.Races;
@@ -53,20 +54,28 @@ const RacesDetails = (props) => {
 
   }
 
-  
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
-      backgroundColor: grey[400],
-      border: 0,
-      color: theme.palette.common.black,
-      fontWeight: 600,
+      backgroundColor: 'black',
+      color: 'white',
+      fontWeight: 900,
+      fontSize: 20,
       padding: 10,
     },
     [`&.${tableCellClasses.body}`]: {
       fontSize: 14,
       fontWeight: 600,
-      color: `#3a587f`,
+      color: 'white',
       padding: 5,
+    },
+  }));
+
+  const StyledTableRow = styled(TableRow)(({ theme }) => ({
+    '&:nth-of-type(odd)': {
+      backgroundColor: "#00000040",
+    },
+    '&:last-child td, &:last-child th': {
+      border: 0,
     },
   }));
 
@@ -75,7 +84,7 @@ const RacesDetails = (props) => {
     navigate(linkTo);
     const items = [
       {name: 'Home', link: '/', icon: <Home/>},
-      { name: `${path.charAt(0).toUpperCase() + path.slice(1)}`, link: `/${path}/`, icon: path == "drivers" ? <SportsMotorsports/> : <Groups/>},
+      { name: `${path.charAt(0).toUpperCase() + path.slice(1)}`, link: `/${path}/`, icon: path === "drivers" ? <SportsMotorsports/> : <Groups/>},
       { name: `${name}`}
     ]
     props.breadcrumbs(items)
@@ -85,21 +94,11 @@ const RacesDetails = (props) => {
     return <LoaderFlag/>
   }
 
-  const StyledTableRow = styled(TableRow)(({ theme }) => ({
-    '&:nth-of-type(odd)': {
-      backgroundColor: grey[300],
-    },
-    '&:last-child td, &:last-child th': {
-      border: 0,
-    },
-  }));
-
   return (
     <Box display="flex">
-      <Box
-        width={1/5}
-      >
-        <Card sx={{ maxWidth: 235 }}>
+      <Box width={1/5}>
+        <Card width={1/1}
+          className="detail-card">
           <CardActionArea>
             <CardContent>
               <Box
@@ -111,12 +110,14 @@ const RacesDetails = (props) => {
                 margin='auto'>
                 <Flag country={getAlphaCode(props.flags, CardX.Circuit.Location.country)} size={200} />
               </Box>
-
               <Typography variant="caption" display="block" fontWeight={700} style={{fontSize: "20px", color: "pink", textAlign:"center"}}>{CardX.raceName}</Typography>
               <Typography variant="caption" display="block" fontWeight={900}>Country: {CardX.Circuit.Location.country}</Typography>
               <Typography variant="caption" display="block" fontWeight={900}>Location: {CardX.Circuit.Location.locality}</Typography>
               <Typography variant="caption" display="block" fontWeight={900}>Date: {CardX.date}</Typography>
-              <Box display='flex' alignItems='center'><Typography variant="caption" display="block" fontWeight={900}>Full Report: </Typography><OpenInNewIcon fontSize="small"  onClick={()=>goToExternalLink(CardX.url)} /></Box>
+              <Box display='flex' justifyContent='center' alignItems='center'>
+                <Typography variant="caption" display="block" fontWeight={900}>Full Report: </Typography>
+                <OpenInNew fontSize="small" sx={{paddingLeft: 0.5}} onClick={()=>goToExternalLink(CardX.url)} />
+              </Box>
             </CardContent>
           </CardActionArea>
         </Card>
@@ -125,8 +126,8 @@ const RacesDetails = (props) => {
         display="flex" 
         width={1/1}
         border={15}
-        color="gray">
-        <TableContainer sx={{ color: 'grey', border: 15 }}>
+        className="table-background-details">
+        <TableContainer>
           <Table>
             <TableHead>
               <TableRow>
@@ -171,8 +172,7 @@ const RacesDetails = (props) => {
           </Table>
         </TableContainer>
 
-
-        <TableContainer  sx={{ color: 'grey', border: 15 }}>
+        <TableContainer sx={{borderLeft: 25}}>
         <Table>
             <TableHead>
               <TableRow>

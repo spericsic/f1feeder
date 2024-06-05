@@ -7,7 +7,7 @@ const FlagHelperList = [
     {   
         alpha_2_code: "US",
         en_short_name: "USA",
-        nationality: "United States",
+        nationality: "AMERICAN",
     },
     {
         alpha_2_code: "NL",

@@ -2,11 +2,10 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams , useNavigate } from "react-router-dom";
 import Flag from 'react-flagkit';
-import { getAlphaCode , goToExternalLink, getCellBackgroundColor} from '../Utils.js';
+import { getAlphaCode , goToExternalLink, getCellBackgroundColor, setSearchData} from '../Utils.js';
 import { styled } from '@mui/material/styles';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Card, CardContent, Typography, Box }from '@mui/material';
 import { tableCellClasses } from '@mui/material/TableCell';
-import { grey } from "@mui/material/colors";
 import { CardActionArea } from '@mui/material';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import LoaderFlag from "./LoaderFlag.js";
@@ -16,6 +15,7 @@ const DriverDetails = (props) => {
   const [driverDetails, setDriverDetails] = useState([]);
   const [driverList, setDriverList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [filteredDrivers, setFilteredDrivers] = useState([]);
 
   const params = useParams();
   const navigate = useNavigate();
@@ -24,10 +24,19 @@ const DriverDetails = (props) => {
     getDriver();
   }, []);
 
+  useEffect(() => {
+    const filtered = setSearchData(props.searchValue, driverList);
+    setFilteredDrivers(filtered);
+  }, [props.searchValue]);
+
   const getDriver = async () => {
+
+    props.main(false);
+
+    const year = props.year
     const id = params.driverId;
-    const urlDetails = `http://ergast.com/api/f1/2013/drivers/${id}/driverStandings.json`;
-    const urlList = `http://ergast.com/api/f1/2013/drivers/${id}/results.json`;
+    const urlDetails = `http://ergast.com/api/f1/${year}/drivers/${id}/driverStandings.json`;
+    const urlList = `http://ergast.com/api/f1/${year}/drivers/${id}/results.json`;
 
     const responseDetails = await axios.get(urlDetails);
     const dataDetails = responseDetails.data.MRData.StandingsTable.StandingsLists[0].DriverStandings[0];
@@ -35,6 +44,9 @@ const DriverDetails = (props) => {
     const responseList = await axios.get(urlList);
     const dataList = responseList.data.MRData.RaceTable.Races;
 
+    const filtered = setSearchData(props.searchValue, dataList);
+
+    setFilteredDrivers(filtered);
     setDriverDetails(dataDetails);
     setDriverList(dataList);
     setIsLoading(false);
@@ -44,8 +56,8 @@ const DriverDetails = (props) => {
     const linkTo = `/${path}/${id}`;
     navigate(linkTo);
     const items = [
-      {name: 'Home', link: '/', icon: <Home/>},
-      { name: `${path.charAt(0).toUpperCase() + path.slice(1)}`, link: `/${path}/`, icon: path == "races" ? <SportsScore/> : <Groups/>},
+      { name: 'Home', link: '/', icon: <Home/>},
+      { name: `${path.charAt(0).toUpperCase() + path.slice(1)}`, link: `/${path}/`, icon: path === "races" ? <SportsScore/> : <Groups/>},
       { name: `${name}`}
     ]
     props.breadcrumbs(items)
@@ -55,25 +67,25 @@ const DriverDetails = (props) => {
     return <LoaderFlag/>
   };
 
-  const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  const StyledTableCell = styled(TableCell)(() => ({
     [`&.${tableCellClasses.head}`]: {
-      backgroundColor: grey[400],
-      border: 0,
-      color: theme.palette.common.black,
-      fontWeight: 600,
+      backgroundColor: 'black',
+      color: 'white',
+      fontWeight: 900,
+      fontSize: 20,
       padding: 10,
     },
     [`&.${tableCellClasses.body}`]: {
       fontSize: 14,
       fontWeight: 600,
-      color: `#3a587f`,
+      color: 'white',
       padding: 5,
     },
   }));
 
-  const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  const StyledTableRow = styled(TableRow)(() => ({
     '&:nth-of-type(odd)': {
-      backgroundColor: grey[300],
+      backgroundColor: "#00000040",
     },
     '&:last-child td, &:last-child th': {
       border: 0,
@@ -82,10 +94,9 @@ const DriverDetails = (props) => {
 
   return (
     <Box display="flex">
-      <Box
-        width={1/5}
-      >
-        <Card sx={{ Width: 235 }}>
+      <Box width={1/5}>
+        <Card width={1/1}
+          className="detail-card">
           <CardActionArea>
             <CardContent>
               <Box
@@ -117,7 +128,10 @@ const DriverDetails = (props) => {
               <Typography variant="caption" display="block" fontWeight={900}>Country: {driverDetails.Driver.nationality}</Typography>
               <Typography variant="caption" display="block" fontWeight={900}>Team: {driverDetails.Constructors[0].name}</Typography>
               <Typography variant="caption" display="block" fontWeight={900}>Birth: {driverDetails.Driver.dateOfBirth}</Typography>
-              <Box display='flex' alignItems='center'><Typography variant="caption" display="block" fontWeight={900}>Biography: </Typography><OpenInNewIcon fontSize="small" onClick={()=>goToExternalLink(driverDetails.Driver.url)} /></Box>
+              <Box display='flex' justifyContent='center' alignItems='center'>
+                <Typography variant="caption" display="block" fontWeight={900}>Biography: 
+                </Typography><OpenInNewIcon fontSize="small" sx={{paddingLeft: 0.5}} onClick={()=>goToExternalLink(driverDetails.Driver.url)} />
+              </Box>
             </CardContent>
           </CardActionArea>
         </Card>
@@ -126,12 +140,12 @@ const DriverDetails = (props) => {
         display="flex"
         width={1/1}
         border={15}
-        color="gray">              
+        className="table-background-details">              
         <TableContainer>
           <Table>
             <TableHead>
               <TableRow>
-                <StyledTableCell  colSpan={5}>Formula 1 2013 Results</StyledTableCell>
+                <StyledTableCell  colSpan={5}>Formula 1 {props.year} Results</StyledTableCell>
               </TableRow>
               <TableRow>
                 <StyledTableCell>Round</StyledTableCell>
@@ -143,7 +157,7 @@ const DriverDetails = (props) => {
             </TableHead>
 
             <TableBody>
-              {driverList.map((race) =>
+              {filteredDrivers.map((race) =>
                 <StyledTableRow key={race.round}>
                   <StyledTableCell>{race.round}</StyledTableCell>
                   <StyledTableCell>
