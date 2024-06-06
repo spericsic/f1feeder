@@ -75,7 +75,7 @@ export function getCellBackgroundColor(value) {
             colorClass = "#e5e5edab";
             break;
         case '3':
-            colorClass = "#ff9657ab";
+            colorClass = "#ff965770";
             break;
         case '4':
             colorClass = "#8cea97ab";
