@@ -72,7 +72,7 @@ const DriverDetails = (props) => {
       backgroundColor: 'black',
       color: 'white',
       fontWeight: 900,
-      fontSize: 20,
+      fontSize: 15,
       padding: 10,
     },
     [`&.${tableCellClasses.body}`]: {
@@ -94,10 +94,13 @@ const DriverDetails = (props) => {
 
   return (
     <Box display="flex">
-      <Box width={1/5}>
+      <Box 
+        width={1/5}>
         <Card width={1/1}
           className="detail-card">
-          <CardActionArea>
+          <CardActionArea 
+            className="details-card-area"
+            height={1/1}>
             <CardContent>
               <Box
                 display='flex'
@@ -138,11 +141,11 @@ const DriverDetails = (props) => {
       </Box>
       <Box 
         display="flex"
-        width={1/1}
+        width={3/4}
         border={15}
         className="table-background-details">              
         <TableContainer>
-          <Table>
+          <Table stickyHeader>
             <TableHead>
               <TableRow>
                 <StyledTableCell  colSpan={5}>Formula 1 {props.year} Results</StyledTableCell>

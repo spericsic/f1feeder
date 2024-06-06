@@ -58,7 +58,7 @@ const TeamDetails = (props) => {
       backgroundColor: 'black',
       color: 'white',
       fontWeight: 900,
-      fontSize: 20,
+      fontSize: 15,
       padding: 10,
 
     },
@@ -101,7 +101,9 @@ const TeamDetails = (props) => {
         <Card
           width={1/1}
           className="detail-card">
-          <CardActionArea>
+          <CardActionArea
+            className="details-card-area"
+            height={1/1}>
             <CardContent>
               <Box
                 display='flex'
@@ -150,7 +152,7 @@ const TeamDetails = (props) => {
         className="table-background-details">
 
         <TableContainer>
-          <Table>
+          <Table stickyHeader>
             <TableHead>
               <TableRow >
                 <StyledTableCell colSpan={5}>Formula 1 {props.year} Results </StyledTableCell>

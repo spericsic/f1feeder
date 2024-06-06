@@ -59,7 +59,7 @@ const RacesDetails = (props) => {
       backgroundColor: 'black',
       color: 'white',
       fontWeight: 900,
-      fontSize: 20,
+      fontSize: 15,
       padding: 10,
     },
     [`&.${tableCellClasses.body}`]: {
@@ -99,7 +99,9 @@ const RacesDetails = (props) => {
       <Box width={1/5}>
         <Card width={1/1}
           className="detail-card">
-          <CardActionArea>
+          <CardActionArea
+            className="details-card-area"
+            height={1/1}>
             <CardContent>
               <Box
                 display='flex'
@@ -108,7 +110,7 @@ const RacesDetails = (props) => {
                 flexDirection='column'
                 alignItems='center'
                 margin='auto'>
-                <Flag country={getAlphaCode(props.flags, CardX.Circuit.Location.country)} size={200} />
+                <Flag country={getAlphaCode(props.flags, CardX.Circuit.Location.country)} size={200}/>
               </Box>
               <Typography variant="caption" display="block" fontWeight={700} style={{fontSize: "20px", color: "pink", textAlign:"center"}}>{CardX.raceName}</Typography>
               <Typography variant="caption" display="block" fontWeight={900}>Country: {CardX.Circuit.Location.country}</Typography>
@@ -128,7 +130,7 @@ const RacesDetails = (props) => {
         border={15}
         className="table-background-details">
         <TableContainer>
-          <Table>
+          <Table stickyHeader>
             <TableHead>
               <TableRow>
                 <StyledTableCell colSpan={5}>Qualifying results</StyledTableCell>
@@ -173,7 +175,7 @@ const RacesDetails = (props) => {
         </TableContainer>
 
         <TableContainer sx={{borderLeft: 25}}>
-        <Table>
+        <Table stickyHeader>
             <TableHead>
               <TableRow>
                 <StyledTableCell colSpan={5}>Race results</StyledTableCell>

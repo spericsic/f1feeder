@@ -98,7 +98,7 @@ const TeamsList = (props) => {
         className="table-background"
       >
         <TableContainer>
-          <Table>
+          <Table stickyHeader>
             <TableHead>
               <TableRow>
                 <StyledTableCell colSpan={5}> Constructors Championship Standings - {props.year} </StyledTableCell>

@@ -94,7 +94,7 @@ const DriversList = (props) => {
         border={15}
         className="table-background">
         <TableContainer>
-          <Table>
+          <Table stickyHeader>
             <TableHead>
               <TableRow>
                 <StyledTableCell colSpan={5}>Drivers Championship Standings - {props.year}</StyledTableCell>
