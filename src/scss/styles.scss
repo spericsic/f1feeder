@@ -21,6 +21,8 @@ body {
         flex-direction: row;
         background-image: $backgroundMain;
         width: 5%;
+        transition-duration: 500ms;
+
 
         .nav-logo {
             min-height: 7vh;
@@ -42,6 +44,7 @@ body {
 
         &:hover {
             width: 15%;
+            transition-duration: 500ms;
 
             .nav-logo {
                 height: 15%;
@@ -54,7 +57,7 @@ body {
             .nav-bar-text {
                 display: block;
                 color: #fff;
-                font-size: 25px;
+                font-size: 18px;
                 font-weight: 900;
             }
         }
