@@ -120,7 +120,7 @@ const App = () => {
                 component='img'
                 width={1/1}
                 alt='Logo'
-                src={`${process.env.PUBLIC_URL}/assets/img/f1wlogo.png`}/>
+                src={`${process.env.PUBLIC_URL}/assets/img/F1wlogo.png`}/>
                 <Button variant="filled" size="large">
                   <Link 
                     className="nav-bar-link"
