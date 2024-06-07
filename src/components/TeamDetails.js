@@ -35,8 +35,8 @@ const TeamDetails = (props) => {
 
     const year = props.year
     const id = params.constructorId;
-    const urlDetails = `http://ergast.com/api/f1/${year}/constructors/${id}/constructorStandings.json`;
-    const urlList = `http://ergast.com/api/f1/${year}/constructors/${id}/results.json`;
+    const urlDetails = `https://ergast.com/api/f1/${year}/constructors/${id}/constructorStandings.json`;
+    const urlList = `https://ergast.com/api/f1/${year}/constructors/${id}/results.json`;
 
     const responseDetails = await axios.get(urlDetails);
     const dataDetails = responseDetails.data.MRData.StandingsTable.StandingsLists[0].ConstructorStandings[0];

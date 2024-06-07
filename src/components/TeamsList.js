@@ -36,7 +36,7 @@ const TeamsList = (props) => {
     props.main(false);
 
     const year = props.year
-    const url = `http://ergast.com/api/f1/${year}/constructorStandings.json`;
+    const url = `https://ergast.com/api/f1/${year}/constructorStandings.json`;
     const response = await axios.get(url);
     const data = response.data.MRData.StandingsTable.StandingsLists[0].ConstructorStandings;
     const filtered = setSearchData(props.searchValue, data);

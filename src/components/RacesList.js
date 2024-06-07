@@ -34,7 +34,7 @@ const RacesList = (props) => {
     props.main(false);
 
     const year = props.year
-    const url = `http://ergast.com/api/f1/${year}/results/1.json`;
+    const url = `https://ergast.com/api/f1/${year}/results/1.json`;
     const response = await axios.get(url);
     const data = response.data.MRData.RaceTable.Races;
     const filtered = setSearchData(props.searchValue, data);

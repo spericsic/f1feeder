@@ -43,7 +43,7 @@ const RacesDetails = (props) => {
     const raceId = params.raceId;
 
     const urlDetails = `https://ergast.com/api/f1/${year}/${raceId}/qualifying.json`;
-    const urlList = `http://ergast.com/api/f1/${year}/${raceId}/results.json`;
+    const urlList = `https://ergast.com/api/f1/${year}/${raceId}/results.json`;
 
     const responseDetails = await axios.get(urlDetails);
     const dataCard = responseDetails.data.MRData.RaceTable.Races;

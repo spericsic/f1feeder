@@ -34,8 +34,8 @@ const DriverDetails = (props) => {
 
     const year = props.year
     const id = params.driverId;
-    const urlDetails = `http://ergast.com/api/f1/${year}/drivers/${id}/driverStandings.json`;
-    const urlList = `http://ergast.com/api/f1/${year}/drivers/${id}/results.json`;
+    const urlDetails = `https://ergast.com/api/f1/${year}/drivers/${id}/driverStandings.json`;
+    const urlList = `https://ergast.com/api/f1/${year}/drivers/${id}/results.json`;
 
     const responseDetails = await axios.get(urlDetails);
     const dataDetails = responseDetails.data.MRData.StandingsTable.StandingsLists[0].DriverStandings[0];
