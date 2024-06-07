@@ -209,7 +209,6 @@ const App = () => {
                       title="Main Video"
                       image={`${process.env.PUBLIC_URL}/assets/video/F1 2024.mp4`}
                       autoPlay
-                      muted
                   />
                   </Box>
                 }/>
