@@ -10,11 +10,10 @@ const LoaderFlag = () => {
                 justifyContent='space-around'
                 alignItems='center'
                 flexDirection='column'
-                height="100%"
-                margin="5%">
+                margin="10px 0px 0px 0px">
                 <Box 
                     width={650}
-                    height={400}
+                    height={350}
                     component='img'
                     alt='Zastavica'
                     src={`${process.env.PUBLIC_URL}/assets/img/F1flag.gif`}

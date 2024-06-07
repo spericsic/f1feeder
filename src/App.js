@@ -24,7 +24,6 @@ const App = () => {
   const [isMain, setIsMain] = useState(true);
   const [yearSelect, setYearSelect] = useState('2013');
 
-
   useEffect(() => {
     getFlagsList();
   }, []);
@@ -50,9 +49,13 @@ const App = () => {
   };
 
   const handleYearSelected = (e) => {
-    const year = e.$y;
-    setYearSelect(year);
-  }
+    if (e && e.$y) {
+      setYearSelect(e.$y);
+    } else {
+      setYearSelect('2013');
+    }
+    
+  };
 
   if (isLoading) {
     return <LoaderFlag/>
@@ -69,17 +72,16 @@ const App = () => {
 
   const searchBoxShow = () => {
     if (!isMain) { 
-      return <Box className="text-background-color">
-                <TextField
-                  className="searc-field"
-                  value = {searchValue}
-                  id="main-search"
-                  onChange={handleSearchInput}
-                  type="search"
-                  color="error"
-                  variant="filled"
-                  label="Search for.." />
-            </Box>
+      return <TextField
+                size="small"
+                className="app-bar-search"
+                value = {searchValue}
+                id="main-search"
+                onChange={handleSearchInput}
+                type="search"
+                color="error"
+                variant="filled"
+                label="Search for.." />
     }
   };
 
@@ -110,65 +112,66 @@ const App = () => {
         <Box className="main-screen">
           <Box className="nav-box">
             <Box className="nav-links">
-                <Box 
-                  className="nav-logo"
-                  sx={{ 
-                    objectFit: "cover"  
-                  }}
-                  component='img'
-                  width={1/1}
-                  alt='Logo'
-                  src={`${process.env.PUBLIC_URL}/assets/img/f1wlogo.png`}/>
-              <Button variant="filled" size="large">
-                <Link 
-                  className="nav-bar-link"
-                  to="/drivers">
-                  <Box 
-                    className="nav-bar-img"
-                    sx={{ 
-                      objectFit: "contain"  
-                    }}
-                    component='img'
-                    width={1/1}
-                    alt="Helmet"
-                    src={`${process.env.PUBLIC_URL}/assets/img/Kaciga.png`}/>
-                    <Box className="nav-bar-text">DRIVERS</Box>
-                </Link>
-              </Button>
-              <Button variant="filled" size="large">
-                <Link 
-                  className="nav-bar-link"
-                  to="/teams">
-                  <Box 
-                    className="nav-bar-img"
-                    sx={{ 
-                      objectFit: "contain"  
-                    }}
-                    component='img'
-                    width={1/1}
-                    alt="Teams"
-                    src={`${process.env.PUBLIC_URL}/assets/img/Teams.png`} />
-                    <Box className="nav-bar-text">TEAMS</Box>
-                </Link>
-              </Button>
-              <Button variant="filled" size="large">
-                <Link 
-                  className="nav-bar-link"
-                  to="/races">
-                  <Box 
-                    className="nav-bar-img"
-                    sx={{ 
-                      objectFit: "contain"  
-                    }}
-                    component='img'
-                    width={1/1}
-                    alt="Races"
-                    src={`${process.env.PUBLIC_URL}/assets/img/Races1.png`} />
-                    <Box className="nav-bar-text">RACES</Box>
-                </Link>
-              </Button>
+              <Box 
+                className="nav-logo"
+                sx={{ 
+                  objectFit: "contain"  
+                }}
+                component='img'
+                width={1/1}
+                alt='Logo'
+                src={`${process.env.PUBLIC_URL}/assets/img/f1wlogo.png`}/>
+                <Button variant="filled" size="large">
+                  <Link 
+                    className="nav-bar-link"
+                    to="/drivers">
+                    <Box 
+                      className="nav-bar-img"
+                      sx={{ 
+                        objectFit: "contain"  
+                      }}
+                      component='img'
+                      width={1/1}
+                      alt="Helmet"
+                      src={`${process.env.PUBLIC_URL}/assets/img/Kaciga.png`}/>
+                      <Box className="nav-bar-text">DRIVERS</Box>
+                  </Link>
+                </Button>
+                <Button variant="filled" size="large">
+                  <Link 
+                    className="nav-bar-link"
+                    to="/teams">
+                    <Box 
+                      className="nav-bar-img"
+                      sx={{ 
+                        objectFit: "contain"  
+                      }}
+                      component='img'
+                      width={1/1}
+                      alt="Teams"
+                      src={`${process.env.PUBLIC_URL}/assets/img/Teams.png`} />
+                      <Box className="nav-bar-text">TEAMS</Box>
+                  </Link>
+                </Button>
+                <Button variant="filled" size="large">
+                  <Link 
+                    className="nav-bar-link"
+                    to="/races">
+                    <Box 
+                      className="nav-bar-img"
+                      sx={{ 
+                        objectFit: "contain"  
+                      }}
+                      component='img'
+                      width={1/1}
+                      alt="Races"
+                      src={`${process.env.PUBLIC_URL}/assets/img/Races1.png`} />
+                      <Box className="nav-bar-text">RACES</Box>
+                  </Link>
+                </Button>
+              </Box>
+              <Box className="footer">Team 6</Box>
             </Box>
-          </Box>
           <Box className="main-content">
             <AppBar 
               position="static"
@@ -179,11 +182,15 @@ const App = () => {
                 )}
               </Breadcrumbs>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DatePicker defaultValue={dayjs(yearSelect)} 
-                            views={['year']} 
-                            onChange={handleYearSelected} 
-                            disabled={!isMain} 
-                            sx={{border: "5px solid hsla(0, 100%, 51%, 0.28)"}}/>
+                <DatePicker defaultValue={dayjs(yearSelect)}
+                            views={['year']}
+                            onChange={handleYearSelected}
+                            disableFuture 
+                            variant="inline"
+                            color="error"
+                            className= { isMain ? "app-bar-inputenable" : "app-bar-inputdisable"}
+                            slotProps={{ textField: { size: 'small' } }}
+                />
               </LocalizationProvider>
               <Box>
                 {searchBoxShow()}
@@ -211,36 +218,43 @@ const App = () => {
                                                   searchValue={searchValue} 
                                                   breadcrumbs={getBreadCrums}
                                                   main={getIsInMain} 
-                                                  year={yearSelect} />} />
+                                                  year={yearSelect}/>} 
+                />
                 <Route path="/drivers/:driverId" element={<DriverDetails 
                                                             flags={flagsList}
                                                             searchValue={searchValue}
                                                             breadcrumbs={getBreadCrums}
                                                             main={getIsInMain}
-                                                            year={yearSelect}  />} />
+                                                            year={yearSelect}/>} 
+                />
                 <Route path="/teams" element={<TeamsList 
                                                 flags={flagsList} 
                                                 searchValue={searchValue} 
                                                 breadcrumbs={getBreadCrums}
                                                 main={getIsInMain}
-                                                year={yearSelect}  />} />
+                                                year={yearSelect}/>} 
+                />
                 <Route path="/teams/:constructorId" element={<TeamDetails 
                                                                 flags={flagsList} 
                                                                 searchValue={searchValue}
                                                                 breadcrumbs={getBreadCrums}
                                                                 main={getIsInMain} 
-                                                                year={yearSelect} />} />
+                                                                year={yearSelect} />} 
+                />
                 <Route path="/races" element={<RacesList 
                                                 flags={flagsList} 
                                                 searchValue={searchValue} 
                                                 breadcrumbs={getBreadCrums}
                                                 main={getIsInMain}
-                                                year={yearSelect}  />}  />
+                                                year={yearSelect} />}  
+                />
                 <Route path="/races/:raceId" element={<RacesDetails 
                                                         flags={flagsList} 
+                                                        searchValue={searchValue} 
                                                         main={getIsInMain}
                                                         breadcrumbs={getBreadCrums}
-                                                        year={yearSelect}  />} />
+                                                        year={yearSelect} />} 
+                />
               </Routes>
             </Box>
           </Box>

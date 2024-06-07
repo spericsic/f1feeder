@@ -2,7 +2,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Flag from 'react-flagkit';
-import { getAlphaCode , goToExternalLink, getCellBackgroundColor} from '../Utils.js';
+import { getAlphaCode , goToExternalLink, getCellBackgroundColor, getTableColors, setSearchData} from '../Utils.js';
 import { styled } from '@mui/material/styles';
 import { Table, TableBody, TableCell, TableContainer, TableHead,TableRow, Card, CardContent, Typography, Box } from '@mui/material';
 import { tableCellClasses } from '@mui/material/TableCell';
@@ -16,6 +16,8 @@ const RacesDetails = (props) => {
   const [RacesDetails, setRacesDetails] = useState([]);
   const [CardX, setCard] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [filteredData, setFilteredData] = useState([]);
+  const [filteredQualifyData, setFilteredQualifyData] = useState([]);
 
   const params = useParams();
   const navigate = useNavigate();
@@ -24,11 +26,20 @@ const RacesDetails = (props) => {
     getRacesDetails();
   }, []);
 
+  useEffect(() => {
+
+    const filtered = setSearchData(props.searchValue, RacesDetails, true);
+    const filteredQualify = CardX.QualifyingResults ? setSearchData(props.searchValue, CardX.QualifyingResults , true) : [];
+    setFilteredData(filtered);
+    setFilteredQualifyData(filteredQualify);
+
+  }, [props.searchValue]);
+
   const getRacesDetails = async () => {
     
-    props.main(true);
+    props.main(false);
 
-    const year = props.year
+    const year = props.year;
     const raceId = params.raceId;
 
     const urlDetails = `https://ergast.com/api/f1/${year}/${raceId}/qualifying.json`;
@@ -41,43 +52,23 @@ const RacesDetails = (props) => {
     const responseDetailsList = await axios.get(urlList);
     const dataList = responseDetailsList.data.MRData.RaceTable.Races;
     const dataRacesDetails = dataList[0].Results;
+    
+    const filteredRace = setSearchData(props.searchValue, dataRacesDetails , true);
+    const filteredQualify = setSearchData(props.searchValue, dataCards.QualifyingResults , true);
 
     setCard(dataCards);
     setRacesDetails(dataRacesDetails);
+    setFilteredData(filteredRace);
+    setFilteredQualifyData(filteredQualify);
     setIsLoading(false);
-  }
+  };
 
   const handelTime = (race) => {
-    const handleBestTime = [race.Q1, race.Q2, race.Q3]
-    handleBestTime.sort()
-    return handleBestTime[0]
+    const handleBestTime = [race.Q1, race.Q2, race.Q3];
+    handleBestTime.sort();
+    return handleBestTime[0];
 
-  }
-
-  const StyledTableCell = styled(TableCell)(({ theme }) => ({
-    [`&.${tableCellClasses.head}`]: {
-      backgroundColor: 'black',
-      color: 'white',
-      fontWeight: 900,
-      fontSize: 15,
-      padding: 10,
-    },
-    [`&.${tableCellClasses.body}`]: {
-      fontSize: 14,
-      fontWeight: 600,
-      color: 'white',
-      padding: 5,
-    },
-  }));
-
-  const StyledTableRow = styled(TableRow)(({ theme }) => ({
-    '&:nth-of-type(odd)': {
-      backgroundColor: "#00000040",
-    },
-    '&:last-child td, &:last-child th': {
-      border: 0,
-    },
-  }));
+  };
 
   const handelClickDetails = (path, id, name) => {
     const linkTo = `/${path}/${id}`;
@@ -86,17 +77,44 @@ const RacesDetails = (props) => {
       {name: 'Home', link: '/', icon: <Home/>},
       { name: `${path.charAt(0).toUpperCase() + path.slice(1)}`, link: `/${path}/`, icon: path === "drivers" ? <SportsMotorsports/> : <Groups/>},
       { name: `${name}`}
-    ]
-    props.breadcrumbs(items)
+    ];
+    props.breadcrumbs(items);
   };
+
+  const tableColors = getTableColors();
+
+  const StyledTableCell = styled(TableCell)(({ theme }) => ({
+    [`&.${tableCellClasses.head}`]: {
+      backgroundColor: tableColors.tableHeadBackgroundColor,
+      color: tableColors.tableTextColor,
+      fontWeight: 900,
+      fontSize: 15,
+      padding: 10,
+    },
+    [`&.${tableCellClasses.body}`]: {
+      fontSize: 12,
+      fontWeight: 600,
+      color: tableColors.tableTextColor,
+      padding: 5,
+    },
+  }));
+
+  const StyledTableRow = styled(TableRow)(({ theme }) => ({
+    '&:nth-of-type(odd)': {
+      backgroundColor: tableColors.tableRowBackgroundColor,
+    },
+    '&:last-child td, &:last-child th': {
+      border: 0,
+    },
+  }));
 
   if (isLoading) {
     return <LoaderFlag/>
-  }
+  };  
 
   return (
     <Box display="flex">
-      <Box width={1/5}>
+      <Box>
         <Card width={1/1}
           className="detail-card">
           <CardActionArea
@@ -110,9 +128,11 @@ const RacesDetails = (props) => {
                 flexDirection='column'
                 alignItems='center'
                 margin='auto'>
-                <Flag country={getAlphaCode(props.flags, CardX.Circuit.Location.country)} size={200}/>
+                <Flag country={getAlphaCode(props.flags, CardX.Circuit.Location.country)} size={150}/>
               </Box>
-              <Typography variant="caption" display="block" fontWeight={700} style={{fontSize: "20px", color: "pink", textAlign:"center"}}>{CardX.raceName}</Typography>
+              <Typography variant="caption" display="block" fontWeight={700} style={{fontSize: "20px", color: "pink", textAlign:"center"}}>
+                {CardX.raceName}
+              </Typography>
               <Typography variant="caption" display="block" fontWeight={900}>Country: {CardX.Circuit.Location.country}</Typography>
               <Typography variant="caption" display="block" fontWeight={900}>Location: {CardX.Circuit.Location.locality}</Typography>
               <Typography variant="caption" display="block" fontWeight={900}>Date: {CardX.date}</Typography>
@@ -124,6 +144,7 @@ const RacesDetails = (props) => {
           </CardActionArea>
         </Card>
       </Box>
+
       <Box 
         display="flex" 
         width={1/1}
@@ -133,7 +154,7 @@ const RacesDetails = (props) => {
           <Table stickyHeader>
             <TableHead>
               <TableRow>
-                <StyledTableCell colSpan={5}>Qualifying results</StyledTableCell>
+                <StyledTableCell colSpan={4}>Qualifying results</StyledTableCell>
               </TableRow>
               <TableRow>
                 <StyledTableCell>Pos</StyledTableCell>
@@ -143,7 +164,7 @@ const RacesDetails = (props) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {CardX.QualifyingResults.map((race) => (
+              {filteredQualifyData.map((race) => (
                 <StyledTableRow key={race.position}>
                   <StyledTableCell >{race.position}</StyledTableCell>
                   <StyledTableCell>
@@ -166,16 +187,18 @@ const RacesDetails = (props) => {
                       </Box>
                     </Box>
                   </StyledTableCell>
-                  <StyledTableCell onClick={() => handelClickDetails('teams',race.Constructor.constructorId,race.Constructor.name)} hover sx={{ cursor: 'pointer' }} >{race.Constructor.name}</StyledTableCell>
+                  <StyledTableCell onClick={() => handelClickDetails('teams',race.Constructor.constructorId,race.Constructor.name)} hover sx={{ cursor: 'pointer' }} >
+                    {race.Constructor.name}
+                  </StyledTableCell>
                   <StyledTableCell>{handelTime(race)}</StyledTableCell>
                 </StyledTableRow>
               ))}
             </TableBody>
           </Table>
         </TableContainer>
-
-        <TableContainer sx={{borderLeft: 25}}>
-        <Table stickyHeader>
+        <Box backgroundColor={tableColors.tableHeadBackgroundColor} width={1/30}></Box>
+        <TableContainer>
+          <Table stickyHeader>
             <TableHead>
               <TableRow>
                 <StyledTableCell colSpan={5}>Race results</StyledTableCell>
@@ -189,7 +212,7 @@ const RacesDetails = (props) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {RacesDetails.map((race) => (
+              {filteredData.map((race) => (
                 <StyledTableRow key={race.position}>
                   <StyledTableCell>{race.position}</StyledTableCell>
                   <StyledTableCell>
@@ -201,8 +224,7 @@ const RacesDetails = (props) => {
                         marginRight={0.8} 
                         display='flex'
                         justifyItems='center'
-                        alignItems='center'
-                        >
+                        alignItems='center'>
                           <Flag country={getAlphaCode(props.flags, race.Driver.nationality)} size={30} />
                       </Box> 
                       <Box 
@@ -211,11 +233,16 @@ const RacesDetails = (props) => {
                       </Box>
                     </Box>
                   </StyledTableCell>
-                  <StyledTableCell onClick={() => handelClickDetails('teams',race.Constructor.constructorId,race.Constructor.name)} hover sx={{ cursor: 'pointer' }} >{race.Constructor.name}</StyledTableCell>
+                  <StyledTableCell 
+                    onClick={() => handelClickDetails('teams',race.Constructor.constructorId,race.Constructor.name)} 
+                    hover 
+                    sx={{ cursor: 'pointer' }} >
+                      {race.Constructor.name}
+                  </StyledTableCell>
                   <StyledTableCell>{race.Time ? race.Time.time : "0"}</StyledTableCell>
-                    <StyledTableCell sx={{ backgroundColor: getCellBackgroundColor(race.points)}}>
+                  <StyledTableCell sx={{ backgroundColor: getCellBackgroundColor(race.points)}}>
                     {race.points}
-                    </StyledTableCell>
+                  </StyledTableCell>
                 </StyledTableRow>
               ))}
             </TableBody>

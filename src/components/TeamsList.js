@@ -2,13 +2,12 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Flag from 'react-flagkit';
-import { getAlphaCode, setSearchData, goToExternalLink } from '../Utils.js';
-import {Table, TableBody, TableCell, TableContainer, TableHead,TableRow} from '@mui/material';
+import {Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Box} from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { tableCellClasses } from '@mui/material/TableCell';
-import Box from "@mui/material/Box";
-import LoaderFlag from "./LoaderFlag.js";
 import { OpenInNew, Home, Groups } from '@mui/icons-material';
+import LoaderFlag from "./LoaderFlag.js";
+import { getAlphaCode, setSearchData, goToExternalLink, getTableColors } from '../Utils.js';
 
 
 const TeamsList = (props) => {
@@ -54,14 +53,16 @@ const TeamsList = (props) => {
       {name: 'Home', link: '/', icon: <Home/>},
       { name: 'Teams', link: '/teams/', icon: <Groups/>},
       { name: `${name}`}
-    ]
-    props.breadcrumbs(items)
+    ];
+    props.breadcrumbs(items);
   };
+
+  const tableColors = getTableColors();
 
   const StyledTableCell = styled(TableCell)(() => ({
     [`&.${tableCellClasses.head}`]: {
-      backgroundColor: 'black',
-      color: 'white',
+      backgroundColor: tableColors.tableHeadBackgroundColor,
+      color: tableColors.tableTextColor,
       fontWeight: 900,
       fontSize: 20,
       padding: 15,
@@ -69,14 +70,14 @@ const TeamsList = (props) => {
     [`&.${tableCellClasses.body}`]: {
       fontSize: 14,
       fontWeight: 600,
-      color: 'white',
+      color: tableColors.tableTextColor,
       padding: 5,
     },
   }));
 
   const StyledTableRow = styled(TableRow)(() => ({
     '&:nth-of-type(odd)': {
-      backgroundColor: "#00000040",
+      backgroundColor: tableColors.tableRowBackgroundColor,
     },
     '&:last-child td, &:last-child th': {
       border: 0,
@@ -85,7 +86,7 @@ const TeamsList = (props) => {
 
   if (isLoading) {
     return <LoaderFlag />
-  }
+  };
 
   return (
     <>

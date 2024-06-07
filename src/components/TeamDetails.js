@@ -2,14 +2,13 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Flag from "react-flagkit";
-import { getAlphaCode, getCellBackgroundColor, goToExternalLink, setSearchData } from '../Utils.js';
+import { getAlphaCode, getCellBackgroundColor, goToExternalLink, setSearchData, getTableColors } from '../Utils.js';
 import { styled } from '@mui/material/styles';
 import { Box, Table, TableBody, TableContainer, TableHead, TableRow, TableCell, Card, CardContent, Typography } from '@mui/material';
 import { tableCellClasses } from '@mui/material/TableCell';
 import { CardActionArea } from '@mui/material';
-import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import LoaderFlag from "./LoaderFlag.js";
-import {SportsScore, Home} from '@mui/icons-material';
+import {SportsScore, Home, OpenInNew} from '@mui/icons-material';
 
 
 const TeamDetails = (props) => {
@@ -26,7 +25,7 @@ const TeamDetails = (props) => {
   }, []);
 
   useEffect(() => {
-    const filtered = setSearchData(props.searchValue, teamList);
+    const filtered = setSearchData(props.searchValue, teamList, true);
     setFilteredTeams(filtered);
   }, [props.searchValue]);
 
@@ -44,7 +43,7 @@ const TeamDetails = (props) => {
 
     const responseList = await axios.get(urlList);
     const dataList = responseList.data.MRData.RaceTable.Races;
-    const filtered = setSearchData(props.searchValue, dataList);
+    const filtered = setSearchData(props.searchValue, dataList, true);
 
     setFilteredTeams(filtered);
     setTeamDetails(dataDetails);
@@ -52,32 +51,6 @@ const TeamDetails = (props) => {
     setIsLoading(false);
 
   };
-
-  const StyledTableCell = styled(TableCell)(() => ({
-    [`&.${tableCellClasses.head}`]: {
-      backgroundColor: 'black',
-      color: 'white',
-      fontWeight: 900,
-      fontSize: 15,
-      padding: 10,
-
-    },
-    [`&.${tableCellClasses.body}`]: {
-      fontSize: 14,
-      fontWeight: 600,
-      color: 'white',
-      padding: 5,
-    },
-  }));
-
-  const StyledTableRow = styled(TableRow)(() => ({
-    '&:nth-of-type(odd)': {
-      backgroundColor: "#00000040",
-    },
-    '&:last-child td, &:last-child th': {
-      border: 0,
-    },
-  }));
 
   const handelClickDetails = (id, name) => {
     const linkTo = `/races/${id}`;
@@ -87,17 +60,45 @@ const TeamDetails = (props) => {
       { name: `Races`, link: `/races/`, icon: <SportsScore/>},
       { name: `${name}`}
     ]
-    props.breadcrumbs(items)
+    props.breadcrumbs(items);
   };
+
+  const tableColors = getTableColors();
+
+  const StyledTableCell = styled(TableCell)(() => ({
+    [`&.${tableCellClasses.head}`]: {
+      backgroundColor: tableColors.tableHeadBackgroundColor,
+      color: tableColors.tableTextColor,
+      fontWeight: 900,
+      fontSize: 15,
+      padding: 10,
+
+    },
+    [`&.${tableCellClasses.body}`]: {
+      fontSize: 12,
+      fontWeight: 600,
+      color: tableColors.tableTextColor,
+      padding: 5,
+    },
+  }));
+
+  const StyledTableRow = styled(TableRow)(() => ({
+    '&:nth-of-type(odd)': {
+      backgroundColor: tableColors.tableRowBackgroundColor,
+    },
+    '&:last-child td, &:last-child th': {
+      border: 0,
+    },
+  }));
 
   if (isLoading) {
     return <LoaderFlag />
-  }
+  };
 
   return (
-    <Box display="flex"  >
+    <Box display="flex">
 
-      <Box width={1/5}>
+      <Box>
         <Card
           width={1/1}
           className="detail-card">
@@ -137,20 +138,18 @@ const TeamDetails = (props) => {
 
               <Box display='flex' justifyContent='center' alignItems='center'>
                 <Typography variant="caption" display="block" fontWeight={900}>History:  </Typography>
-                <OpenInNewIcon fontSize="small" onClick={() => goToExternalLink(teamDetails.Constructor.url)} />
+                <OpenInNew fontSize="small" onClick={() => goToExternalLink(teamDetails.Constructor.url)} />
               </Box>
             </CardContent>
           </CardActionArea>
         </Card>
       </Box>
 
-      {/* novi box sa parametrima sx */}
       <Box
         display="flex" 
         width={1/1}
         border={15}
         className="table-background-details">
-
         <TableContainer>
           <Table stickyHeader>
             <TableHead>
@@ -188,8 +187,12 @@ const TeamDetails = (props) => {
                       </Box>
                     </Box>
                   </StyledTableCell>
-                  <TableCell sx={{ backgroundColor: getCellBackgroundColor(result.Results[0].position), padding: 0 }}>{result.Results[0].position}</TableCell>
-                  <TableCell sx={{ backgroundColor: getCellBackgroundColor(result.Results[0].points), padding: 0 }}>{result.Results[1].points}</TableCell>
+                  <StyledTableCell sx={{ backgroundColor: getCellBackgroundColor(result.Results[0].position), padding: 0 }}>
+                      {result.Results[0].position}
+                  </StyledTableCell>
+                  <StyledTableCell sx={{ backgroundColor: getCellBackgroundColor(result.Results[1].position), padding: 0 }}>
+                    {result.Results[1].position}
+                  </StyledTableCell>
                   <StyledTableCell>{parseInt(result.Results[0].points) + parseInt(result.Results[1].points)}</StyledTableCell>
                 </StyledTableRow>
               )}

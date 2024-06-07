@@ -2,7 +2,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Flag from 'react-flagkit';
-import { getAlphaCode , setSearchData } from '../Utils.js';
+import { getAlphaCode, setSearchData, getTableColors } from '../Utils.js';
 import { styled } from '@mui/material/styles';
 import {Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Box} from '@mui/material';
 import { tableCellClasses } from '@mui/material/TableCell';
@@ -51,14 +51,16 @@ const RacesList = (props) => {
       {name: 'Home', link: '/', icon: <Home/>},
       { name: `${path.charAt(0).toUpperCase() + path.slice(1)}`, link: `/${path}/`, icon: path === "drivers" ? <SportsMotorsports/> : <SportsScore/>},
       { name: `${name}`}
-    ]
-    props.breadcrumbs(items)
+    ];
+    props.breadcrumbs(items);
   };
+
+  const tableColors = getTableColors();
 
   const StyledTableCell = styled(TableCell)(() => ({
     [`&.${tableCellClasses.head}`]: {
-      backgroundColor: 'black',
-      color: 'white',
+      backgroundColor: tableColors.tableHeadBackgroundColor,
+      color: tableColors.tableTextColor,
       fontWeight: 900,
       fontSize: 20,
       padding: 10,
@@ -66,14 +68,14 @@ const RacesList = (props) => {
     [`&.${tableCellClasses.body}`]: {
       fontSize: 14,
       fontWeight: 600,
-      color: 'white',
+      color: tableColors.tableTextColor,
       padding: 5,
     },
   }));
 
   const StyledTableRow = styled(TableRow)(() => ({
     '&:nth-of-type(odd)': {
-      backgroundColor: "#00000040",
+      backgroundColor: tableColors.tableRowBackgroundColor,
     },
     '&:last-child td, &:last-child th': {
       border: 0,
@@ -82,7 +84,7 @@ const RacesList = (props) => {
 
   if (isLoading) {
     return <LoaderFlag/>
-  }
+  };
 
   return (
     <>
@@ -130,7 +132,10 @@ const RacesList = (props) => {
                   </StyledTableCell>
                   <StyledTableCell>{race.Circuit.circuitName}</StyledTableCell>
                   <StyledTableCell>{race.date}</StyledTableCell>
-                  <StyledTableCell onClick={() => handelClickDetails('drivers',race.Results[0].Driver.driverId,race.Results[0].Driver.familyName)} hover sx={{ cursor: 'pointer' }}>
+                  <StyledTableCell 
+                    onClick={() => handelClickDetails('drivers',race.Results[0].Driver.driverId,race.Results[0].Driver.familyName)} 
+                    hover
+                    sx={{ cursor: 'pointer' }}>
                     <Box
                       display="flex"
                       justifyItems='center'

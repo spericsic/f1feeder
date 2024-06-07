@@ -2,14 +2,13 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams , useNavigate } from "react-router-dom";
 import Flag from 'react-flagkit';
-import { getAlphaCode , goToExternalLink, getCellBackgroundColor, setSearchData} from '../Utils.js';
+import { getAlphaCode , goToExternalLink, getCellBackgroundColor, setSearchData, getTableColors} from '../Utils.js';
 import { styled } from '@mui/material/styles';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Card, CardContent, Typography, Box }from '@mui/material';
 import { tableCellClasses } from '@mui/material/TableCell';
 import { CardActionArea } from '@mui/material';
-import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import LoaderFlag from "./LoaderFlag.js";
-import {SportsScore, Groups, Home} from '@mui/icons-material';
+import {SportsScore, Groups, Home, OpenInNew} from '@mui/icons-material';
 
 const DriverDetails = (props) => {
   const [driverDetails, setDriverDetails] = useState([]);
@@ -25,7 +24,7 @@ const DriverDetails = (props) => {
   }, []);
 
   useEffect(() => {
-    const filtered = setSearchData(props.searchValue, driverList);
+    const filtered = setSearchData(props.searchValue, driverList, true);
     setFilteredDrivers(filtered);
   }, [props.searchValue]);
 
@@ -44,7 +43,7 @@ const DriverDetails = (props) => {
     const responseList = await axios.get(urlList);
     const dataList = responseList.data.MRData.RaceTable.Races;
 
-    const filtered = setSearchData(props.searchValue, dataList);
+    const filtered = setSearchData(props.searchValue, dataList , true);
 
     setFilteredDrivers(filtered);
     setDriverDetails(dataDetails);
@@ -59,48 +58,49 @@ const DriverDetails = (props) => {
       { name: 'Home', link: '/', icon: <Home/>},
       { name: `${path.charAt(0).toUpperCase() + path.slice(1)}`, link: `/${path}/`, icon: path === "races" ? <SportsScore/> : <Groups/>},
       { name: `${name}`}
-    ]
-    props.breadcrumbs(items)
+    ];
+    props.breadcrumbs(items);
   };
 
-  if (isLoading) {
-    return <LoaderFlag/>
-  };
+  const tableColors = getTableColors();
 
   const StyledTableCell = styled(TableCell)(() => ({
     [`&.${tableCellClasses.head}`]: {
-      backgroundColor: 'black',
-      color: 'white',
+      backgroundColor: tableColors.tableHeadBackgroundColor,
+      color: tableColors.tableTextColor,
       fontWeight: 900,
       fontSize: 15,
       padding: 10,
     },
     [`&.${tableCellClasses.body}`]: {
-      fontSize: 14,
+      fontSize: 12,
       fontWeight: 600,
-      color: 'white',
+      color: tableColors.tableTextColor,
       padding: 5,
     },
   }));
 
   const StyledTableRow = styled(TableRow)(() => ({
     '&:nth-of-type(odd)': {
-      backgroundColor: "#00000040",
+      backgroundColor: tableColors.tableRowBackgroundColor,
     },
     '&:last-child td, &:last-child th': {
       border: 0,
     },
   }));
 
+  if (isLoading) {
+    return <LoaderFlag/>
+  };
+
   return (
     <Box display="flex">
-      <Box 
-        width={1/5}>
-        <Card width={1/1}
+      <Box>
+        <Card 
+          width={1/4}
           className="detail-card">
           <CardActionArea 
-            className="details-card-area"
-            height={1/1}>
+            className="details-card-area">
             <CardContent>
               <Box
                 display='flex'
@@ -133,12 +133,13 @@ const DriverDetails = (props) => {
               <Typography variant="caption" display="block" fontWeight={900}>Birth: {driverDetails.Driver.dateOfBirth}</Typography>
               <Box display='flex' justifyContent='center' alignItems='center'>
                 <Typography variant="caption" display="block" fontWeight={900}>Biography: 
-                </Typography><OpenInNewIcon fontSize="small" sx={{paddingLeft: 0.5}} onClick={()=>goToExternalLink(driverDetails.Driver.url)} />
+                </Typography><OpenInNew fontSize="small" sx={{paddingLeft: 0.5}} onClick={()=>goToExternalLink(driverDetails.Driver.url)} />
               </Box>
             </CardContent>
           </CardActionArea>
         </Card>
       </Box>
+
       <Box 
         display="flex"
         width={3/4}
@@ -178,16 +179,21 @@ const DriverDetails = (props) => {
                           <Flag country={getAlphaCode(props.flags, race.Circuit.Location.country)} size={30} />
                       </Box>
                       <Box 
-                        onClick={() => handelClickDetails('races',race.round,race.raceName)} hover sx={{ cursor: 'pointer' }}>
+                        onClick={() => handelClickDetails('races', race.round, race.raceName)} hover sx={{ cursor: 'pointer' }}>
                           {race.raceName}
                       </Box>
                     </Box>      
                   </StyledTableCell>
-                  <StyledTableCell onClick={() => handelClickDetails('teams',race.Results[0].Constructor.constructorId,race.Results[0].Constructor.name)} hover sx={{ cursor: 'pointer' }} >{race.Results[0].Constructor.name}</StyledTableCell>
+                  <StyledTableCell 
+                    onClick={() => handelClickDetails('teams',race.Results[0].Constructor.constructorId,race.Results[0].Constructor.name)} 
+                    hover 
+                    sx={{ cursor: 'pointer' }} >
+                      {race.Results[0].Constructor.name}
+                  </StyledTableCell>
                   <StyledTableCell>{race.Results[0].grid}</StyledTableCell>
-                    <TableCell sx={{ backgroundColor: getCellBackgroundColor(race.Results[0].position), padding: 0 }}>
+                    <StyledTableCell sx={{ backgroundColor: getCellBackgroundColor(race.Results[0].position), padding: 0 }}>
                       {race.Results[0].position}
-                    </TableCell>
+                    </StyledTableCell>
                 </StyledTableRow>
               )}
             </TableBody>

@@ -2,9 +2,9 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Flag from 'react-flagkit';
-import { getAlphaCode , setSearchData } from '../Utils.js';
-import { styled } from '@mui/material/styles';
+import { getAlphaCode, setSearchData, getTableColors } from '../Utils.js';
 import {Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Box} from '@mui/material';
+import { styled } from '@mui/material/styles';
 import { tableCellClasses } from '@mui/material/TableCell';
 import LoaderFlag from "./LoaderFlag.js";
 import { SportsMotorsports, Home, Groups } from '@mui/icons-material';
@@ -33,7 +33,7 @@ const DriversList = (props) => {
     props.breadcrumbs(items);
     props.main(false);
     
-    const year = props.year
+    const year = props.year;
     const url =`http://ergast.com/api/f1/${year}/driverStandings.json`;
     const response = await axios.get(url);
     const data = response.data.MRData.StandingsTable.StandingsLists[0].DriverStandings;
@@ -51,14 +51,16 @@ const DriversList = (props) => {
       {name: 'Home', link: '/', icon: <Home/>},
       { name: `${path.charAt(0).toUpperCase() + path.slice(1)}`, link: `/${path}/`, icon: path === "drivers" ? <SportsMotorsports/> : <Groups/>},
       { name: `${name}`}
-    ]
-    props.breadcrumbs(items)
+    ];
+    props.breadcrumbs(items);
   };
+
+  const tableColors = getTableColors();
 
   const StyledTableCell = styled(TableCell)(() => ({
     [`&.${tableCellClasses.head}`]: {
-      backgroundColor: 'black',
-      color: 'white',
+      backgroundColor: tableColors.tableHeadBackgroundColor,
+      color: tableColors.tableTextColor,
       fontWeight: 900,
       fontSize: 20,
       padding: 10,
@@ -66,14 +68,14 @@ const DriversList = (props) => {
     [`&.${tableCellClasses.body}`]: {
       fontSize: 14,
       fontWeight: 600,
-      color: 'white',
+      color: tableColors.tableTextColor,
       padding: 5,
     },
   }));
 
   const StyledTableRow = styled(TableRow)(() => ({
     '&:nth-of-type(odd)': {
-      backgroundColor: "#00000040",
+      backgroundColor: tableColors.tableRowBackgroundColor,
     },
     '&:last-child td, &:last-child th': {
       border: 0,
@@ -82,7 +84,7 @@ const DriversList = (props) => {
 
   if (isLoading) {
     return <LoaderFlag/>
-  }
+  };
 
   return (
     <>

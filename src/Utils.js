@@ -42,23 +42,32 @@ export function getAlphaCode(flags, value) {
     }
 }
 
-export function setSearchData(value, table) {
+export function setSearchData(value, table, details) {
     const search = value.toLowerCase();
     const filteredData = table.filter((el) => {
         if (search === '') {
             return el;
         }
         else {
-            if (el.Driver){ 
-                return el.Driver.givenName.toLowerCase().includes(search)
-                    || el.Driver.familyName.toLowerCase().includes(search)
-                    || el.Constructors[0].name.toLowerCase().includes(search)
+            if (el.Driver){
+                if (details) {
+                    return el.Driver.familyName.toLowerCase().includes(search)
+                        || el.Constructor.name.toLowerCase().includes(search)
+                } else {
+                    return el.Driver.givenName.toLowerCase().includes(search)
+                        || el.Driver.familyName.toLowerCase().includes(search)
+                        || el.Constructors[0].name.toLowerCase().includes(search)
+                }
             }else if(el.Constructor) {
                 return el.Constructor.name.toLowerCase().includes(search)
             }else if(el.Circuit) {
-                return el.Results[0].Driver.familyName.toLowerCase().includes(search)
-                    || el.Circuit.circuitName.toLowerCase().includes(search)
-                    || el.Circuit.Location.country.toLowerCase().includes(search)
+                if (details) {
+                    return el.raceName.toLowerCase().includes(search)
+                } else {
+                    return el.Results[0].Driver.familyName.toLowerCase().includes(search)
+                        || el.Circuit.circuitName.toLowerCase().includes(search)
+                        || el.Circuit.Location.country.toLowerCase().includes(search)
+                }
             }
         }  
     })
@@ -84,11 +93,21 @@ export function getCellBackgroundColor(value) {
             colorClass = "#cbecf7ab";
             break;
         default:
-            colorClass = "#ffc0cbab";
+            colorClass = "#97979766";
     };
     return colorClass;
 }
 
 export function goToExternalLink(value) {
     window.open(value, "_blank");
+}
+
+export function getTableColors() {
+    const tableColors = {
+        tableHeadBackgroundColor : "#00000085",
+        tableTextColor : "#fff",
+        tableRowBackgroundColor : "#00000035",
+    }
+
+    return tableColors
 }
